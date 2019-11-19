@@ -8,3 +8,5 @@
 
 -   Website: <https://mauriciabad.com/>
 -   Github: <https://github.com/mauriciabad/>
+
+> Based on https://docs.staticsiteboilerplate.com/
