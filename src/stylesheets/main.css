@@ -1,12 +1,11 @@
 body {
   display: grid;
   place-content: center;
-  height: 100vw;
+  height: 100vh;
   overflow: hidden;
 }
 
 .wip {
   max-width: 100%;
-  max-height: 100%;
   object-fit: contain;
 }
