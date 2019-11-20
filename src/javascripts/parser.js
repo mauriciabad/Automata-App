@@ -8,7 +8,7 @@ const regxParser = {
   states: /states: *((.*)*) */i,
   final: /final: *((.*)*) */i,
   transitions: /transitions: *\n([^]*) *end\./i,
-  transition: / *([^\n,]*) *, *([^\n,[\]]) *(\[? *([^\n,[\]]?) *,? *([^\n,[\]]?) *\]? *)?--> *(.*) */g,
+  transition: /^ *([^\n,\->[\]]+) *,? *([^\n,\->[\]]?) *(\[ *([^\n,\->[\]]?) *,? *([^\n,\->[\]]?) *\]?)? *-?-?>? *([^\n,\->[\]]*)? */gm,
 };
 
 function parse(str) {
@@ -20,9 +20,9 @@ function parse(str) {
     states: str.match(regxParser.states)[1].split(',').map((item) => item.trim()),
     final: str.match(regxParser.final)[1].split(',').map((item) => item.trim()),
     transitions: Array.from(transitions.matchAll(regxParser.transition), (match) => ({
-      origin: match[1],
-      destination: match[6],
-      label: (match[2] === '_') ? '' : match[2],
+      origin: match[1] || '',
+      destination: match[6] || '',
+      label: (match[2] === '_') ? '' : match[2] || '',
     })),
   };
 }
