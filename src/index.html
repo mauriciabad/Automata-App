@@ -8,16 +8,16 @@
 <body>
   <div class="grid" id="grid">
     <textarea class="input" id="input">
-# comments
+# Example graph
 alphabet: abc
 states: B,S,C
 final: C
 transitions:
-S,a [_,x] --> S
+S,a [_,c] --> S
 S,_       --> B
-B,b [_,x] --> B
+B,b [_,_] --> B
 B,_       --> C
-C,c [x,_] --> C
+C,c [c,_] --> C
 end.
     </textarea>
     <pre class="output" id="output"></pre>
