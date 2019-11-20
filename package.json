@@ -76,6 +76,7 @@
     "normalize.css": "^8.0.1",
     "reset-css": "^4.0.1",
     "sanitize.css": "^11.0.0",
+    "viz.js": "^2.1.2",
     "webpack-dev-server": "^3.8.0"
   }
 }

@@ -8,15 +8,14 @@ body {
 
 .grid {
   display: grid;
-  grid-template: 1fr / 1fr 1fr;
+  grid-template: 1fr 1fr / 1fr 1fr;
   padding: 1rem;
   gap: 1rem;
   height: 100%;
   box-sizing: border-box;
 }
 
-.input,
-.output {
+.grid > * {
   font-family: 'Roboto Mono', monospace;
   border-radius: 1rem;
   box-shadow: 0 0.25rem 0.5rem #0004;
@@ -30,13 +29,11 @@ body {
   margin: 0;
 }
 
-.input:focus,
-.output:focus {
+.grid > *:focus {
   border-color: #333;
 }
 
-.input:invalid,
-.output:invalid {
+.grid > *:invalid {
   border-color: crimson;
   color: crimson;
 }
