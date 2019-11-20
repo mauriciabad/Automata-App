@@ -10,4 +10,4 @@ const outputElem = document.getElementById('output');
 const data = parse(inputElem.textContent);
 
 console.log(data);
-outputElem.textContent = JSON.parse(data);
+outputElem.textContent = JSON.stringify(data, null, 2);

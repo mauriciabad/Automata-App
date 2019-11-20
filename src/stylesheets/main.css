@@ -25,6 +25,9 @@ body {
   border: solid 0.125rem #aaa;
   transition: border-color 400ms ease-out;
   outline: none;
+  overflow: scroll;
+  scroll-behavior: smooth;
+  margin: 0;
 }
 
 .input:focus,
