@@ -3,6 +3,7 @@
  */
 
 const regxParser = {
+  comments: /^\s*#\s*(.*)\s*$/gm,
   alphabet: /alphabet:\s*(.*)\s*/i,
   states: /states:\s*((.*)*)\s*/i,
   final: /final:\s*((.*)*)\s*/i,
@@ -14,6 +15,7 @@ function parse(str) {
   const transitions = str.match(regxParser.transitions)[1];
 
   return {
+    comments: Array.from(str.matchAll(regxParser.comments), (match) => match[1]),
     alphabet: str.match(regxParser.alphabet)[1],
     states: str.match(regxParser.states)[1].split(',').map((item) => item.trim()),
     final: str.match(regxParser.final)[1].split(',').map((item) => item.trim()),
