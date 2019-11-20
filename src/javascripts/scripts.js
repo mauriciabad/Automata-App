@@ -9,7 +9,7 @@ let data;
 let graph;
 
 function readData() {
-  data = parse(inputElem.textContent);
+  data = parse(inputElem.value);
   console.log(data);
 
   outputElem.textContent = JSON.stringify(data, null, 2);
