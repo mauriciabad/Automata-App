@@ -2,18 +2,18 @@
   "name": "ale2",
   "description": "ALE2 assignment",
   "version": "1.0.0",
-  "homepage": "https://github.com/mauriciabad/ALE2#readme",
+  "homepage": "https://github.com/mauriciabad/ALE2-Fall-2019#readme",
   "author": {
     "name": "Maurici Aabd Gutierrez",
     "url": "https://mauriciabad.com"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mauriciabad/ALE2.git"
+    "url": "git+https://github.com/mauriciabad/ALE2-Fall-2019.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mauriciabad/ALE2/issues"
+    "url": "https://github.com/mauriciabad/ALE2-Fall-2019/issues"
   },
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack-dev-server --config ./config/webpack.config.js",
