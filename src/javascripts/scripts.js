@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 const Viz = require('viz.js/viz');
 const { Module, render } = require('viz.js/full.render.js');
-const Graph = require('./graph');
+// const Graph = require('./graph');
 const parse = require('./parser');
 
 const graphElem = document.getElementById('graph');
@@ -9,12 +9,12 @@ const inputElem = document.getElementById('input');
 const outputElem = document.getElementById('output');
 
 let data;
-let graph;
+// let graph;
 
-const viz = new Viz({ Module, render });
+let viz = new Viz({ Module, render });
 
 function toDotFormat(graphData) {
-  return `digraph ${graphData.comments ? graphData.comments[0] : ''} {
+  return `digraph "${graphData.comments ? graphData.comments[0] : 'Graph'}" {
   rankdir=LR;
   node [shape="circle"];
   "_" [label= "", shape=point]
@@ -35,9 +35,11 @@ function readData() {
   viz.renderSVGElement(toDotFormat(data)).then((element) => {
     graphElem.innerHTML = '';
     graphElem.appendChild(element);
+  }).catch(() => {
+    viz = new Viz({ Module, render });
   });
 
-  graph = new Graph(data);
+  // graph = new Graph(data);
   // console.log(graph);
 }
 
