@@ -27,7 +27,22 @@ readData();
 
 inputElem.addEventListener('input', readData);
 
-let dotFile = `digraph myAutomaton { rankdir=LR; "" [shape=none] "A" [shape=doublecircle] "B" [shape=doublecircle] "C" [shape=circle] "SINK" [shape=circle] "" -> "C" "A" -> "A" [label="a"] "B" -> "SINK" [label="a [x/ε]"] "C" -> "B" [label="b [y/z]"] "C" -> "A" [label="ε"] "C" -> "A" [label="d"] "C" -> "C" [label="a"] }`;
+const dotFile = `digraph myAutomaton {
+  rankdir=LR;
+  "" [shape=none]
+  "A" [shape=doublecircle]
+  "B" [shape=doublecircle]
+  "C" [shape=circle]
+  "SINK" [shape=circle]
+
+  "" -> "C"
+  "A" -> "A" [label="a"]
+  "B" -> "SINK" [label="a [x/ε]"]
+  "C" -> "B" [label="b [y/z]"]
+  "C" -> "A" [label="ε"]
+  "C" -> "A" [label="d"]
+  "C" -> "C" [label="a"]
+}`;
 
 viz.renderSVGElement(dotFile).then((element) => {
   graphElem.appendChild(element);
