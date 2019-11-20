@@ -3,12 +3,12 @@
  */
 
 const regxParser = {
-  comments: /^\s*#\s*(.*)\s*$/gm,
-  alphabet: /alphabet:\s*(.*)\s*/i,
-  states: /states:\s*((.*)*)\s*/i,
-  final: /final:\s*((.*)*)\s*/i,
-  transitions: /transitions:\s*\n((.*\n)*)\s*end\./i,
-  transition: /\s*([^\n\r,]*)\s*,\s*(.)\s*(\[\s*(.?)\s*,\s*(.?)\s*\]\s*)?-->\s*(.*)\s*/g,
+  comments: /^ *# *(.*) *$/gm,
+  alphabet: /alphabet: *(.*) */i,
+  states: /states: *((.*)*) */i,
+  final: /final: *((.*)*) */i,
+  transitions: /transitions: *\n([^]*) *end\./i,
+  transition: / *(.*) *, *(.) *(\[ *(.?) *, *(.?) *\] *)?--> *(.*) */g,
 };
 
 function parse(str) {
