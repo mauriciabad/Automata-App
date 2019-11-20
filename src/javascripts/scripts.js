@@ -1,13 +1,23 @@
+/* eslint-disable no-console */
 const Graph = require('./graph');
 const parse = require('./parser');
-
-const g = new Graph();
-g.addVertex('A');
 
 const inputElem = document.getElementById('input');
 const outputElem = document.getElementById('output');
 
-const data = parse(inputElem.textContent);
+let data;
+let graph;
 
-console.log(data);
-outputElem.textContent = JSON.stringify(data, null, 2);
+function readData() {
+  data = parse(inputElem.textContent);
+  console.log(data);
+
+  outputElem.textContent = JSON.stringify(data, null, 2);
+
+  graph = new Graph(data);
+  console.log(graph);
+}
+
+readData();
+
+inputElem.addEventListener('input', () => { readData(); });

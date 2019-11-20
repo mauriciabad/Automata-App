@@ -5,8 +5,20 @@ const Node = require('./node');
  * This is a adaptation of this code: https://github.com/amejiarosario/dsa.js-data-structures-algorithms-javascript/blob/master/src/data-structures/graphs/graph.js
  */
 class Graph {
-  constructor() {
+  constructor({ states, transitions }) {
     this.nodes = new Map();
+
+    if (states) {
+      states.forEach((node) => {
+        this.addVertex(node);
+      });
+    }
+
+    if (transitions) {
+      transitions.forEach((edge) => {
+        this.addEdge(edge.origin, edge.destination);
+      });
+    }
   }
 
   addVertex(value) {
