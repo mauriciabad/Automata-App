@@ -4,7 +4,7 @@ const { Module, render } = require('viz.js/full.render.js');
 const Graph = require('./graph');
 const parse = require('./parser');
 
-const gridElem = document.getElementById('grid');
+const graphElem = document.getElementById('graph');
 const inputElem = document.getElementById('input');
 const outputElem = document.getElementById('output');
 
@@ -30,5 +30,5 @@ inputElem.addEventListener('input', readData);
 let dotFile = `digraph myAutomaton { rankdir=LR; "" [shape=none] "A" [shape=doublecircle] "B" [shape=doublecircle] "C" [shape=circle] "SINK" [shape=circle] "" -> "C" "A" -> "A" [label="a"] "B" -> "SINK" [label="a [x/ε]"] "C" -> "B" [label="b [y/z]"] "C" -> "A" [label="ε"] "C" -> "A" [label="d"] "C" -> "C" [label="a"] }`;
 
 viz.renderSVGElement(dotFile).then((element) => {
-  gridElem.appendChild(element);
+  graphElem.appendChild(element);
 });
