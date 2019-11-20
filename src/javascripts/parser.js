@@ -3,11 +3,11 @@
  */
 
 const regxParser = {
-  alphabet: /alphabet:\s*((.)*)\s*/i,
-  states: /states:\s*((.)*)\s*/i,
-  final: /final:\s*((.)*)\s*/i,
+  alphabet: /alphabet:\s*(.*)\s*/i,
+  states: /states:\s*((.*)*)\s*/i,
+  final: /final:\s*((.*)*)\s*/i,
   transitions: /transitions:\s*\n((.*\n)*)\s*end\./i,
-  transition: /\s*(.)\s*,\s*(.)\s*(\[\s*(.)\s*,\s*(.)\s*\]\s*)?-->\s*(.)\s*/g,
+  transition: /\s*(.*)\s*,\s*(.)\s*(\[\s*(.)\s*,\s*(.)\s*\]\s*)?-->\s*(.*)\s*/g,
 };
 
 function parse(str) {
