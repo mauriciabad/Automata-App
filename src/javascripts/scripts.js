@@ -16,17 +16,18 @@ const viz = new Viz({ Module, render });
 function toDotFormat(graphData) {
   return `digraph ${graphData.comments ? graphData.comments[0] : ''} {
   rankdir=LR;
-  "" [shape=none]
-${graphData.states.reduce((total, state) => `${total}  "${state}" [shape=${graphData.final.includes(state) ? 'double' : ''}circle]\n`, '')}
+  node [shape="circle"];
+  "_" [label= "", shape=point]
+${graphData.states.reduce((total, state) => `${total}  "${state}"${graphData.final.includes(state) ? ' [shape=doublecircle]' : ''}\n`, '')}
 
-  "" -> "${graphData.states[0]}"
+  "_" -> "${graphData.states[0]}"
 ${graphData.transitions.reduce((total, transition) => `${total}  "${transition.origin}" -> "${transition.destination}" [label="${transition.label || 'ε'}"]\n`, '')}
 }`;
 }
 
 function readData() {
   data = parse(inputElem.value);
-  console.log(data);
+  // console.log(data);
 
   outputElem.textContent = JSON.stringify(data, null, 2);
 
@@ -37,7 +38,7 @@ function readData() {
   });
 
   graph = new Graph(data);
-  console.log(graph);
+  // console.log(graph);
 }
 
 readData();
