@@ -34,3 +34,9 @@ body {
 .output:focus {
   border-color: #333;
 }
+
+.input:invalid,
+.output:invalid {
+  border-color: crimson;
+  color: crimson;
+}
