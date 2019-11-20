@@ -16,9 +16,9 @@ function parse(str) {
 
   return {
     comments: Array.from(str.matchAll(regxParser.comments), (match) => match[1]),
-    alphabet: str.match(regxParser.alphabet)[1],
-    states: str.match(regxParser.states)[1].split(',').map((item) => item.trim()),
-    final: str.match(regxParser.final)[1].split(',').map((item) => item.trim()),
+    alphabet: str.match(regxParser.alphabet)[1] || '',
+    states: str.match(regxParser.states)[1].split(',').map((item) => item.trim()).filter((item) => item !== ''),
+    final: str.match(regxParser.final)[1].split(',').map((item) => item.trim()).filter((item) => item !== ''),
     transitions: Array.from(transitions.matchAll(regxParser.transition), (match) => ({
       origin: match[1] || '',
       destination: match[6] || '',
