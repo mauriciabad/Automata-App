@@ -1,3 +1,5 @@
+const Node = require('./node');
+
 /**
  * Graph data structure implemented with an adjacent list
  * This is a adaptation of this code: https://github.com/amejiarosario/dsa.js-data-structures-algorithms-javascript/blob/master/src/data-structures/graphs/graph.js
