@@ -27,6 +27,7 @@ body {
   overflow: scroll;
   scroll-behavior: smooth;
   margin: 0;
+  resize: none;
 }
 
 .grid > *:focus {
