@@ -13,11 +13,28 @@ let graph;
 
 const viz = new Viz({ Module, render });
 
+function toDotFormat(graphData) {
+  return `digraph ${graphData.comments ? graphData.comments[0] : ''} {
+  rankdir=LR;
+  "" [shape=none]
+${graphData.states.reduce((total, state) => `${total}  "${state}" [shape=${graphData.final.includes(state) ? 'double' : ''}circle]\n`, '')}
+
+  "" -> "${graphData.states[0]}"
+${graphData.transitions.reduce((total, transition) => `${total}  "${transition.origin}" -> "${transition.destination}" [label="${transition.label || 'ε'}"]\n`, '')}
+}`;
+}
+
 function readData() {
   data = parse(inputElem.value);
   console.log(data);
 
   outputElem.textContent = JSON.stringify(data, null, 2);
+
+
+  viz.renderSVGElement(toDotFormat(data)).then((element) => {
+    graphElem.innerHTML = '';
+    graphElem.appendChild(element);
+  });
 
   graph = new Graph(data);
   console.log(graph);
@@ -26,24 +43,3 @@ function readData() {
 readData();
 
 inputElem.addEventListener('input', readData);
-
-const dotFile = `digraph myAutomaton {
-  rankdir=LR;
-  "" [shape=none]
-  "A" [shape=doublecircle]
-  "B" [shape=doublecircle]
-  "C" [shape=circle]
-  "SINK" [shape=circle]
-
-  "" -> "C"
-  "A" -> "A" [label="a"]
-  "B" -> "SINK" [label="a [x/ε]"]
-  "C" -> "B" [label="b [y/z]"]
-  "C" -> "A" [label="ε"]
-  "C" -> "A" [label="d"]
-  "C" -> "C" [label="a"]
-}`;
-
-viz.renderSVGElement(dotFile).then((element) => {
-  graphElem.appendChild(element);
-});

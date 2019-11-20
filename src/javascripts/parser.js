@@ -8,7 +8,7 @@ const regxParser = {
   states: /states:\s*((.*)*)\s*/i,
   final: /final:\s*((.*)*)\s*/i,
   transitions: /transitions:\s*\n((.*\n)*)\s*end\./i,
-  transition: /\s*(.*)\s*,\s*(.)\s*(\[\s*(.)\s*,\s*(.)\s*\]\s*)?-->\s*(.*)\s*/g,
+  transition: /\s*([^\n\r,]*)\s*,\s*(.)\s*(\[\s*(.?)\s*,\s*(.?)\s*\]\s*)?-->\s*(.*)\s*/g,
 };
 
 function parse(str) {
