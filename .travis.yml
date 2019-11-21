@@ -1,8 +1,11 @@
 language: node_js
 
 node_js:
-  - node
   - lts/*
+
+cache:
+  directories:
+    - node_modules
 
 install:
   - SKIP_SETUP=true npm install
