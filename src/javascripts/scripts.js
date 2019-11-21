@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 const Viz = require('viz.js/viz');
 const { Module, render } = require('viz.js/full.render.js');
-// const Graph = require('./graph');
+const Graph = require('./graph');
 const parse = require('./parser');
 
 const graphElem = document.getElementById('graph');
@@ -13,7 +13,7 @@ const infoDfaElem = document.getElementById('infoDfa');
 const infoFiniteElem = document.getElementById('infoFinite');
 
 let data;
-// let graph;
+let graph;
 
 let viz = new Viz({ Module, render });
 
@@ -33,7 +33,7 @@ function readData() {
   data = parse(inputElem.value);
   // console.log(data);
 
-  // graph = new Graph(data);
+  graph = new Graph(data);
   // console.log(graph);
 
   outputElem.textContent = JSON.stringify(data, null, 2);
@@ -46,15 +46,15 @@ function readData() {
     viz = new Viz({ Module, render });
   });
 
-  const isDfa = data.dfa; // TODO: change for graph.isDfa();
+  const isDfa = graph.isDfa();
   infoDfaElem.classList.remove('graph-info--false', 'graph-info--true', 'graph-info--warning');
   infoDfaElem.classList.add(`graph-info--${isDfa ? 'true' : 'false'}`);
-  // if(data.dfa !== isDfa) infoDfaElem.classList.add('graph-info--warning');
+  if (data.dfa !== isDfa) infoDfaElem.classList.add('graph-info--warning');
 
-  const isFinite = data.finite; // TODO: change for graph.isDfa();
+  const isFinite = data.finite; // TODO: change for graph.isFinite();
   infoFiniteElem.classList.remove('graph-info--false', 'graph-info--true', 'graph-info--warning');
   infoFiniteElem.classList.add(`graph-info--${isFinite ? 'true' : 'false'}`);
-  // if(data.finite !== isFinite) infoFiniteElem.classList.add('graph-info--warning');
+  if (data.finite !== isFinite) infoFiniteElem.classList.add('graph-info--warning');
 }
 
 function readFileAsString() {

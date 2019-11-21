@@ -68,6 +68,10 @@ class Graph {
 
     return false;
   }
+
+  isDfa() {
+    return true;
+  }
 }
 
 module.exports = Graph;

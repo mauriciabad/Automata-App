@@ -51,7 +51,7 @@ img {
   border: none;
   padding: 0;
 }
-.box__content--graph { overflow: hidden; }
+.box__content--graph { overflow: visible; }
 
 .box__content--input:invalid {
   color: crimson;
