@@ -83,7 +83,12 @@ img {
   left: 0;
   width: 100%;
   opacity: 0;
+  font-size: 0;
   z-index: 1;
+  cursor: pointer;
+}
+
+.upload__input::-webkit-file-upload-button {
   cursor: pointer;
 }
 
