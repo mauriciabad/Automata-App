@@ -12,6 +12,9 @@ const uploadElem = document.getElementById('upload');
 const infoDfaElem = document.getElementById('infoDfa');
 const infoFiniteElem = document.getElementById('infoFinite');
 
+const storedRawGraph = localStorage.getItem('rawGraph');
+if (storedRawGraph) inputElem.value = storedRawGraph;
+
 let data;
 // let graph;
 
@@ -30,6 +33,7 @@ ${graphData.transitions.reduce((total, transition) => `${total}  "${transition.o
 }
 
 function readData() {
+  localStorage.setItem('rawGraph', inputElem.value);
   data = new RawGraph(inputElem.value);
   // console.log(data);
 
