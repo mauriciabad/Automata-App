@@ -30,6 +30,10 @@ function parse(str) {
       origin: match[1] || '',
       destination: match[6] || '',
       label: (match[2] === '_') ? '' : match[2] || '',
+      stack: {
+        remove: (match[4] === '_') ? '' : match[4] || '',
+        add: (match[5] === '_') ? '' : match[5] || '',
+      },
     })),
   };
 }
