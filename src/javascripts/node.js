@@ -3,8 +3,9 @@
  * This is a adaptation of this code: https://github.com/amejiarosario/dsa.js-data-structures-algorithms-javascript/blob/master/src/data-structures/graphs/node.js
  */
 class Node {
-  constructor(value) {
+  constructor(value, isFinal = false) {
     this.value = value;
+    this.isFinal = isFinal;
     this.adjacents = new Set();
   }
 

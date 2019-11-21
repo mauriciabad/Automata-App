@@ -5,12 +5,15 @@ const Node = require('./node');
  * This is a adaptation of this code: https://github.com/amejiarosario/dsa.js-data-structures-algorithms-javascript/blob/master/src/data-structures/graphs/graph.js
  */
 class Graph {
-  constructor({ states, transitions }) {
+  constructor({
+    states, transitions, final, start,
+  }) {
     this.nodes = new Map();
+    this.start = start;
 
     if (states) {
       states.forEach((node) => {
-        this.addVertex(node);
+        this.addVertex(node, final.includes(node));
       });
     }
 
@@ -66,6 +69,12 @@ class Graph {
       return sourceNode.isAdjacent(destinationNode);
     }
 
+    return false;
+  }
+
+  isTree() {
+    const visitedNodes = [this.start];
+    visitedNodes.pop(); // TODO: Implement real function
     return false;
   }
 }

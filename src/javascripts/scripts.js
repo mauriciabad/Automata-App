@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 const Viz = require('viz.js/viz');
 const { Module, render } = require('viz.js/full.render.js');
-// const Graph = require('./graph');
+const Graph = require('./graph');
 const RawGraph = require('./rawGraph');
 
 const graphElem = document.getElementById('graph');
@@ -16,7 +16,7 @@ const storedRawGraph = localStorage.getItem('rawGraph');
 if (storedRawGraph) inputElem.value = storedRawGraph;
 
 let data;
-// let graph;
+let graph;
 
 let viz = new Viz({ Module, render });
 
@@ -37,7 +37,7 @@ function readData() {
   data = new RawGraph(inputElem.value);
   // console.log(data);
 
-  // graph = new Graph(data);
+  graph = new Graph(data);
   // console.log(graph);
 
   outputElem.textContent = JSON.stringify(data, null, 2);
@@ -55,7 +55,7 @@ function readData() {
   infoDfaElem.classList.add(`graph-info--${isDfa ? 'true' : 'false'}`);
   if (data.dfa !== isDfa) infoDfaElem.classList.add('graph-info--warning');
 
-  const isFinite = data.finite; // TODO: change for graph.isFinite();
+  const isFinite = graph.isTree();
   infoFiniteElem.classList.remove('graph-info--false', 'graph-info--true', 'graph-info--warning');
   infoFiniteElem.classList.add(`graph-info--${isFinite ? 'true' : 'false'}`);
   if (data.finite !== isFinite) infoFiniteElem.classList.add('graph-info--warning');
