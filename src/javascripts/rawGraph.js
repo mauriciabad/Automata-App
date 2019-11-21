@@ -31,17 +31,19 @@ class RawGraph {
     const wordsMatches = (str.match(regxParser.words) || ['', ''])[1].matchAll(regxParser.word);
 
     this.comments = Array.from(commentMatches, (match) => match[1]);
-    this.alphabet = (alphabetMatch ? alphabetMatch[1] : '');
+    this.alphabet = (alphabetMatch ? alphabetMatch[1] : '').split('');
     this.stack = (stackMatch ? stackMatch[1] : '');
     this.states = (statesMatch ? statesMatch[1] : '').split(',').map((item) => item.trim()).filter((item) => item !== '');
     this.final = (finalMatch ? finalMatch[1] : '').split(',').map((item) => item.trim()).filter((item) => item !== '');
     this.transitions = Array.from(transitionsMatches, (match) => {
       if (match[1] && !this.states.includes(match[1])) this.states.push(match[1]);
       if (match[6] && !this.states.includes(match[6])) this.states.push(match[6]);
+      const label = (match[2] === '_') ? '' : match[2] || '';
+      if (label && !this.alphabet.includes(label)) this.alphabet.push(label);
       return {
-        origin: match[1] || '', // TODO: add orignin to states if is not in states
+        origin: match[1] || '',
         destination: match[6] || '',
-        label: (match[2] === '_') ? '' : match[2] || '',
+        label,
         stack: {
           remove: (match[4] === '_') ? '' : match[4] || '',
           add: (match[5] === '_') ? '' : match[5] || '',
@@ -54,6 +56,7 @@ class RawGraph {
       word: match[1] || '',
       accepted: afirmative.includes(match[2].toLowerCase()),
     }));
+    this.start = this.states[0] || '';
   }
 
   isDfa() {
