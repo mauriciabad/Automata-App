@@ -5,6 +5,7 @@ const { Module, render } = require('viz.js/full.render.js');
 const parse = require('./parser');
 
 const graphElem = document.getElementById('graph');
+const graphTitleElem = document.getElementById('graph-title');
 const inputElem = document.getElementById('input');
 const outputElem = document.getElementById('output');
 const uploadElem = document.getElementById('upload');
@@ -32,10 +33,10 @@ function readData() {
 
   outputElem.textContent = JSON.stringify(data, null, 2);
 
-
   viz.renderSVGElement(toDotFormat(data)).then((element) => {
     graphElem.innerHTML = '';
     graphElem.appendChild(element);
+    graphTitleElem.textContent = data.comments ? data.comments[0] : '';
   }).catch(() => {
     viz = new Viz({ Module, render });
   });
