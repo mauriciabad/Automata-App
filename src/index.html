@@ -10,14 +10,30 @@
     <textarea class="input" id="input">
 # Example graph
 alphabet: abc
+stack: x
 states: B,S,C
 final: C
 transitions:
-S,a [_,c] --> S
-S,_       --> B
-B,b [_,_] --> B
-B,_       --> C
-C,c [c,_] --> C
+S,a [_,x] --> S
+S,_ --> B
+B,a [_,_] --> C
+B,b [_,x] --> B
+B,_ --> C
+C,c [x,_] --> C
+end.
+
+dfa: n
+finite: n
+
+words:
+,y
+abcc,y
+aacc,y
+bbbccc,y
+aaabbcccc,n
+aabbccccc,n
+bbaccc,n
+aaaabbbacccccccc,n
 end.
     </textarea>
     <pre class="output" id="output"></pre>
