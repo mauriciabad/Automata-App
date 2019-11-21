@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 const Viz = require('viz.js/viz');
 const { Module, render } = require('viz.js/full.render.js');
-const Graph = require('./graph');
-const parse = require('./parser');
+// const Graph = require('./graph');
+const RawGraph = require('./rawGraph');
 
 const graphElem = document.getElementById('graph');
 const graphTitleElem = document.getElementById('graph-title');
@@ -13,7 +13,7 @@ const infoDfaElem = document.getElementById('infoDfa');
 const infoFiniteElem = document.getElementById('infoFinite');
 
 let data;
-let graph;
+// let graph;
 
 let viz = new Viz({ Module, render });
 
@@ -30,10 +30,10 @@ ${graphData.transitions.reduce((total, transition) => `${total}  "${transition.o
 }
 
 function readData() {
-  data = parse(inputElem.value);
+  data = new RawGraph(inputElem.value);
   // console.log(data);
 
-  graph = new Graph(data);
+  // graph = new Graph(data);
   // console.log(graph);
 
   outputElem.textContent = JSON.stringify(data, null, 2);
@@ -46,7 +46,7 @@ function readData() {
     viz = new Viz({ Module, render });
   });
 
-  const isDfa = graph.isDfa();
+  const isDfa = data.isDfa();
   infoDfaElem.classList.remove('graph-info--false', 'graph-info--true', 'graph-info--warning');
   infoDfaElem.classList.add(`graph-info--${isDfa ? 'true' : 'false'}`);
   if (data.dfa !== isDfa) infoDfaElem.classList.add('graph-info--warning');
