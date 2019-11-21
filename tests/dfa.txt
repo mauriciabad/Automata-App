@@ -1,0 +1,14 @@
+# DFA Graph
+alphabet: ab
+final: C
+transitions:
+S,a --> B
+S,b --> B
+B,a --> C
+B,b --> C
+C,a --> S
+C,b --> S
+end.
+
+dfa: n
+finite: n
