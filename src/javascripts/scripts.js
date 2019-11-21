@@ -9,6 +9,8 @@ const graphTitleElem = document.getElementById('graph-title');
 const inputElem = document.getElementById('input');
 const outputElem = document.getElementById('output');
 const uploadElem = document.getElementById('upload');
+const infoDfaElem = document.getElementById('infoDfa');
+const infoFiniteElem = document.getElementById('infoFinite');
 
 let data;
 // let graph;
@@ -31,6 +33,9 @@ function readData() {
   data = parse(inputElem.value);
   // console.log(data);
 
+  // graph = new Graph(data);
+  // console.log(graph);
+
   outputElem.textContent = JSON.stringify(data, null, 2);
 
   viz.renderSVGElement(toDotFormat(data)).then((element) => {
@@ -41,8 +46,13 @@ function readData() {
     viz = new Viz({ Module, render });
   });
 
-  // graph = new Graph(data);
-  // console.log(graph);
+  infoDfaElem.classList.remove('graph-info--false','graph-info--true','graph-info--warning');
+  infoDfaElem.classList.add(`graph-info--${data.dfa ? 'true' : 'false'}`);
+  // if(data.dfa !== graph.isDfa()) infoDfaElem.classList.add('graph-info--warning');
+
+  infoFiniteElem.classList.remove('graph-info--false','graph-info--true','graph-info--warning');
+  infoFiniteElem.classList.add(`graph-info--${data.finite ? 'true' : 'false'}`);
+  // if(data.finite !== graph.isFinite()) infoFiniteElem.classList.add('graph-info--warning');
 }
 
 function readFileAsString() {

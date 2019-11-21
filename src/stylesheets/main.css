@@ -99,3 +99,37 @@ body {
   color: #666;
   font-size: 0.6667em;
 }
+
+.grid-graph {
+  display: grid;
+  grid-template: 1fr 1fr / 3fr 1fr;
+  grid-template-areas:
+    'graph infoDfa'
+    'graph infoFinite';
+}
+.graph-info__dfa { grid-area: infoDfa; }
+.graph-info__finite { grid-area: infoFinite; }
+.grid-graph__graph { grid-area: graph; }
+
+.graph-info__icon {
+  display: none;
+  height: 3rem;
+}
+
+.graph-info__text {
+  margin: 0.5em 0 0;
+  font-weight: bold;
+}
+
+.graph-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.graph-info--false > .graph-info__icon--false,
+.graph-info--true > .graph-info__icon--true,
+.graph-info--warning > .graph-info__icon--warning {
+  display: block;
+}
