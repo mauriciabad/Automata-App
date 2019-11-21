@@ -9,7 +9,8 @@
   <div class="grid" id="grid">
     <div class="box box--input">
       <h2 class="box__title">Input</h2>
-      <textarea class="box__content box__content--input" id="input">
+      <div class="input_box">
+        <textarea class="box__content box__content--input" id="input">
 # Example graph
 alphabet: abc
 stack: x
@@ -37,7 +38,13 @@ aabbccccc,n
 bbaccc,n
 aaaabbbacccccccc,n
 end.
-      </textarea>
+        </textarea>
+        <div class="upload">
+          <img class="upload__icon" src="images/document.svg" alt="📄">
+          <label class="upload__text" for="file">Choose a file or drag it here</label>
+          <input class="upload__input" type="file" id="upload">
+        </div>
+      </div>
     </div>
     <div class="box box--output">
         <h2 class="box__title">Parsed input</h2>

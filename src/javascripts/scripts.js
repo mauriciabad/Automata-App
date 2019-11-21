@@ -7,6 +7,7 @@ const parse = require('./parser');
 const graphElem = document.getElementById('graph');
 const inputElem = document.getElementById('input');
 const outputElem = document.getElementById('output');
+const uploadElem = document.getElementById('upload');
 
 let data;
 // let graph;
@@ -43,6 +44,20 @@ function readData() {
   // console.log(graph);
 }
 
+function readFileAsString() {
+  const { files } = this;
+  if (files.length >= 0) {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      inputElem.value = event.target.result;
+      readData();
+      uploadElem.value = null;
+    };
+    reader.readAsText(files[0]);
+  }
+}
+
 readData();
 
 inputElem.addEventListener('input', readData);
+uploadElem.addEventListener('change', readFileAsString);

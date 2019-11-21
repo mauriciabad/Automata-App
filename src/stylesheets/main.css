@@ -51,6 +51,43 @@ body {
   color: crimson;
 }
 
+.input_box {
+  display: flex;
+  flex-grow: 1;
+}
+
+.upload {
+  width: 33.33%;
+  border: dashed 1rem #0002;
+  border-radius: 1rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  opacity: 0.5;
+}
+
+.upload__input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.upload__text {
+  text-align: center;
+  margin: 0.5rem 1rem 0;
+}
+
+.upload__icon {
+  height: 5rem;
+}
+
 #graph > svg {
   width: 100%;
   height: 100%;
