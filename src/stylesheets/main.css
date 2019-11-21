@@ -77,11 +77,12 @@ img {
 
 .upload__input {
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+  top: -1rem;
+  right: -1rem;
+  bottom: -1rem;
+  left: -1rem;
+  border-radius: 1rem;
+  width: calc(100% + 2rem);
   opacity: 0;
   font-size: 0;
   z-index: 1;
