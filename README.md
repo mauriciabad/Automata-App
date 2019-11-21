@@ -4,11 +4,9 @@
 
 Use it here: https://ale2.netlify.com/
 
-## Author
+Author: **Maurici Abad**
 
-**Maurici Abad**
-
--   Website: <https://mauriciabad.com/>
--   Github: <https://github.com/mauriciabad/>
+- Website: <https://mauriciabad.com/>
+- Github: <https://github.com/mauriciabad/>
 
 Boilerplate used https://docs.staticsiteboilerplate.com/
