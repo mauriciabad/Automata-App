@@ -46,13 +46,15 @@ function readData() {
     viz = new Viz({ Module, render });
   });
 
-  infoDfaElem.classList.remove('graph-info--false','graph-info--true','graph-info--warning');
-  infoDfaElem.classList.add(`graph-info--${data.dfa ? 'true' : 'false'}`);
-  // if(data.dfa !== graph.isDfa()) infoDfaElem.classList.add('graph-info--warning');
+  const isDfa = data.dfa; // TODO: change for graph.isDfa();
+  infoDfaElem.classList.remove('graph-info--false', 'graph-info--true', 'graph-info--warning');
+  infoDfaElem.classList.add(`graph-info--${isDfa ? 'true' : 'false'}`);
+  // if(data.dfa !== isDfa) infoDfaElem.classList.add('graph-info--warning');
 
-  infoFiniteElem.classList.remove('graph-info--false','graph-info--true','graph-info--warning');
-  infoFiniteElem.classList.add(`graph-info--${data.finite ? 'true' : 'false'}`);
-  // if(data.finite !== graph.isFinite()) infoFiniteElem.classList.add('graph-info--warning');
+  const isFinite = data.finite; // TODO: change for graph.isDfa();
+  infoFiniteElem.classList.remove('graph-info--false', 'graph-info--true', 'graph-info--warning');
+  infoFiniteElem.classList.add(`graph-info--${isFinite ? 'true' : 'false'}`);
+  // if(data.finite !== isFinite) infoFiniteElem.classList.add('graph-info--warning');
 }
 
 function readFileAsString() {

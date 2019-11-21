@@ -54,16 +54,20 @@ end.
       <h2 class="box__title">Graph <span class="box__title--sub" id="graph-title"></span></h2>
       <div class="box__content box__content--graph grid-graph">
         <div class="grid-graph__graph" id="graph"></div>
-        <div class="graph-info graph-info__dfa graph-info--true" id="infoDfa">
-          <img class="graph-info__icon graph-info__icon--true" src="images/check_circle_outline-24px.svg" alt="✔">
-          <img class="graph-info__icon graph-info__icon--false" src="images/highlight_off-24px.svg" alt="✘">
-          <img class="graph-info__icon graph-info__icon--warning" src="images/report-24px.svg" alt="⚠">
+        <div class="graph-info graph-info__dfa graph-info--false" id="infoDfa">
+          <div class="graph-info__icon-container">
+            <img class="graph-info__icon graph-info__icon--true" src="images/check_circle_outline-24px.svg" alt="✔">
+            <img class="graph-info__icon graph-info__icon--false" src="images/highlight_off-24px.svg" alt="✘">
+            <img class="graph-info__icon graph-info__icon--warning" src="images/report-24px.svg" alt="⚠">
+          </div>
           <p class="graph-info__text">DFA</p>
         </div>
         <div class="graph-info graph-info__finite graph-info--false" id="infoFinite">
-          <img class="graph-info__icon graph-info__icon--true" src="images/check_circle_outline-24px.svg" alt="✔">
-          <img class="graph-info__icon graph-info__icon--false" src="images/highlight_off-24px.svg" alt="✘">
-          <img class="graph-info__icon graph-info__icon--warning" src="images/report-24px.svg" alt="⚠">
+          <div class="graph-info__icon-container">
+            <img class="graph-info__icon graph-info__icon--true" src="images/check_circle_outline-24px.svg" alt="✔">
+            <img class="graph-info__icon graph-info__icon--false" src="images/highlight_off-24px.svg" alt="✘">
+            <img class="graph-info__icon graph-info__icon--warning" src="images/report-24px.svg" alt="⚠">
+          </div>
           <p class="graph-info__text">Finite</p>
         </div>
       </div>

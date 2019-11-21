@@ -111,9 +111,21 @@ body {
 .graph-info__finite { grid-area: infoFinite; }
 .grid-graph__graph { grid-area: graph; }
 
+.graph-info__icon-container {
+  height: 3rem;
+  position: relative;
+}
+
 .graph-info__icon {
   display: none;
-  height: 3rem;
+  height: 100%;
+}
+
+.graph-info__icon--warning {
+  height: 1.5rem;
+  position: absolute;
+  right: -0.75rem;
+  top: -0.75rem;
 }
 
 .graph-info__text {
@@ -128,8 +140,8 @@ body {
   align-items: center;
 }
 
-.graph-info--false > .graph-info__icon--false,
-.graph-info--true > .graph-info__icon--true,
-.graph-info--warning > .graph-info__icon--warning {
+.graph-info--false .graph-info__icon--false,
+.graph-info--true .graph-info__icon--true,
+.graph-info--warning .graph-info__icon--warning {
   display: block;
 }
