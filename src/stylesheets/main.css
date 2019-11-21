@@ -94,4 +94,8 @@ body {
 }
 
 .box__title { margin: 0 0 1rem; }
-.box__title--sub { color: #666; font-size: 0.6667em; }
+
+.box__title--sub {
+  color: #666;
+  font-size: 0.6667em;
+}
