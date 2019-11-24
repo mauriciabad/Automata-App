@@ -27,7 +27,7 @@ function toDotFormat(graphData) {
   "_" [label= "", shape=point]
 ${graphData.states.reduce((total, state) => `${total}  "${state}"${graphData.final.includes(state) ? ' [shape=doublecircle]' : ''}\n`, '')}
 
-  "_" -> "${graphData.states[0] || '_'}"
+  "_" -> "${graphData.start || '_'}"
 ${graphData.transitions.reduce((total, transition) => `${total}  "${transition.origin}" -> "${transition.destination}" [label="${transition.label || 'ε'}"]\n`, '')}
 }`;
 }
