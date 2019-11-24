@@ -20,18 +20,6 @@ let graph;
 
 let viz = new Viz({ Module, render });
 
-function toDotFormat(graphData) {
-  return `digraph "${graphData.comments ? graphData.comments[0] : 'Graph'}" {
-  rankdir=LR;
-  node [shape="circle"];
-  "_" [label= "", shape=point]
-${graphData.states.reduce((total, state) => `${total}  "${state}"${graphData.final.includes(state) ? ' [shape=doublecircle]' : ''}\n`, '')}
-
-  "_" -> "${graphData.start || '_'}"
-${graphData.transitions.reduce((total, transition) => `${total}  "${transition.origin}" -> "${transition.destination}" [label="${transition.label || 'ε'}"]\n`, '')}
-}`;
-}
-
 function readData() {
   localStorage.setItem('rawGraph', inputElem.value);
   data = new RawGraph(inputElem.value);
@@ -42,7 +30,7 @@ function readData() {
 
   outputElem.textContent = JSON.stringify(data, null, 2);
 
-  viz.renderSVGElement(toDotFormat(data)).then((element) => {
+  viz.renderSVGElement(data.toDotFormat()).then((element) => {
     graphElem.innerHTML = '';
     graphElem.appendChild(element);
     graphTitleElem.textContent = data.comments ? data.comments[0] : '';
