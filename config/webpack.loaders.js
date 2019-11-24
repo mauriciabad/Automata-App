@@ -48,6 +48,8 @@ const postcssLoader = {
   loader: 'postcss-loader',
   options: {
     plugins: [
+      require('postcss-import')(),
+      require('postcss-preset-env')(),
       require('autoprefixer')(),
     ],
     sourceMap,
