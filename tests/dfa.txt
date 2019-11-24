@@ -1,5 +1,6 @@
 # DFA Graph
 alphabet: ab
+states: B,S,C
 final: C
 transitions:
 S,a --> B
@@ -10,5 +11,5 @@ C,a --> S
 C,b --> S
 end.
 
-dfa: n
+dfa: y
 finite: n
