@@ -14,6 +14,11 @@ module.exports = {
     path: path.join(config.root, config.paths.dist),
     filename: '[name].[hash].js',
   },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
+  },
   mode: ['production', 'development'].includes(config.env)
     ? config.env
     : 'development',
