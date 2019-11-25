@@ -9,41 +9,18 @@
   <div class="grid" id="grid">
     <div class="box box--input">
       <h2 class="box__title">Input</h2>
-      <div class="input_box">
-        <textarea class="box__content box__content--input" id="input" autocomplete="off" spellcheck="false" data-gramm="false">
-# Example graph
-alphabet: abc
-stack: x
-states: B,S,C
-final: C
-transitions:
-S,a [_,x] --> S
-S,_ --> B
-B,a [_,_] --> C
-B,b [_,x] --> B
-B,_ --> C
-C,c [x,_] --> C
-end.
-
-dfa: n
-finite: n
-
-words:
-,y
-abcc,y
-aacc,y
-bbbccc,y
-aaabbcccc,n
-aabbccccc,n
-bbaccc,n
-aaaabbbacccccccc,n
-end.
-        </textarea>
+      <div class="box__content box__content--input">
+        <textarea class="input_box" id="input" autocomplete="off" spellcheck="false" data-gramm="false"># Example graph<br>alphabet: abc<br>stack: x<br>states: B,S,C<br>final: C<br>transitions:<br>S,a [_,x] --> S<br>S,_ --> B<br>B,a [_,_] --> C<br>B,b [_,x] --> B<br>B,_ --> C<br>C,c [x,_] --> C<br>end.<br>dfa: n<br>finite: n<br>words:<br>,y<br>abcc,y<br>aacc,y<br>bbbccc,y<br>aaabbcccc,n<br>aabbccccc,n<br>bbaccc,n<br>aaaabbbacccccccc,n<br>end.<br></textarea>
         <div class="upload">
-          <img class="upload__icon" src="images/document.svg" alt="📄">
+          <img class="upload__icon" src="images/document.svg" alt="📄" height="80">
           <label class="upload__text" for="file">Choose a file or drag it here</label>
           <input class="upload__input" type="file" id="upload">
         </div>
+        <select name="template" id="selectTemplate" class="select">
+          <option value="" selected disabled style="display: none;" id="selectTemplatePlaceholder">Template</option>
+          <option value="default">Example</option>
+          <option value="dfa1">DFA 1</option>
+        </select>
       </div>
     </div>
     <div class="box box--output">
@@ -56,17 +33,17 @@ end.
         <div class="grid-graph__graph" id="graph"></div>
         <div class="graph-info graph-info__dfa graph-info--false" id="infoDfa">
           <div class="graph-info__icon-container">
-            <img class="graph-info__icon graph-info__icon--true" src="images/check_circle_outline-24px.svg" alt="✔">
-            <img class="graph-info__icon graph-info__icon--false" src="images/highlight_off-24px.svg" alt="✘">
-            <img class="graph-info__icon graph-info__icon--warning" title="Input is wrong" src="images/report-24px.svg" alt="⚠">
+            <img class="graph-info__icon graph-info__icon--true" height="48" src="images/check_circle_outline-24px.svg" alt="✔">
+            <img class="graph-info__icon graph-info__icon--false" height="48" src="images/highlight_off-24px.svg" alt="✘">
+            <img class="graph-info__icon graph-info__icon--warning" height="20" title="Input is wrong" src="images/report-24px.svg" alt="⚠">
           </div>
           <p class="graph-info__text"><abbr title="Deterministic Finite Automaton">DFA</abbr></p>
         </div>
         <div class="graph-info graph-info__finite graph-info--false" id="infoFinite">
           <div class="graph-info__icon-container">
-            <img class="graph-info__icon graph-info__icon--true" src="images/check_circle_outline-24px.svg" alt="✔">
-            <img class="graph-info__icon graph-info__icon--false" src="images/highlight_off-24px.svg" alt="✘">
-            <img class="graph-info__icon graph-info__icon--warning" title="Input is wrong" src="images/report-24px.svg" alt="⚠">
+            <img class="graph-info__icon graph-info__icon--true" height="48" src="images/check_circle_outline-24px.svg" alt="✔">
+            <img class="graph-info__icon graph-info__icon--false" height="48" src="images/highlight_off-24px.svg" alt="✘">
+            <img class="graph-info__icon graph-info__icon--warning" height="20" title="Input is wrong" src="images/report-24px.svg" alt="⚠">
           </div>
           <p class="graph-info__text">Finite</p>
         </div>

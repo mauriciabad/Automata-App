@@ -3,12 +3,15 @@ import Viz from 'viz.js/viz';
 import { Module, render } from 'viz.js/full.render';
 import Graph from './graph';
 import RawGraph from './rawGraph';
+import templates from '../data/templates';
 
 const graphElem = document.getElementById('graph');
 const graphTitleElem = document.getElementById('graph-title');
 const inputElem = document.getElementById('input');
 const outputElem = document.getElementById('output');
 const uploadElem = document.getElementById('upload');
+const selectTemplateElem = document.getElementById('selectTemplate');
+const selectTemplatePlaceholderElem = document.getElementById('selectTemplatePlaceholder');
 const infoDfaElem = document.getElementById('infoDfa');
 const infoFiniteElem = document.getElementById('infoFinite');
 
@@ -59,6 +62,15 @@ function readFileAsString() {
       uploadElem.value = null;
     };
     reader.readAsText(files[0]);
+    selectTemplatePlaceholderElem.textContent = files[0].name;
+    selectTemplatePlaceholderElem.selected = true;
+  }
+}
+
+function openTemplate() {
+  if (selectTemplateElem.value) {
+    inputElem.value = templates[selectTemplateElem.value];
+    readData();
   }
 }
 
@@ -66,3 +78,4 @@ readData();
 
 inputElem.addEventListener('input', readData);
 uploadElem.addEventListener('change', readFileAsString);
+selectTemplateElem.addEventListener('change', openTemplate);

@@ -1,0 +1,4 @@
+{
+  "default": "# Example graph\nalphabet: abc\nstack: x\nstates: B,S,C\nfinal: C\ntransitions:\nS,a [_,x] --> S\nS,_ --> B\nB,a [_,_] --> C\nB,b [_,x] --> B\nB,_ --> C\nC,c [x,_] --> C\nend.\n\ndfa: n\nfinite: n\n\nwords:\n,y\nabcc,y\naacc,y\nbbbccc,y\naaabbcccc,n\naabbccccc,n\nbbaccc,n\naaaabbbacccccccc,n\nend.\n",
+  "dfa1": "# DFA Graph\nalphabet: ab\nstates: B,S,C\nfinal: C\ntransitions:\nS,a --> B\nS,b --> B\nB,a --> C\nB,b --> C\nC,a --> S\nC,b --> S\nend.\n\ndfa: y\nfinite: n\n"
+}
