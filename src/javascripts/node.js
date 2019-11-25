@@ -1,29 +1,73 @@
-/**
- * Graph node/vertex that hold adjacencies nodes
- * This is a adaptation of this code: https://github.com/amejiarosario/dsa.js-data-structures-algorithms-javascript/blob/master/src/data-structures/graphs/node.js
- */
-class Node {
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-underscore-dangle */
+
+export default class Node {
   constructor(value, isFinal = false) {
     this.value = value;
     this.isFinal = isFinal;
-    this.adjacents = new Set();
+    this._adjacencies = new Set();
   }
 
-  addAdjacent(node) {
-    this.adjacents.add(node);
+  addAdjacency(node, label) {
+    this._adjacencies.add({ node, label });
   }
 
-  removeAdjacent(node) {
-    return this.adjacents.delete(node);
+  isAdjecent({ node, label }) {
+    if (label === undefined && node === undefined) return false;
+    if (label === undefined) return this.adjacentNodes.includes(node);
+    if (node === undefined) return this.labels.includes(label);
+    return this.hasAdjacency(node, label);
   }
 
-  isAdjacent(node) {
-    return this.adjacents.has(node);
+  removeAdjacency(node, label) {
+    for (const adjacency of this._adjacencies) {
+      if (adjacency.node === node && adjacency.label === label) {
+        this._adjacencies.delete(adjacency);
+      }
+    }
   }
 
-  getAdjacents() {
-    return Array.from(this.adjacents);
+  removeAllAdjacencies(node) {
+    if (node === undefined) this._adjacencies.clear();
+    else {
+      for (const adjacency of this._adjacencies) {
+        if (adjacency.node === node) {
+          this._adjacencies.delete(adjacency);
+        }
+      }
+    }
+  }
+
+  getAdjacency(node, label) {
+    for (const adjacency of this._adjacencies) {
+      if (adjacency.node === node && adjacency.label === label) {
+        return adjacency;
+      }
+    }
+    return undefined;
+  }
+
+  hasAdjacency(node, label) {
+    return this.getAdjacency(node, label) !== undefined;
+  }
+
+  get adjacencies() {
+    return Array.from(this._adjacencies);
+  }
+
+  get adjecentNodes() {
+    const adjecentNodes = new Set();
+    for (const adjacency of this._adjacencies) {
+      adjecentNodes.add(adjacency.node);
+    }
+    return Array.from(adjecentNodes);
+  }
+
+  get labels() {
+    const labels = new Set();
+    for (const adjacency of this._adjacencies) {
+      labels.add(adjacency.node);
+    }
+    return Array.from(labels);
   }
 }
-
-module.exports = Node;

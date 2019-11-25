@@ -1,6 +1,3 @@
-/**
- * Raw graph
- */
 const regxParser = {
   comments: /^ *# *(.*) *$/gm,
   alphabet: /alphabet: *(\w*)/i,
@@ -17,7 +14,7 @@ const regxParser = {
 
 const afirmative = ['y', 'ye', 'yes', 'true', '1', 'ok'];
 
-class RawGraph {
+export default class RawGraph {
   constructor(str) {
     const commentMatches = str.matchAll(regxParser.comments);
     const alphabetMatch = str.match(regxParser.alphabet);
@@ -70,5 +67,3 @@ ${this.transitions.reduce((total, transition) => `${total}  "${transition.origin
 }`;
   }
 }
-
-module.exports = RawGraph;

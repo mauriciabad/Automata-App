@@ -1,10 +1,7 @@
-const Node = require('./node');
+/* eslint-disable no-restricted-syntax */
+import Node from './node';
 
-/**
- * Graph data structure implemented with an adjacent list
- * This is a adaptation of this code: https://github.com/amejiarosario/dsa.js-data-structures-algorithms-javascript/blob/master/src/data-structures/graphs/graph.js
- */
-class Graph {
+export default class Graph {
   constructor({
     states, transitions, final, start, alphabet,
   }) {
@@ -12,80 +9,67 @@ class Graph {
     this.start = start;
     this.alphabet = alphabet;
 
-    if (states) {
-      states.forEach((node) => {
-        this.addVertex(node, final.includes(node));
-      });
+    for (const node of states) {
+      this.addVertex(node, final.includes(node));
     }
 
-    if (transitions) {
-      transitions.forEach((edge) => {
-        this.addEdge(edge.origin, edge.destination);
-      });
+    for (const edge of transitions) {
+      this.addEdge(edge.origin, edge.destination, edge.label);
     }
   }
 
-  addVertex(value) {
-    if (this.nodes.has(value)) {
-      return this.nodes.get(value);
+  addVertex(nodeName) {
+    if (this.nodes.has(nodeName)) {
+      return this.nodes.get(nodeName);
     }
-    const vertex = new Node(value);
-    this.nodes.set(value, vertex);
-    return vertex;
+    const node = new Node(nodeName);
+    this.nodes.set(nodeName, node);
+    return node;
   }
 
-  removeVertex(value) {
-    const current = this.nodes.get(value);
+  removeVertex(nodeName) {
+    const current = this.nodes.get(nodeName);
     if (current) {
-      Array.from(this.nodes.values()).forEach((node) => node.removeAdjacent(current));
+      Array.from(this.nodes.values()).forEach((node) => node.removeAllAdjacent(current));
     }
-    return this.nodes.delete(value);
+    return this.nodes.delete(nodeName);
   }
 
-  addEdge(source, destination) {
+  addEdge(source, destination, label) {
     const sourceNode = this.addVertex(source);
     const destinationNode = this.addVertex(destination);
 
-    sourceNode.addAdjacent(destinationNode);
+    sourceNode.addAdjacency(destinationNode, label);
 
-    return [sourceNode, destinationNode];
+    return [sourceNode, destinationNode, label];
   }
 
-  removeEdge(source, destination) {
+  removeEdge(source, destination, label) {
     const sourceNode = this.nodes.get(source);
     const destinationNode = this.nodes.get(destination);
 
-    if (sourceNode && destinationNode) {
-      sourceNode.removeAdjacent(destinationNode);
+    if (sourceNode) {
+      if (destinationNode) {
+        if (label !== undefined) {
+          sourceNode.removeAdjacent(destinationNode, label);
+        } else {
+          sourceNode.removeAllAdjacencies(destinationNode);
+        }
+      } else {
+        sourceNode.removeAllAdjacencies();
+      }
     }
 
-    return [sourceNode, destinationNode];
+    return [sourceNode, destinationNode, label];
   }
 
-  areAdjacents(source, destination) {
-    const sourceNode = this.nodes.get(source);
-    const destinationNode = this.nodes.get(destination);
-
-    if (sourceNode && destinationNode) {
-      return sourceNode.isAdjacent(destinationNode);
-    }
-
-    return false;
-  }
-
-  isDfa() { // TODO: This is not working as it shoud, check why
-    // (its bevause the node transition doesnt have a letter
-    // and its using the node name instead of the transition letter)
-
-    // eslint-disable-next-line no-restricted-syntax
+  isDfa() {
     for (const node of this.nodes.values()) {
       const foundLetters = [];
 
-      // eslint-disable-next-line no-restricted-syntax
-      for (const adjacent of node.getAdjacents()) {
-        const letter = adjacent.value;
-        if (foundLetters.includes(letter)) return false;
-        foundLetters.push(letter);
+      for (const adjacentcy of node.adjacencies) {
+        if (foundLetters.includes(adjacentcy.label)) return false;
+        foundLetters.push(adjacentcy.label);
       }
 
       if (foundLetters.length !== this.alphabet.length) return false;
@@ -99,5 +83,3 @@ class Graph {
     return false;
   }
 }
-
-module.exports = Graph;

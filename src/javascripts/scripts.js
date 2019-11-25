@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
-const Viz = require('viz.js/viz');
-const { Module, render } = require('viz.js/full.render.js');
-const Graph = require('./graph');
-const RawGraph = require('./rawGraph');
+import Viz from 'viz.js/viz';
+import { Module, render } from 'viz.js/full.render';
+import Graph from './graph';
+import RawGraph from './rawGraph';
 
 const graphElem = document.getElementById('graph');
 const graphTitleElem = document.getElementById('graph-title');
