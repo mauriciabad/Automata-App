@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 /**
  * Raw graph
  */
@@ -31,7 +30,7 @@ class RawGraph {
     const wordsMatches = (str.match(regxParser.words) || ['', ''])[1].matchAll(regxParser.word);
 
     this.comments = Array.from(commentMatches, (match) => match[1]);
-    this.alphabet = (alphabetMatch ? alphabetMatch[1] : '').split('');
+    this.alphabet = (alphabetMatch ? alphabetMatch[1] : '').split('').sort();
     this.stack = (stackMatch ? stackMatch[1] : '');
     this.states = (statesMatch ? statesMatch[1] : '').split(',').map((item) => item.trim()).filter((item) => item !== '');
     this.final = (finalMatch ? finalMatch[1] : '').split(',').map((item) => item.trim()).filter((item) => item !== '');
@@ -57,30 +56,6 @@ class RawGraph {
       accepted: afirmative.includes(match[2].toLowerCase()),
     }));
     this.start = this.states[0] || '';
-  }
-
-  isDfa() {
-    const nodes = {};
-
-    for (const state of this.states) {
-      nodes[state] = new Set(this.alphabet);
-    }
-
-    for (const transition of this.transitions) {
-      if (transition.label === '') return false; // Epsilon found
-
-      if (nodes[transition.origin].has(transition.label)) {
-        nodes[transition.origin].delete(transition.label);
-      } else {
-        return false; // Repeated letter in a node
-      }
-    }
-
-    for (const node of Object.values(nodes)) {
-      if (node.size > 0) return false; // Missing letter in a node
-    }
-
-    return true;
   }
 
   toDotFormat() {

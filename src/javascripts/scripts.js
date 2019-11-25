@@ -38,7 +38,7 @@ function readData() {
     viz = new Viz({ Module, render });
   });
 
-  const isDfa = data.isDfa();
+  const isDfa = graph.isDfa();
   infoDfaElem.classList.remove('graph-info--false', 'graph-info--true', 'graph-info--warning');
   infoDfaElem.classList.add(`graph-info--${isDfa ? 'true' : 'false'}`);
   if (data.dfa !== isDfa) infoDfaElem.classList.add('graph-info--warning');

@@ -6,10 +6,11 @@ const Node = require('./node');
  */
 class Graph {
   constructor({
-    states, transitions, final, start,
+    states, transitions, final, start, alphabet,
   }) {
     this.nodes = new Map();
     this.start = start;
+    this.alphabet = alphabet;
 
     if (states) {
       states.forEach((node) => {
@@ -70,6 +71,26 @@ class Graph {
     }
 
     return false;
+  }
+
+  isDfa() { // TODO: This is not working as it shoud, check why
+    // (its bevause the node transition doesnt have a letter
+    // and its using the node name instead of the transition letter)
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const node of this.nodes.values()) {
+      const foundLetters = [];
+
+      // eslint-disable-next-line no-restricted-syntax
+      for (const adjacent of node.getAdjacents()) {
+        const letter = adjacent.value;
+        if (foundLetters.includes(letter)) return false;
+        foundLetters.push(letter);
+      }
+
+      if (foundLetters.length !== this.alphabet.length) return false;
+    }
+    return true;
   }
 
   isTree() {
