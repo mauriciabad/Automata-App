@@ -82,4 +82,37 @@ export default class Graph {
     visitedNodes.pop(); // TODO: Implement real function
     return false;
   }
+
+  * dfs(first = this.start) {
+    const visited = new Map();
+    const visitList = [];
+
+    visitList.push(first);
+
+    while (visitList.length !== 0) {
+      const node = visitList.pop();
+      if (node && !visited.has(node)) {
+        yield node;
+        visited.set(node);
+        visitList.push(...node.getAdjacents());
+      }
+    }
+  }
+
+  isValidPath(word) {
+    // TODO: do a dfs, for each letter save the possible adjacencies
+    // then, for each adjacency, repeat the proces.
+    // return false if there is no posible adjecency to take or
+    // Build the tree, and check if the last level adjecencies point to a final node
+
+    // const path = [];
+    // this.start;
+    // for (const letter in word) {
+
+    // }
+
+    const visitedNodes = [this.start, word]; // TODO: remove this, is fake
+    visitedNodes.pop(); // also this
+    return false;
+  }
 }
