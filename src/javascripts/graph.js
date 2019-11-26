@@ -6,11 +6,11 @@ export default class Graph {
     states, transitions, final, start, alphabet,
   }) {
     this.nodes = new Map();
-    this.start = start;
     this.alphabet = alphabet;
 
-    for (const node of states) {
-      this.addVertex(node, final.includes(node));
+    for (const nodeName of states) {
+      const node = this.addVertex(nodeName, final.includes(nodeName));
+      if (nodeName === start) this.start = node;
     }
 
     for (const edge of transitions) {
