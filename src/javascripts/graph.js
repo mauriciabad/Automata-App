@@ -83,6 +83,8 @@ export default class Graph {
     return false;
   }
 
+  // TODO: not working because getAdjacents() returns adjacencies, not nodes
+  /*
   * dfs(first = this.start) {
     const visited = new Map();
     const visitList = [];
@@ -98,21 +100,20 @@ export default class Graph {
       }
     }
   }
+  */
 
-  isValidPath(word) {
-    // TODO: do a dfs, for each letter save the possible adjacencies
-    // then, for each adjacency, repeat the proces.
-    // return false if there is no posible adjecency to take or
-    // Build the tree, and check if the last level adjecencies point to a final node
+  // isValidPath(word) {
+  //   // TODO: do a dfs, for each letter save the possible adjacencies
+  //   // then, for each adjacency, repeat the proces.
+  //   // return false if there is no posible adjecency to take or
+  //   // Build the tree, and check if the last level adjecencies point to a final node
 
-    // const path = [];
-    // this.start;
-    // for (const letter in word) {
+  //   let path = new Set();
+  //   this.start;
+  //   for (const letter in word) {
 
-    // }
+  //   }
 
-    const visitedNodes = [this.start, word]; // TODO: remove this, is fake
-    visitedNodes.pop(); // also this
-    return false;
-  }
+  //   return false;
+  // }
 }
