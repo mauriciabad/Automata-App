@@ -34,7 +34,6 @@ img {
 
 .box__content {
   flex-grow: 1;
-  font-family: 'Roboto Mono', monospace;
   overflow: auto;
   scroll-behavior: smooth;
 }
@@ -45,6 +44,7 @@ img {
 .box--tests { grid-area: tests; }
 
 .box__content--output {
+  font-family: 'Roboto Mono', monospace;
   margin: 0;
   overflow: scroll;
   scroll-behavior: smooth;
@@ -53,16 +53,18 @@ img {
 
 .box__content--input {
   display: grid;
-  grid-template: 1fr min-content / 2fr 1fr;
+  grid-template: 1fr min-content / 1fr 1fr;
   grid-template-areas:
     'textBox upload'
     'textBox select';
   gap: 1rem;
+  overflow: visible;
 }
 
 .box__content--graph { overflow: visible; }
 
 .input_box {
+  font-family: 'Roboto Mono', monospace;
   grid-area: textBox;
   resize: none;
   outline: none;
@@ -111,6 +113,15 @@ img {
 
 .upload__icon {
   height: 5rem;
+}
+
+.select {
+  grid-area: select;
+  border-radius: 0.5rem;
+  border: none;
+  outline: none;
+  padding: 0.5em 0.5em;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 #graph > svg {
