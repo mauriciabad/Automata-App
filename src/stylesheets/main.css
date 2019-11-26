@@ -46,7 +46,7 @@ img {
 .box__content--output {
   font-family: 'Roboto Mono', monospace;
   margin: 0;
-  overflow: scroll;
+  overflow: auto;
   scroll-behavior: smooth;
   height: 0;
 }
