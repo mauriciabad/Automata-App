@@ -17,6 +17,7 @@ const infoFiniteElem = document.getElementById('infoFinite');
 
 const storedRawGraph = localStorage.getItem('rawGraph');
 if (storedRawGraph) inputElem.value = storedRawGraph;
+if (!inputElem.value) inputElem.value = templates.default;
 
 let data;
 let graph;

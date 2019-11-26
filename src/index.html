@@ -10,7 +10,7 @@
     <div class="box box--input">
       <h2 class="box__title">Input</h2>
       <div class="box__content box__content--input">
-        <textarea class="input_box" id="input" autocomplete="off" spellcheck="false" data-gramm="false"># Example graph<br>alphabet: abc<br>stack: x<br>states: B,S,C<br>final: C<br>transitions:<br>S,a [_,x] --> S<br>S,_ --> B<br>B,a [_,_] --> C<br>B,b [_,x] --> B<br>B,_ --> C<br>C,c [x,_] --> C<br>end.<br>dfa: n<br>finite: n<br>words:<br>,y<br>abcc,y<br>aacc,y<br>bbbccc,y<br>aaabbcccc,n<br>aabbccccc,n<br>bbaccc,n<br>aaaabbbacccccccc,n<br>end.<br></textarea>
+        <textarea class="input_box" id="input" autocomplete="off" spellcheck="false" data-gramm="false"></textarea>
         <div class="upload">
           <img class="upload__icon" src="images/document.svg" alt="📄" height="80">
           <label class="upload__text" for="file">Choose a file or drag it here</label>
@@ -48,6 +48,10 @@
           <p class="graph-info__text">Finite</p>
         </div>
       </div>
+    </div>
+    <div class="box box--tests">
+      <h2 class="box__title">Tests</h2>
+      <pre class="box__content box__content--tests" id="tests"></pre>
     </div>
   </div>
 
