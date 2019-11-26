@@ -11,7 +11,6 @@ const inputElem = document.getElementById('input');
 const outputElem = document.getElementById('output');
 const uploadElem = document.getElementById('upload');
 const selectTemplateElem = document.getElementById('selectTemplate');
-const selectTemplatePlaceholderElem = document.getElementById('selectTemplatePlaceholder');
 const infoDfaElem = document.getElementById('infoDfa');
 const infoFiniteElem = document.getElementById('infoFinite');
 
@@ -19,6 +18,7 @@ const storedRawGraph = localStorage.getItem('rawGraph');
 if (storedRawGraph) inputElem.value = storedRawGraph;
 if (!inputElem.value) inputElem.value = templates.Default;
 selectTemplateElem.innerHTML = Object.keys(templates).reduce((total, templateName) => `${total}<option value="${templateName}">${templateName}</option>`, '<option value="" selected disabled style="display: none;" id="selectTemplatePlaceholder">Template</option>');
+const selectTemplatePlaceholderElem = document.getElementById('selectTemplatePlaceholder');
 
 let data;
 let graph;
