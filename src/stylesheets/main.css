@@ -209,12 +209,59 @@ img {
   display: block;
 }
 
-.test {
-  display: flex;
+.test__input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 2.5rem 0 1rem;
+  line-height: 2.5;
+  position: relative;
 }
 
-.test__input {
-  flex-grow: 1;
-  margin-right: 0.5rem;
-  padding: 0.5rem 1rem;
+.test::before {
+  font-size: 1.25em;
+  position: absolute;
+  line-height: 2;
+  right: 2.5rem;
+  z-index: 1;
+  pointer-events: none;
 }
+
+.test[data-warning="true"] {
+  background: #ffccbc;
+  border-radius: 100px;
+}
+
+.word-list {
+  padding: 0;
+  list-style: none;
+}
+
+.word-list__word {
+  background: #eee;
+  padding: 0 0.3333em;
+  line-height: 1.6667;
+  border-radius: 0.3333em;
+}
+
+.word-list__item {
+  position: relative;
+}
+
+.word-list__item::before {
+  content: '';
+  margin-right: 0.3333em;
+}
+
+[data-icon="true"]::before { content: '✔'; }
+[data-icon="false"]::before { content: '❌'; }
+[data-icon="unknown"]::before { content: '❓'; }
+[data-icon="wrong"]::before { content: '⚠'; }
+
+/* height: 1em;
+width: 1em;
+position: absolute;
+right: calc(100% + 0.3333em);
+top: 0.3333em;
+border-radius: 25%;
+box-sizing: border-box;
+border: 0.1666em solid currentColor; */

@@ -53,17 +53,12 @@
     </div>
     <div class="box box--tests">
       <h2 class="box__title">Tests</h2>
-      <div class="test">
+      <div class="test" id="inputTestIcon" data-icon="false">
         <input type="text" id="inputTest" class="test__input" pattern="^ *(\w*) *$" placeholder="Test accepted word">
-        <div class="info__icon-container info__icon-container--false test__icon" id="iconTest">
-          <img class="info__icon info__icon--true" height="48" src="images/check_circle_outline-24px.svg" alt="✔">
-          <img class="info__icon info__icon--false" height="48" src="images/highlight_off-24px.svg" alt="✘">
-          <img class="info__icon info__icon--wrong" height="48" src="images/error_outline-24px.svg" alt="❗">
-          <img class="info__icon info__icon--unknown" height="48" src="images/help_outline-24px.svg" alt="❓">
-          <img class="info__icon info__icon--warning" height="20" title="Input is wrong" src="images/report-24px.svg" alt="⚠">
-        </div>
       </div>
-      <div class="box__content box__content--tests" id="tests"></div>
+      <div class="box__content box__content--tests" id="tests">
+        <ul class="word-list" id="wordList"></ul>
+      </div>
     </div>
   </div>
 

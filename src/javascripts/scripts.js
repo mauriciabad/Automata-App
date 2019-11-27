@@ -10,11 +10,12 @@ const graphTitleElem = document.getElementById('graph-title');
 const inputElem = document.getElementById('input');
 const outputElem = document.getElementById('output');
 const uploadElem = document.getElementById('upload');
+const wordsElem = document.getElementById('wordList');
 const selectTemplateElem = document.getElementById('selectTemplate');
 const infoDfaElem = document.getElementById('infoDfa');
 const infoFiniteElem = document.getElementById('infoFinite');
-const infoTestElem = document.getElementById('iconTest');
 const inputTestElem = document.getElementById('inputTest');
+const inputTestIconElem = document.getElementById('inputTestIcon');
 
 inputTestElem.value = localStorage.getItem('word');
 const storedRawGraph = localStorage.getItem('rawGraph');
@@ -32,31 +33,25 @@ function testWord() {
   const word = inputTestElem.value.trim();
   localStorage.setItem('word', word);
 
-  infoTestElem.classList.remove(
-    'info__icon-container--false',
-    'info__icon-container--true',
-    'info__icon-container--wrong',
-    'info__icon-container--unknown',
-    'info__icon-container--warning',
-  );
-
   if (inputTestElem.checkValidity()) {
-    infoTestElem.classList.add(`info__icon-container--${graph.isValidPath(word) ? 'true' : 'false'}`);
+    inputTestIconElem.dataset.icon = graph.isValidPath(word) ? 'true' : 'false';
   } else {
-    infoTestElem.classList.add('info__icon-container--wrong');
+    inputTestIconElem.dataset.icon = 'wrong';
   }
 }
 
 function readData() {
+  // Read data
   localStorage.setItem('rawGraph', inputElem.value);
   data = new RawGraph(inputElem.value);
-  // console.log(data);
-
   graph = new Graph(data);
+  // console.log(data);
   // console.log(graph);
 
+  // Display ouput
   outputElem.textContent = JSON.stringify(data, null, 2);
 
+  // Display graph
   viz.renderSVGElement(data.toDotFormat()).then((element) => {
     graphElem.innerHTML = '';
     graphElem.appendChild(element);
@@ -65,6 +60,7 @@ function readData() {
     viz = new Viz({ Module, render });
   });
 
+  // Test Dfa
   const isDfa = graph.isDfa();
   infoDfaElem.classList.remove(
     'info__icon-container--false',
@@ -76,6 +72,7 @@ function readData() {
   infoDfaElem.classList.add(`info__icon-container--${isDfa ? 'true' : 'false'}`);
   if (data.dfa !== isDfa) infoDfaElem.classList.add('info__icon-container--warning');
 
+  // Test finite
   const isFinite = graph.isTree();
   infoFiniteElem.classList.remove(
     'info__icon-container--false',
@@ -87,6 +84,10 @@ function readData() {
   infoFiniteElem.classList.add(`info__icon-container--${isFinite ? 'true' : 'false'}`);
   if (data.finite !== isFinite) infoFiniteElem.classList.add('info__icon-container--warning');
 
+  // Test words
+  wordsElem.innerHTML = data.words.reduce((total, word) => `${total}<li class="word-list__item" data-icon="${word.accepted}"><span class="word-list__word">${word.word !== '' ? word.word : '&nbsp;'}</span></li>`, '');
+
+  // Test custon word
   inputTestElem.pattern = `^ *[${data.alphabet.join('')}]* *$`;
   testWord();
 }
