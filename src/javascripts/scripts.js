@@ -28,7 +28,7 @@ let graph;
 let viz = new Viz({ Module, render });
 
 function testWord() {
-  const word = inputTestElem.value;
+  const word = inputTestElem.value.trim();
 
   infoTestElem.classList.remove(
     'info__icon-container--false',
