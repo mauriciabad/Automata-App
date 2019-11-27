@@ -44,14 +44,14 @@ function readData() {
   });
 
   const isDfa = graph.isDfa();
-  infoDfaElem.classList.remove('graph-info--false', 'graph-info--true', 'graph-info--warning');
-  infoDfaElem.classList.add(`graph-info--${isDfa ? 'true' : 'false'}`);
-  if (data.dfa !== isDfa) infoDfaElem.classList.add('graph-info--warning');
+  infoDfaElem.classList.remove('info__icon-container--false', 'info__icon-container--true', 'info__icon-container--wrong', 'info__icon-container--unknown', 'info__icon-container--warning');
+  infoDfaElem.classList.add(`info__icon-container--${isDfa ? 'true' : 'false'}`);
+  if (data.dfa !== isDfa) infoDfaElem.classList.add('info__icon-container--warning');
 
   const isFinite = graph.isTree();
-  infoFiniteElem.classList.remove('graph-info--false', 'graph-info--true', 'graph-info--warning');
-  infoFiniteElem.classList.add(`graph-info--${isFinite ? 'true' : 'false'}`);
-  if (data.finite !== isFinite) infoFiniteElem.classList.add('graph-info--warning');
+  infoFiniteElem.classList.remove('info__icon-container--false', 'info__icon-container--true', 'info__icon-container--wrong', 'info__icon-container--unknown', 'info__icon-container--warning');
+  infoFiniteElem.classList.add(`info__icon-container--${isFinite ? 'true' : 'false'}`);
+  if (data.finite !== isFinite) infoFiniteElem.classList.add('info__icon-container--warning');
 }
 
 function readFileAsString() {

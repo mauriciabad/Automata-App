@@ -29,19 +29,23 @@
       <h2 class="box__title">Graph <span class="box__title--sub" id="graph-title"></span></h2>
       <div class="box__content box__content--graph grid-graph">
         <div class="grid-graph__graph" id="graph"></div>
-        <div class="graph-info graph-info__dfa graph-info--false" id="infoDfa">
-          <div class="graph-info__icon-container">
-            <img class="graph-info__icon graph-info__icon--true" height="48" src="images/check_circle_outline-24px.svg" alt="✔">
-            <img class="graph-info__icon graph-info__icon--false" height="48" src="images/highlight_off-24px.svg" alt="✘">
-            <img class="graph-info__icon graph-info__icon--warning" height="20" title="Input is wrong" src="images/report-24px.svg" alt="⚠">
+        <div class="graph-info graph-info__dfa info__icon-container--false" id="infoDfa">
+          <div class="info__icon-container">
+            <img class="info__icon info__icon--true" height="48" src="images/check_circle_outline-24px.svg" alt="✔">
+            <img class="info__icon info__icon--false" height="48" src="images/highlight_off-24px.svg" alt="✘">
+            <img class="info__icon info__icon--wrong" height="48" src="images/error_outline-24px.svg" alt="❗">
+            <img class="info__icon info__icon--unknown" height="48" src="images/help_outline-24px.svg" alt="❓">
+            <img class="info__icon info__icon--warning" height="20" title="Input is wrong" src="images/report-24px.svg" alt="⚠">
           </div>
           <p class="graph-info__text"><abbr title="Deterministic Finite Automaton">DFA</abbr></p>
         </div>
-        <div class="graph-info graph-info__finite graph-info--false" id="infoFinite">
-          <div class="graph-info__icon-container">
-            <img class="graph-info__icon graph-info__icon--true" height="48" src="images/check_circle_outline-24px.svg" alt="✔">
-            <img class="graph-info__icon graph-info__icon--false" height="48" src="images/highlight_off-24px.svg" alt="✘">
-            <img class="graph-info__icon graph-info__icon--warning" height="20" title="Input is wrong" src="images/report-24px.svg" alt="⚠">
+        <div class="graph-info graph-info__finite info__icon-container--false" id="infoFinite">
+          <div class="info__icon-container">
+            <img class="info__icon info__icon--true" height="48" src="images/check_circle_outline-24px.svg" alt="✔">
+            <img class="info__icon info__icon--false" height="48" src="images/highlight_off-24px.svg" alt="✘">
+            <img class="info__icon info__icon--wrong" height="48" src="images/error_outline-24px.svg" alt="❗">
+            <img class="info__icon info__icon--unknown" height="48" src="images/help_outline-24px.svg" alt="❓">
+            <img class="info__icon info__icon--warning" height="20" title="Input is wrong" src="images/report-24px.svg" alt="⚠">
           </div>
           <p class="graph-info__text">Finite</p>
         </div>
@@ -49,7 +53,18 @@
     </div>
     <div class="box box--tests">
       <h2 class="box__title">Tests</h2>
-      <pre class="box__content box__content--tests" id="tests"></pre>
+      <div class="box__content box__content--tests" id="tests">
+        <div class="test">
+          <input type="text" id="testInput" class="test__input" pattern="^\W*(\w*)\W*$">
+          <div class="info__icon-container info__icon-container--true test__icon" id="testIcon">
+            <img class="info__icon info__icon--true" height="48" src="images/check_circle_outline-24px.svg" alt="✔">
+            <img class="info__icon info__icon--false" height="48" src="images/highlight_off-24px.svg" alt="✘">
+            <img class="info__icon info__icon--wrong" height="48" src="images/error_outline-24px.svg" alt="❗">
+            <img class="info__icon info__icon--unknown" height="48" src="images/help_outline-24px.svg" alt="❓">
+            <img class="info__icon info__icon--warning" height="20" title="Input is wrong" src="images/report-24px.svg" alt="⚠">
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 

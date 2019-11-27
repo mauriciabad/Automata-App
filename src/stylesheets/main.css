@@ -165,17 +165,17 @@ img {
 .graph-info__finite { grid-area: infoFinite; }
 .grid-graph__graph { grid-area: graph; }
 
-.graph-info__icon-container {
+.info__icon-container {
   height: 3rem;
   position: relative;
 }
 
-.graph-info__icon {
+.info__icon {
   display: none;
   height: 100%;
 }
 
-.graph-info__icon--warning {
+.info__icon--warning {
   height: 1.5rem;
   position: absolute;
   right: -0.75rem;
@@ -194,8 +194,10 @@ img {
   align-items: center;
 }
 
-.graph-info--false .graph-info__icon--false,
-.graph-info--true .graph-info__icon--true,
-.graph-info--warning .graph-info__icon--warning {
+.info__icon-container--false .info__icon--false,
+.info__icon-container--true .info__icon--true,
+.info__icon-container--wrong .info__icon--wrong,
+.info__icon-container--unknown .info__icon--unknown,
+.info__icon-container--warning .info__icon--warning {
   display: block;
 }
