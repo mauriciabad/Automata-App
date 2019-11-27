@@ -70,4 +70,17 @@ export default class Node {
     }
     return Array.from(labels);
   }
+
+  epsilonAccessibleNodes(accessibleNodes = new Set([this])) {
+    for (const node of accessibleNodes) {
+      for (const adjacency of node.adjacencies) {
+        if (adjacency.label === '' && !accessibleNodes.has(adjacency.node)) {
+          accessibleNodes.add(adjacency.node);
+          accessibleNodes.add(...adjacency.node.epsilonAccessibleNodes(accessibleNodes));
+        }
+      }
+    }
+
+    return Array.from(accessibleNodes);
+  }
 }

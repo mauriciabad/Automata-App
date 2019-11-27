@@ -103,14 +103,16 @@ export default class Graph {
   */
 
   isValidPath(word) {
-    let originNodes = new Set([this.start]);
+    let originNodes = new Set(this.start.epsilonAccessibleNodes());
 
     for (const letter of word) {
       const nextOriginNodes = new Set();
 
       for (const node of originNodes) {
         for (const adjacency of node.adjacencies) {
-          if (adjacency.label === letter) nextOriginNodes.add(adjacency.node);
+          if (adjacency.label === letter) {
+            adjacency.node.epsilonAccessibleNodes().forEach(nextOriginNodes.add, nextOriginNodes);
+          }
         }
       }
 
