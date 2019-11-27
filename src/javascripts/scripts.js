@@ -16,7 +16,7 @@ const infoFiniteElem = document.getElementById('infoFinite');
 const infoTestElem = document.getElementById('iconTest');
 const inputTestElem = document.getElementById('inputTest');
 
-infoTestElem.value = localStorage.getItem('word');
+inputTestElem.value = localStorage.getItem('word');
 const storedRawGraph = localStorage.getItem('rawGraph');
 if (storedRawGraph) inputElem.value = storedRawGraph;
 if (!inputElem.value) inputElem.value = templates.Default;
