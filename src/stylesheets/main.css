@@ -20,7 +20,7 @@ img {
   grid-template: 1fr 1fr / 1fr 1fr;
   grid-template-areas:
     'input output'
-    'graph output';
+    'graph tests';
   padding: 1rem;
   gap: 1rem;
   height: 100vh;
@@ -46,11 +46,7 @@ img {
 .box--output { grid-area: output; }
 .box--input { grid-area: input; }
 .box--graph { grid-area: graph; }
-
-.box--tests {
-  grid-area: tests;
-  display: none;
-}
+.box--tests { grid-area: tests; }
 
 .box__content--output {
   font-family: 'Roboto Mono', monospace;
