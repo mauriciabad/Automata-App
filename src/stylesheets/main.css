@@ -129,6 +129,10 @@ img {
 
 .select {
   grid-area: select;
+}
+
+.select,
+.test__input {
   border-radius: 0.5rem;
   border: none;
   outline: none;
@@ -137,7 +141,8 @@ img {
   transition: box-shadow 200ms var(--ease-bounce);
 }
 
-.select:focus {
+.select:focus,
+.test__input:focus {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3), 0 0 0 3px var(--color-primary);
 }
 
@@ -200,4 +205,13 @@ img {
 .info__icon-container--unknown .info__icon--unknown,
 .info__icon-container--warning .info__icon--warning {
   display: block;
+}
+
+.test {
+  display: flex;
+}
+
+.test__input {
+  flex-grow: 1;
+  margin-right: 0.5rem;
 }
