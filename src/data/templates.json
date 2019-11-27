@@ -2,14 +2,18 @@
   "Default": "# Example graph\nalphabet: abc\nstack: x\nstates: B,S,C\nfinal: C\ntransitions:\nS,a [_,x] --> S\nS,_ --> B\nB,a [_,_] --> C\nB,b [_,x] --> B\nB,_ --> C\nC,c [x,_] --> C\nend.\n\ndfa: n\nfinite: n\n\nwords:\n,y\nabcc,y\naacc,y\nbbbccc,y\naaabbcccc,n\naabbccccc,n\nbbaccc,n\naaaabbbacccccccc,n\nend.\n",
   "DFA": "# DFA Graph\nalphabet: ab\nstates: B,S,C\nfinal: C\ntransitions:\nS,a --> B\nS,b --> B\nB,a --> C\nB,b --> C\nC,a --> S\nC,b --> S\nend.\n\ndfa: y\nfinite: n\n",
   "No end": "# Imposible ending\nalphabet: abcde\nstates: 1,2,3\nfinal: 3\ntransitions:\n1,a --> 1\n1,b --> 2\n2,c --> 1\n2,d --> 2\n3,e --> 2\nend.\n\ndfa: n\nfinite: y\n",
+  "Woooow" : "# Woooow\nalphabet: wo\nstates: 1,2,3\nfinal: 3\ntransitions:\n1,w --> 2\n2,o --> 2\n2,w --> 3\nend.\n\ndfa: n\nfinite: n\n",
+  "A or nothing": "# A or nothing\nalphabet: a\nstates: 1,2\nfinal: 2\ntransitions:\n1,a --> 2\n1,_ --> 2\nend.\n\ndfa: n\nfinite: y\n",
   "Two ε": "# Two consecutive epsilons\nalphabet: x\nstates: A,B,C,D,E,F\nfinal: F\ntransitions:\nA,_ --> B\nB,_ --> C\nC,x --> D\nD,_ --> E\nE,_ --> F\nend.\n\ndfa: n\nfinite: y\n",
   "Two ε (2x)": "# Double two consecutive epsilons\nalphabet: x\nstates: A,B,C,D,E,F\nfinal: F\ntransitions:\nA,_ --> B\nB,_ --> A\nB,_ --> C\nC,_ --> B\nC,x --> D\nD,_ --> E\nE,_ --> D\nE,_ --> F\nF,_ --> E\nend.\n\ndfa: n\nfinite: y\n",
   "Mega ε loop": "# Mega epsilon loop\nalphabet: xyz\nstates: A,B,C\nfinal: C\ntransitions:\nA,_ --> A\nA,_ --> B\nA,_ --> C\nB,_ --> A\nB,_ --> B\nB,_ --> C\nC,_ --> A\nC,_ --> B\nC,_ --> C\nend.\n\ndfa: n\nfinite: y\n",
   "Mega ε bridge": "# Mega epsilon bridge\nalphabet: xyz\nstates: A1,B1,C1,A2,B2,C2\nfinal: C2\ntransitions:\nA1,_ --> A1\nA1,_ --> B1\nA1,_ --> C1\nB1,_ --> A1\nB1,_ --> B1\nB1,_ --> C1\nC1,_ --> A1\nC1,_ --> B1\nC1,_ --> C1\n\nA2,_ --> A2\nA2,_ --> B2\nA2,_ --> C2\nB2,_ --> A2\nB2,_ --> B2\nB2,_ --> C2\nC2,_ --> A2\nC2,_ --> B2\nC2,_ --> C2\n\nC1,x --> A2\nend.\n\ndfa: n\nfinite: y\n",
   "Mega ε bridge (2x)": "# Mega epsilon bridge\nalphabet: xyz\nstates: A1,B1,C1,A2,B2,C2\nfinal: C2\ntransitions:\nA1,_ --> A1\nA1,_ --> B1\nA1,_ --> C1\nB1,_ --> A1\nB1,_ --> B1\nB1,_ --> C1\nC1,_ --> A1\nC1,_ --> B1\nC1,_ --> C1\n\nA2,_ --> A2\nA2,_ --> B2\nA2,_ --> C2\nB2,_ --> A2\nB2,_ --> B2\nB2,_ --> C2\nC2,_ --> A2\nC2,_ --> B2\nC2,_ --> C2\n\nC1,x --> A2\nA2,y --> C1\nend.\n\ndfa: n\nfinite: y\n",
-  "Simple lv1" : "# Easy\nalphabet: a\nstates: 1,2\nfinal: 2\ntransitions:\n1,a --> 2\nend.\n\ndfa: n\nfinite: n\n",
-  "Simple lv2" : "# Easy\nalphabet: a\nstates: 1,2\nfinal: 2\ntransitions:\n1,a --> 2\n2,a --> 1\nend.\n\ndfa: y\nfinite: n\n",
-  "Simple lv3" : "# Easy\nalphabet: ab\nstates: 1,2\nfinal: 2\ntransitions:\n1,a --> 2\n2,a --> 1\n1,b --> 1\n2,b --> 2\nend.\n\ndfa: y\nfinite: n\n",
-  "Woooow" : "# Woooow\nalphabet: wo\nstates: 1,2,3\nfinal: 3\ntransitions:\n1,w --> 2\n2,o --> 2\n2,w --> 3\nend.\n\ndfa: n\nfinite: n\n",
-  "A or nothing": "# A or nothing\nalphabet: a\nstates: 1,2\nfinal: 2\ntransitions:\n1,a --> 2\n1,_ --> 2\nend.\n\ndfa: n\nfinite: y\n"
+  "Empty": "# Empty\nalphabet: a\nstates: 1\nfinal: 1\ntransitions:\nend.\n\ndfa: n\nfinite: y\n",
+  "Simple 1" : "# Simple 1 \nalphabet: a\nstates: 1,2\nfinal: 2\ntransitions:\n1,a --> 2\nend.\n\ndfa: n\nfinite: n\n",
+  "Simple 2" : "# Simple 2 \nalphabet: a\nstates: 1,2\nfinal: 2\ntransitions:\n1,a --> 2\n2,a --> 1\nend.\n\ndfa: y\nfinite: n\n",
+  "Simple 3" : "# Simple 3 \nalphabet: ab\nstates: 1,2\nfinal: 2\ntransitions:\n1,a --> 2\n2,a --> 1\n1,b --> 1\n2,b --> 2\nend.\n\ndfa: y\nfinite: n\n",
+  "Finite 1": "# Finite 1 \nalphabet: a,b\nstates: 1,2,3\nfinal: 2\ntransitions:\n1,a --> 2\n1,b --> 3\n3,b --> 3\nend.\n\ndfa: n\nfinite: y\n",
+  "Finite 2": "# Finite 2\nalphabet: ox\nstates: 1,2,3\nfinal: 2\ntransitions:\n1,o --> 2\n2,x --> 3\n3,x --> 3\nend.\n\ndfa: n\nfinite: y\n",
+  "Finite 3": "# Tricky Finite 3\nalphabet: ox\nstates: 1,2,3,4,5\nfinal: 2\ntransitions:\n1,o --> 2\n2,x --> 3\n3,_ --> 4\n4,_ --> 5\n5,_ --> 3\n\nend.\n\ndfa: n\nfinite: y\n"
 }
