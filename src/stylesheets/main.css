@@ -139,6 +139,8 @@ img {
   padding: 0.5em 0.5em;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3), 0 0 0 0 var(--color-primary);
   transition: box-shadow 200ms var(--ease-bounce);
+  min-width: 0;
+  background: white;
 }
 
 .select:focus,
