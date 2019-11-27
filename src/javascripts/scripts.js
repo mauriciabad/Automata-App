@@ -16,6 +16,7 @@ const infoFiniteElem = document.getElementById('infoFinite');
 const infoTestElem = document.getElementById('iconTest');
 const inputTestElem = document.getElementById('inputTest');
 
+infoTestElem.value = localStorage.getItem('word');
 const storedRawGraph = localStorage.getItem('rawGraph');
 if (storedRawGraph) inputElem.value = storedRawGraph;
 if (!inputElem.value) inputElem.value = templates.Default;
@@ -29,6 +30,7 @@ let viz = new Viz({ Module, render });
 
 function testWord() {
   const word = inputTestElem.value.trim();
+  localStorage.setItem('word', word);
 
   infoTestElem.classList.remove(
     'info__icon-container--false',

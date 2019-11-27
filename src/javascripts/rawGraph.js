@@ -52,7 +52,13 @@ export default class RawGraph {
       word: match[1] || '',
       accepted: afirmative.includes(match[2].toLowerCase()),
     }));
-    this.start = this.states[0] || '';
+
+    if (this.states.length === 0) this.states = ['1'];
+    // eslint-disable-next-line prefer-destructuring
+    if (this.final.length === 0) this.final = this.states[0];
+
+    // eslint-disable-next-line prefer-destructuring
+    this.start = this.states[0];
   }
 
   toDotFormat() {
