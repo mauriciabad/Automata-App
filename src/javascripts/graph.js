@@ -18,11 +18,11 @@ export default class Graph {
     }
   }
 
-  addVertex(nodeName) {
+  addVertex(nodeName, isFinal) {
     if (this.nodes.has(nodeName)) {
       return this.nodes.get(nodeName);
     }
-    const node = new Node(nodeName);
+    const node = new Node(nodeName, isFinal);
     this.nodes.set(nodeName, node);
     return node;
   }
