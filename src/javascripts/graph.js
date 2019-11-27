@@ -102,18 +102,27 @@ export default class Graph {
   }
   */
 
-  // isValidPath(word) {
-  //   // TODO: do a dfs, for each letter save the possible adjacencies
-  //   // then, for each adjacency, repeat the proces.
-  //   // return false if there is no posible adjecency to take or
-  //   // Build the tree, and check if the last level adjecencies point to a final node
+  isValidPath(word) {
+    let originNodes = new Set([this.start]);
 
-  //   let path = new Set();
-  //   this.start;
-  //   for (const letter in word) {
+    for (const letter of word) {
+      const nextOriginNodes = new Set();
 
-  //   }
+      for (const node of originNodes) {
+        for (const adjacency of node.adjacencies) {
+          if (adjacency.label === letter) nextOriginNodes.add(adjacency.node);
+        }
+      }
 
-  //   return false;
-  // }
+      if (nextOriginNodes.size === 0) return false;
+
+      originNodes = nextOriginNodes;
+    }
+
+    for (const node of originNodes) {
+      if (node.isFinal) return true;
+    }
+
+    return false;
+  }
 }

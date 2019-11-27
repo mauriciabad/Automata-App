@@ -13,6 +13,8 @@ const uploadElem = document.getElementById('upload');
 const selectTemplateElem = document.getElementById('selectTemplate');
 const infoDfaElem = document.getElementById('infoDfa');
 const infoFiniteElem = document.getElementById('infoFinite');
+const infoTestElem = document.getElementById('iconTest');
+const inputTestElem = document.getElementById('inputTest');
 
 const storedRawGraph = localStorage.getItem('rawGraph');
 if (storedRawGraph) inputElem.value = storedRawGraph;
@@ -24,6 +26,24 @@ let data;
 let graph;
 
 let viz = new Viz({ Module, render });
+
+function testWord() {
+  const word = inputTestElem.value;
+
+  infoTestElem.classList.remove(
+    'info__icon-container--false',
+    'info__icon-container--true',
+    'info__icon-container--wrong',
+    'info__icon-container--unknown',
+    'info__icon-container--warning',
+  );
+
+  if (inputTestElem.checkValidity()) {
+    infoTestElem.classList.add(`info__icon-container--${graph.isValidPath(word) ? 'true' : 'false'}`);
+  } else {
+    infoTestElem.classList.add('info__icon-container--wrong');
+  }
+}
 
 function readData() {
   localStorage.setItem('rawGraph', inputElem.value);
@@ -44,14 +64,29 @@ function readData() {
   });
 
   const isDfa = graph.isDfa();
-  infoDfaElem.classList.remove('info__icon-container--false', 'info__icon-container--true', 'info__icon-container--wrong', 'info__icon-container--unknown', 'info__icon-container--warning');
+  infoDfaElem.classList.remove(
+    'info__icon-container--false',
+    'info__icon-container--true',
+    'info__icon-container--wrong',
+    'info__icon-container--unknown',
+    'info__icon-container--warning',
+  );
   infoDfaElem.classList.add(`info__icon-container--${isDfa ? 'true' : 'false'}`);
   if (data.dfa !== isDfa) infoDfaElem.classList.add('info__icon-container--warning');
 
   const isFinite = graph.isTree();
-  infoFiniteElem.classList.remove('info__icon-container--false', 'info__icon-container--true', 'info__icon-container--wrong', 'info__icon-container--unknown', 'info__icon-container--warning');
+  infoFiniteElem.classList.remove(
+    'info__icon-container--false',
+    'info__icon-container--true',
+    'info__icon-container--wrong',
+    'info__icon-container--unknown',
+    'info__icon-container--warning',
+  );
   infoFiniteElem.classList.add(`info__icon-container--${isFinite ? 'true' : 'false'}`);
   if (data.finite !== isFinite) infoFiniteElem.classList.add('info__icon-container--warning');
+
+  inputTestElem.pattern = `^ *[${data.alphabet.join('')}]* *$`;
+  testWord();
 }
 
 function readFileAsString() {
@@ -81,3 +116,4 @@ readData();
 inputElem.addEventListener('input', readData);
 uploadElem.addEventListener('change', readFileAsString);
 selectTemplateElem.addEventListener('change', openTemplate);
+inputTestElem.addEventListener('input', testWord);
