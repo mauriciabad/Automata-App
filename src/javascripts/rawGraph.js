@@ -1,3 +1,5 @@
+import { checkParentheses, missingParentheses } from './helper';
+
 const regxParser = {
   comments: /^ *# *(.*) *$/gm,
   regex: /(regex|re|regexr|regular expression)s? *: *(.*)/i,
@@ -29,7 +31,11 @@ export default class RawGraph {
     const wordsMatches = (str.match(regxParser.words) || ['', ''])[1].matchAll(regxParser.word);
 
     this.comments = Array.from(commentMatches, (match) => match[1]);
-    this.regex = (regexMatch ? regexMatch[2] : '');
+    this.regex = (regexMatch ? regexMatch[2] : '').replace(/[^\w,().*|]+/g, '').replace(/(\w)(?=\w)/g, '$1,').replace(/(\))(?!\))/g, '$1,').replace(/,+/g, ',');
+    this.regex += ')'.repeat(Math.max(0, missingParentheses(this.regex.match(/(\(|\))/g) || [])));
+    this.regexValidity = {
+      parentheses: checkParentheses(this.regex.match(/(\(|\))/g) || []),
+    };
     this.alphabet = (alphabetMatch ? alphabetMatch[1] : '').split('').sort();
     this.stack = (stackMatch ? stackMatch[1] : '');
     this.states = (statesMatch ? statesMatch[1] : '').split(',').map((item) => item.trim()).filter((item) => item !== '');

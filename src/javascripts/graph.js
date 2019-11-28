@@ -3,13 +3,19 @@ import Node from './node';
 
 export default class Graph {
   constructor({
-    regex, states, transitions, final, start, alphabet, comments,
+    regex, regexValidity, states, transitions, final, start, alphabet, comments,
   }) {
     this.title = comments ? comments[0] : 'Graph';
 
-    if (regex !== '') {
+    if (regex !== '' && regexValidity.parentheses) {
       this.nodes = new Map();
       this.alphabet = new Set();
+
+      // for (const char of regex) {
+
+      // }
+
+
       const node = this.addVertex('1', true);
       this.start = node;
     } else {
