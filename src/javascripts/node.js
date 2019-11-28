@@ -2,8 +2,8 @@
 /* eslint-disable no-underscore-dangle */
 
 export default class Node {
-  constructor(value, isFinal = false) {
-    this.value = value;
+  constructor(label, isFinal = false) {
+    this.label = label;
     this.isFinal = isFinal;
     this._adjacencies = new Set();
   }

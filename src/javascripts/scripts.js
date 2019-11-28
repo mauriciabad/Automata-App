@@ -52,7 +52,7 @@ function readData() {
   outputElem.textContent = JSON.stringify(data, null, 2);
 
   // Display graph
-  viz.renderSVGElement(data.toDotFormat()).then((element) => {
+  viz.renderSVGElement(graph.toDotFormat()).then((element) => {
     graphElem.innerHTML = '';
     graphElem.appendChild(element);
     graphTitleElem.textContent = data.comments ? data.comments[0] : '';

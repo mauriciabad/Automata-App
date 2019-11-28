@@ -63,16 +63,4 @@ export default class RawGraph {
     // eslint-disable-next-line prefer-destructuring
     this.start = this.states[0];
   }
-
-  toDotFormat() {
-    return `digraph "${this.comments ? this.comments[0] : 'Graph'}" {
-  rankdir=LR;
-  node [shape="circle"];
-  "_" [label= "", shape=point]
-${this.states.reduce((total, state) => `${total}  "${state}"${this.final.includes(state) ? ' [shape=doublecircle]' : ''}\n`, '')}
-
-  "_" -> "${this.start || '_'}"
-${this.transitions.reduce((total, transition) => `${total}  "${transition.origin}" -> "${transition.destination}" [label="${transition.label || 'ε'}"]\n`, '')}
-}`;
-  }
 }

@@ -3,8 +3,10 @@ import Node from './node';
 
 export default class Graph {
   constructor({
-    regex, states, transitions, final, start, alphabet,
+    regex, states, transitions, final, start, alphabet, comments,
   }) {
+    this.title = comments ? comments[0] : 'Graph';
+
     if (regex !== '') {
       this.nodes = new Map();
       this.alphabet = new Set();
@@ -133,5 +135,28 @@ export default class Graph {
     }
 
     return false;
+  }
+
+  toDotFormat() {
+    const nodesInDotFormat = [];
+    const edgesInDotFormat = [];
+
+    for (const node of this.nodes.values()) {
+      nodesInDotFormat.push(`"${node.label}"${node.isFinal ? ' [shape=doublecircle]' : ''}`);
+
+      for (const adjacency of node.adjacencies) {
+        edgesInDotFormat.push(`"${node.label}" -> "${adjacency.node.label}" [label="${adjacency.label || 'ε'}"]`);
+      }
+    }
+
+    return `digraph "${this.title}" {
+  rankdir=LR;
+  node [shape="circle"];
+  "_" [label= "", shape=point]
+  ${nodesInDotFormat.join('\n  ')}
+
+  "_" -> "${this.start.label || '_'}"
+  ${edgesInDotFormat.join('\n  ')}
+}`;
   }
 }
