@@ -250,6 +250,7 @@ img {
   padding: 0 0.3333em;
   line-height: 1.6667;
   border-radius: 0.3333em;
+  margin-left: 1.75em;
 }
 
 .word-list__item {
@@ -258,7 +259,8 @@ img {
 
 .word-list__item::before {
   content: '';
-  margin-right: 0.3333em;
+  position: absolute;
+  line-height: 1.5;
 }
 
 [data-icon]::before { font-family: 'Apple Color Emoji', 'Android Emoji', 'Segoe UI Emoji', EmojiSymbols, Symbola, sans-serif; }
