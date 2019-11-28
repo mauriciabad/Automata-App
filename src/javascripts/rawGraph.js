@@ -1,14 +1,15 @@
 const regxParser = {
   comments: /^ *# *(.*) *$/gm,
-  alphabet: /alphabets?:? *(\w*)/i,
-  stack: /stacks?:? *(\w*)/i,
-  states: /states?:? *((.*)*)/i,
-  final: /final:? *((.*)*)/i,
-  transitions: /transitions?:? *([^]+?) *end\.?/i,
+  regex: /[(regex)|(re)|(regexr)(regular expression)]s? *: *(.*)/i,
+  alphabet: /alphabets? *: *(\w*)/i,
+  stack: /stacks? *: *(\w*)/i,
+  states: /states? *: *((.*)*)/i,
+  final: /final *: *((.*)*)/i,
+  transitions: /transitions? *: *([^]+?) *end\.?/i,
   transition: /^ *([^\n,\->[\]]+) *,? *(\w?) *(\[ *(\w?) *,? *(\w?) *\]?)? *-*>? *([^\n,\->[\]]*)?/gm,
-  dfa: /dfa:? *(\w*)/i,
-  finite: /finite:? *(\w*)/i,
-  words: /words?:? *([^]+?) *end\.?/i,
+  dfa: /dfa *: *(\w*)/i,
+  finite: /finite *: *(\w*)/i,
+  words: /words? *: *([^]+?) *end\.?/i,
   word: /^ *(\w*)[^\w\n]+(\w+)/gm,
 };
 
@@ -17,6 +18,7 @@ const afirmative = ['y', 'ye', 'yes', 'true', '1', 'ok'];
 export default class RawGraph {
   constructor(str) {
     const commentMatches = str.matchAll(regxParser.comments);
+    const regexMatch = str.match(regxParser.regex);
     const alphabetMatch = str.match(regxParser.alphabet);
     const stackMatch = str.match(regxParser.stack);
     const statesMatch = str.match(regxParser.states);
@@ -27,6 +29,7 @@ export default class RawGraph {
     const wordsMatches = (str.match(regxParser.words) || ['', ''])[1].matchAll(regxParser.word);
 
     this.comments = Array.from(commentMatches, (match) => match[1]);
+    this.regex = (regexMatch ? regexMatch[1] : '');
     this.alphabet = (alphabetMatch ? alphabetMatch[1] : '').split('').sort();
     this.stack = (stackMatch ? stackMatch[1] : '');
     this.states = (statesMatch ? statesMatch[1] : '').split(',').map((item) => item.trim()).filter((item) => item !== '');
