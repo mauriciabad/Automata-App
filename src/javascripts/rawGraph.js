@@ -4,11 +4,11 @@ const regxParser = {
   stack: /stacks?:? *(\w*)/i,
   states: /states?:? *((.*)*)/i,
   final: /final:? *((.*)*)/i,
-  transitions: /transitions?:? *\n([^]+?) *end\.?/i,
+  transitions: /transitions?:? *\n([^(end\.)]+?) *end\.?/i,
   transition: /^ *([^\n,\->[\]]+) *,? *(\w?) *(\[ *(\w?) *,? *(\w?) *\]?)? *-*>? *([^\n,\->[\]]*)?/gm,
   dfa: /dfa:? *(\w*)/i,
   finite: /finite:? *(\w*)/i,
-  words: /words?:? *\n([^]+?) *end\.?/i,
+  words: /words?:? *\n([^(end\.)]+?) *end\.?/i,
   word: /^ *(\w*)[^\w\n]+(\w+)/gm,
 };
 
