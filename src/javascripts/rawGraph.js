@@ -31,7 +31,7 @@ export default class RawGraph {
     const wordsMatches = (str.match(regxParser.words) || ['', ''])[1].matchAll(regxParser.word);
 
     this.comments = Array.from(commentMatches, (match) => match[1]);
-    this.regex = (regexMatch ? regexMatch[2] : '').replace(/[^\w,().*|]+/g, '').replace(/(\w)(?=\w)/g, '$1,').replace(/(\))(?!\))/g, '$1,').replace(/,+/g, ',');
+    this.regex = (regexMatch ? regexMatch[2] : '').replace(/[^\w,().*|]+/g, '').replace(/(\w)(?=\w)/g, '$1,').replace(/(\))(?=[\w,(.*|])/g, '$1,').replace(/,+/g, ',');
     this.regex += ')'.repeat(Math.max(0, missingParentheses(this.regex.match(/(\(|\))/g) || [])));
     this.regexValidity = {
       parentheses: checkParentheses(this.regex.match(/(\(|\))/g) || []),
