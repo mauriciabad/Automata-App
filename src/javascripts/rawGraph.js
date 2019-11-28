@@ -13,7 +13,7 @@ const regxParser = {
   word: /^ *(\w*)[^\w\n]+(\w+)/gm,
 };
 
-const afirmative = ['y', 'ye', 'yes', 'true', '1', 'ok'];
+const afirmative = ['y', 'ye', 'yes', 'true', 'tru', 'tr', 't', '1', 'ok', 'si'];
 
 export default class RawGraph {
   constructor(str) {
