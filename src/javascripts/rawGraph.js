@@ -29,7 +29,7 @@ export default class RawGraph {
     const wordsMatches = (str.match(regxParser.words) || ['', ''])[1].matchAll(regxParser.word);
 
     this.comments = Array.from(commentMatches, (match) => match[1]);
-    this.regex = (regexMatch ? regexMatch[1] : '');
+    this.regex = (regexMatch ? regexMatch[2] : '');
     this.alphabet = (alphabetMatch ? alphabetMatch[1] : '').split('').sort();
     this.stack = (stackMatch ? stackMatch[1] : '');
     this.states = (statesMatch ? statesMatch[1] : '').split(',').map((item) => item.trim()).filter((item) => item !== '');
