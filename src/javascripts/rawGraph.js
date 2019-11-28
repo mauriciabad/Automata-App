@@ -1,14 +1,14 @@
 const regxParser = {
   comments: /^ *# *(.*) *$/gm,
-  alphabet: /alphabet: *(\w*)/i,
-  stack: /stack: *(\w*)/i,
-  states: /states: *((.*)*)/i,
-  final: /final: *((.*)*)/i,
-  transitions: /transitions: *\n([^]+?) *end\./i,
+  alphabet: /alphabets?:? *(\w*)/i,
+  stack: /stacks?:? *(\w*)/i,
+  states: /states?:? *((.*)*)/i,
+  final: /final:? *((.*)*)/i,
+  transitions: /transitions?:? *\n([^]+?) *end\.?/i,
   transition: /^ *([^\n,\->[\]]+) *,? *(\w?) *(\[ *(\w?) *,? *(\w?) *\]?)? *-*>? *([^\n,\->[\]]*)?/gm,
-  dfa: /dfa: *(\w*)/i,
-  finite: /finite: *(\w*)/i,
-  words: /words: *\n([^]+?) *end\./i,
+  dfa: /dfa:? *(\w*)/i,
+  finite: /finite:? *(\w*)/i,
+  words: /words?:? *\n([^]+?) *end\.?/i,
   word: /^ *(\w*)[^\w\n]+(\w+)/gm,
 };
 
