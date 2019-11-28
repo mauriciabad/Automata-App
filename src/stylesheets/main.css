@@ -169,7 +169,11 @@ img {
     'graph infoFinite';
 }
 .graph-info__dfa { grid-area: infoDfa; }
-.graph-info__finite { grid-area: infoFinite; }
+
+.graph-info__finite {
+  grid-area: infoFinite;
+  opacity: 0.25;
+}
 .grid-graph__graph { grid-area: graph; }
 
 .info__icon-container {
