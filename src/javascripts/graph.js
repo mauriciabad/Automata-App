@@ -86,7 +86,7 @@ export default class Graph {
     return true;
   }
 
-  isTree() {
+  isFinite() {
     const visitedNodes = [this.start];
     visitedNodes.pop(); // TODO: Implement real function
     return false;

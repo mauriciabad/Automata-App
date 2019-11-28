@@ -73,7 +73,7 @@ function readData() {
   if (data.dfa !== isDfa) infoDfaElem.classList.add('info__icon-container--warning');
 
   // Test finite
-  const isFinite = graph.isTree();
+  const isFinite = graph.isFinite();
   infoFiniteElem.classList.remove(
     'info__icon-container--false',
     'info__icon-container--true',
