@@ -3,18 +3,25 @@ import Node from './node';
 
 export default class Graph {
   constructor({
-    states, transitions, final, start, alphabet,
+    regex, states, transitions, final, start, alphabet,
   }) {
-    this.nodes = new Map();
-    this.alphabet = alphabet;
+    if (regex !== '') {
+      this.nodes = new Map();
+      this.alphabet = new Set();
+      const node = this.addVertex('1', true);
+      this.start = node;
+    } else {
+      this.nodes = new Map();
+      this.alphabet = new Set(alphabet);
 
-    for (const nodeName of states) {
-      const node = this.addVertex(nodeName, final.includes(nodeName));
-      if (nodeName === start) this.start = node;
-    }
+      for (const nodeName of states) {
+        const node = this.addVertex(nodeName, final.includes(nodeName));
+        if (nodeName === start) this.start = node;
+      }
 
-    for (const edge of transitions) {
-      this.addEdge(edge.origin, edge.destination, edge.label);
+      for (const edge of transitions) {
+        this.addEdge(edge.origin, edge.destination, edge.label);
+      }
     }
   }
 
@@ -65,14 +72,14 @@ export default class Graph {
 
   isDfa() {
     for (const node of this.nodes.values()) {
-      const foundLetters = [];
+      const foundLetters = new Set();
 
       for (const adjacentcy of node.adjacencies) {
-        if (foundLetters.includes(adjacentcy.label)) return false;
-        foundLetters.push(adjacentcy.label);
+        if (foundLetters.has(adjacentcy.label)) return false;
+        foundLetters.add(adjacentcy.label);
       }
 
-      if (foundLetters.length !== this.alphabet.length) return false;
+      if (foundLetters.size !== this.alphabet.size) return false;
     }
     return true;
   }
