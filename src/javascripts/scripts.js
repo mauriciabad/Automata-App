@@ -85,7 +85,7 @@ function readData() {
   if (data.finite !== isFinite) infoFiniteElem.classList.add('info__icon-container--warning');
 
   // Test words
-  wordsElem.innerHTML = data.words.reduce((total, word) => `${total}<li class="word-list__item" data-icon="${word.accepted}"><span class="word-list__word">${word.word !== '' ? word.word : '&nbsp;'}</span></li>`, '');
+  wordsElem.innerHTML = data.words.reduce((total, word) => `${total}<li class="word-list__item" data-icon="${graph.isValidPath(word.word)}" data-original="${word.accepted}"><span class="word-list__word">${word.word !== '' ? word.word : '&nbsp;'}</span></li>`, '');
 
   // Test custon word
   inputTestElem.pattern = `^ *[${data.alphabet.join('')}]* *$`;

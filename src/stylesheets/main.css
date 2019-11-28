@@ -226,9 +226,12 @@ img {
   pointer-events: none;
 }
 
-.test[data-warning="true"] {
-  background: #ffccbc;
-  border-radius: 100px;
+.word-list__item[data-icon="true"][data-original="false"]::before {
+  text-shadow: 0 0 8px #368a39;
+}
+
+.word-list__item[data-icon="false"][data-original="true"]::before {
+  text-shadow: 0 0 8px #ff5d2a;
 }
 
 .word-list {
