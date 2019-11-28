@@ -1,6 +1,6 @@
 const regxParser = {
   comments: /^ *# *(.*) *$/gm,
-  regex: /[(regex)|(re)|(regexr)(regular expression)]s? *: *(.*)/i,
+  regex: /(regex|re|regexr|regular expression)s? *: *(.*)/i,
   alphabet: /alphabets? *: *(\w*)/i,
   stack: /stacks? *: *(\w*)/i,
   states: /states? *: *((.*)*)/i,
