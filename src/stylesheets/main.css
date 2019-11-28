@@ -261,6 +261,7 @@ img {
   margin-right: 0.3333em;
 }
 
+[data-icon]::before { font-family: 'Apple Color Emoji', 'Android Emoji', 'Segoe UI Emoji', EmojiSymbols, Symbola, sans-serif; }
 [data-icon="true"]::before { content: '✔'; }
 [data-icon="false"]::before { content: '❌'; }
 [data-icon="unknown"]::before { content: '❓'; }
