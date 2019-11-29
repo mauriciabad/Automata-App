@@ -19,5 +19,8 @@
   "Regex Complex": "# Regex 1\nregex: *(|(*(.(a,b)),c))\n\ndfa: n\nfinite: n\n\nwords:\n,y\nc,y\nab,y\nabab,y\nababc,y\ncabcab,y\nend.\n",
   "Regex a*": "# Regex a*\nregex: *(a)\n\ndfa: n\nfinite: n\n\nwords:\n,y\na,y\naa,y\naaa,y\naaaa,y\naaaaa,y\nend.\n",
   "Regex a.b": "# Regex a.b\nregex: .(a,b)\n\ndfa: n\nfinite: y\n\nwords:\n,n\na,n\nb,n\naa,n\nab,y\nba,n\nbb,n\n\naaa,n\naab,n\naba,n\nabb,n\nbaa,n\nbab,n\nbba,n\nbbb,n\n\naaaa,n\naaab,n\naaba,n\naabb,n\nabaa,n\nabab,n\nabba,n\nabbb,n\nbaaa,n\nbaab,n\nbaba,n\nbabb,n\nbbaa,n\nbbab,n\nbbba,n\nbbbb,n\nend.\n",
-  "Regex a|b": "# Regex a|b\nregex: |(a,b)\n\ndfa: n\nfinite: y\n\nwords:\n,n\na,y\nb,y\naa,n\nab,n\nba,n\nbb,n\n\naaa,n\naab,n\naba,n\nabb,n\nbaa,n\nbab,n\nbba,n\nbbb,n\n\naaaa,n\naaab,n\naaba,n\naabb,n\nabaa,n\nabab,n\nabba,n\nabbb,n\nbaaa,n\nbaab,n\nbaba,n\nbabb,n\nbbaa,n\nbbab,n\nbbba,n\nbbbb,n\nend.\n"
+  "Regex a|b": "# Regex a|b\nregex: |(a,b)\n\ndfa: n\nfinite: y\n\nwords:\n,n\na,y\nb,y\naa,n\nab,n\nba,n\nbb,n\n\naaa,n\naab,n\naba,n\nabb,n\nbaa,n\nbab,n\nbba,n\nbbb,n\n\naaaa,n\naaab,n\naaba,n\naabb,n\nabaa,n\nabab,n\nabba,n\nabbb,n\nbaaa,n\nbaab,n\nbaba,n\nbabb,n\nbbaa,n\nbbab,n\nbbba,n\nbbbb,n\nend.\n",
+  "Regex (a|b)|(c|d)": "# Regex a|b|c|d\nregex: |(|(a,b),|(c,d))\n\ndfa: n\nfinite: y\n\nwords:\n,n\na,n\nb,n\nc,n\nd,n\nz,n\n\na,n\naa,n\nab,n\nac,n\nad,n\n\naz,y\nbz,y\ncz,y\ndz,y\n\nend.\n",
+  "Regex (a|b|c|d)": "# Regex (a|b|c|d)\nregex: |(a,b,c,d)\n\ndfa: n\nfinite: y\n\nwords:\n,n\na,y\nb,y\nc,y\nd,y\n\naa,n\nab,n\nac,n\nad,n\n\nend.\n",
+  "Regex (a|b|c|d).z": "# Regex (a|b|c|d).z\nregex: .(|(|(a,b),|(c,d)),z)\n\ndfa: n\nfinite: y\n\nwords:\n,n\na,n\nb,n\nc,n\nd,n\nz,n\n\na,n\naa,n\nab,n\nac,n\nad,n\n\naz,y\nbz,y\ncz,y\ndz,y\n\nend.\n"
 }
