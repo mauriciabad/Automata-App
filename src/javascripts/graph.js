@@ -18,7 +18,7 @@ export default class Graph {
         const nodeOut = this.addVertex(undefined, true);
         this.start = nodeIn;
         this.addRegex(nodeIn, nodeOut, regex);
-        this.simplifyFinals();
+        // this.simplifyConsecutiveEpsilons();
       } catch (e) {
         this.nodes = new Map();
         this.alphabet = new Set();
@@ -130,6 +130,43 @@ export default class Graph {
     }
   }
 
+  simplifyConsecutiveEpsilons() {
+    const undeletableEpsilonNodes = new Set([this.start]);
+    const nodesOrigins = new Map();
+
+    for (const node of this.nodes.values()) {
+      for (const adjecency of node.adjacencies) {
+        if (adjecency.label !== '') {
+          undeletableEpsilonNodes.add(node);
+          undeletableEpsilonNodes.add(adjecency.node);
+        }
+        if (!Array.isArray(nodesOrigins.get(adjecency.node))) nodesOrigins.set(adjecency.node, []);
+        nodesOrigins.get(adjecency.node).push(node);
+      }
+    }
+
+    for (const node of this.nodes.values()) {
+      if (!undeletableEpsilonNodes.has(node)) {
+        for (const adjecency of node.adjacencies) {
+          const destinationNode = adjecency.node;
+          if (node.isFinal) destinationNode.isFinal = true;
+
+          for (const originNode of nodesOrigins.get(node)) {
+            originNode.addAdjacency(destinationNode, '');
+          }
+        }
+        if (node.adjacencies.length === 0) {
+          for (const originNode of nodesOrigins.get(node)) {
+            originNode.isFinal = true;
+          }
+        }
+
+        this.removeVertex(node.label);
+        node.isFinal = true;
+      }
+    }
+  }
+
   addVertex(nodeName, isFinal = false) {
     let newNodeName = nodeName;
     if (newNodeName === undefined) newNodeName = this.nodes.size + 1;
@@ -145,7 +182,9 @@ export default class Graph {
   removeVertex(nodeName) {
     const current = this.nodes.get(nodeName);
     if (current) {
-      Array.from(this.nodes.values()).forEach((node) => node.removeAllAdjacencies(current));
+      for (const node of this.nodes.values()) {
+        node.removeAllAdjacencies(current);
+      }
     }
     return this.nodes.delete(nodeName);
   }
