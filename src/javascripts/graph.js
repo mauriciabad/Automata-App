@@ -22,7 +22,7 @@ export default class Graph {
       } catch (e) {
         this.nodes = new Map();
         this.alphabet = new Set();
-        this.start = this.addVertex(undefined, true);
+        this.start = this.addVertex(undefined, false);
         this.invalid = true;
         this.errorMessage = e.message;
       }
