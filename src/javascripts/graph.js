@@ -14,7 +14,12 @@ export default class Graph {
       const nodeIn = this.addVertex(undefined);
       const nodeOut = this.addVertex(undefined, true);
       this.start = nodeIn;
-      this.addRegex(nodeIn, nodeOut, regex);
+      try {
+        this.addRegex(nodeIn, nodeOut, regex);
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.log(e);
+      }
     } else {
       this.nodes = new Map();
       this.alphabet = new Set(alphabet);
@@ -37,7 +42,7 @@ export default class Graph {
       this.addRegex(lastNode, node, operand);
       lastNode = node;
     }
-    this.addEdge(lastNode, nodeOut, '');
+    lastNode.addAdjacency(nodeOut, '');
   }
 
   addRegexOr(nodeIn, nodeOut, operands) {
@@ -65,7 +70,7 @@ export default class Graph {
     this.alphabet.add(label);
   }
 
-  addRegex(nodeIn, nodeOut, regex) {
+  addRegex(nodeIn, nodeOut, regex = ['']) {
     const operator = regex[0];
     const operands = [];
     let level = 0;
@@ -84,17 +89,15 @@ export default class Graph {
       }
     }
 
-    if ((regex.length - 1) > operandBegining) {
-      operands.push(regex.slice(operandBegining, regex.length - 1));
-    }
+    operands.push(regex.slice(operandBegining, regex.length - 1));
 
     if (level !== 0) throw Error('Parenthesis are wrong');
-    if (operands.length === 0 && regex === '') throw Error('No operands in a operation');
 
     switch (operator) {
       case '*': this.addRegexRepeat(nodeIn, nodeOut, operands); break;
       case '.': this.addRegexAdd(nodeIn, nodeOut, operands); break;
       case '|': this.addRegexOr(nodeIn, nodeOut, operands); break;
+      case '': throw Error('No operands in a operation');
       case '(': case ')': throw Error('Missing operator (*.|)');
       default: this.addRegexBasic(nodeIn, nodeOut, regex); break;
     }
