@@ -3,7 +3,7 @@ import Node from './node';
 
 export default class Graph {
   constructor({
-    regex, regexValidity, states, transitions, final, start, alphabet, comments,
+    regex, states, transitions, final, start, alphabet, comments,
   }) {
     this.title = comments ? comments[0] : 'Graph';
     this.invalid = false;
