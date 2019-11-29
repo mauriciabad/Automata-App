@@ -11,13 +11,10 @@ export default class Graph {
       this.nodes = new Map();
       this.alphabet = new Set();
 
-      // for (const char of regex) {
-
-      // }
-
-
-      const node = this.addVertex('1', true);
-      this.start = node;
+      const nodeIn = this.addVertex(undefined);
+      const nodeOut = this.addVertex(undefined, true);
+      this.start = nodeIn;
+      this.addRegex(nodeIn, nodeOut, regex);
     } else {
       this.nodes = new Map();
       this.alphabet = new Set(alphabet);
@@ -33,12 +30,85 @@ export default class Graph {
     }
   }
 
-  addVertex(nodeName, isFinal) {
-    if (this.nodes.has(nodeName)) {
-      return this.nodes.get(nodeName);
+  addRegexAdd(nodeIn, nodeOut, operands) {
+    let lastNode = nodeIn;
+    for (const operand of operands) {
+      const node = this.addVertex(undefined);
+      this.addRegex(lastNode, node, operand);
+      lastNode = node;
     }
-    const node = new Node(nodeName, isFinal);
-    this.nodes.set(nodeName, node);
+    this.addEdge(lastNode, nodeOut, '');
+  }
+
+  addRegexOr(nodeIn, nodeOut, operands) {
+    for (const operand of operands) {
+      const node = this.addVertex(undefined);
+      node.addAdjacency(nodeOut, '');
+      this.addRegex(nodeIn, node, operand);
+    }
+  }
+
+  addRegexRepeat(nodeIn, nodeOut, operands) {
+    const nodeCenter = this.addVertex(undefined);
+    const nodeRight = this.addVertex(undefined);
+
+    nodeIn.addAdjacency(nodeRight, '');
+    nodeCenter.addAdjacency(nodeRight, '');
+    nodeRight.addAdjacency(nodeIn, '');
+    nodeRight.addAdjacency(nodeOut, '');
+
+    this.addRegex(nodeIn, nodeCenter, operands[0]);
+  }
+
+  addRegexBasic(nodeIn, nodeOut, label) {
+    nodeIn.addAdjacency(nodeOut, label);
+    this.alphabet.add(label);
+  }
+
+  addRegex(nodeIn, nodeOut, regex) {
+    const operator = regex[0];
+    const operands = [];
+    let level = 0;
+    let operandBegining = 2;
+    for (let i = 2; i < regex.length - 1; i += 1) {
+      switch (regex[i]) {
+        case '(': level += 1; break;
+        case ')': level -= 1; break;
+        case ',':
+          if (level === 0) {
+            operands.push(regex.slice(operandBegining, i));
+            operandBegining = i + 1;
+          }
+          break;
+        default: break;
+      }
+    }
+
+    if ((regex.length - 1) > operandBegining) {
+      operands.push(regex.slice(operandBegining, regex.length - 1));
+    }
+
+    if (level !== 0) throw Error('Parenthesis are wrong');
+    if (operands.length === 0 && regex === '') throw Error('No operands in a operation');
+
+    switch (operator) {
+      case '*': this.addRegexRepeat(nodeIn, nodeOut, operands); break;
+      case '.': this.addRegexAdd(nodeIn, nodeOut, operands); break;
+      case '|': this.addRegexOr(nodeIn, nodeOut, operands); break;
+      case '(': case ')': throw Error('Missing operator (*.|)');
+      default: this.addRegexBasic(nodeIn, nodeOut, regex); break;
+    }
+  }
+
+  addVertex(nodeName, isFinal = false) {
+    let newNodeName = nodeName;
+    if (newNodeName === undefined) newNodeName = this.nodes.size + 1;
+
+    if (this.nodes.has(newNodeName)) {
+      return this.nodes.get(newNodeName);
+    }
+    const node = new Node(newNodeName, isFinal);
+    this.nodes.set(newNodeName, node);
     return node;
   }
 
