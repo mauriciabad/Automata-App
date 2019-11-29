@@ -17,6 +17,7 @@ export default class Graph {
       this.start = nodeIn;
       try {
         this.addRegex(nodeIn, nodeOut, regex);
+        this.simplifyFinals();
       } catch (e) {
         // eslint-disable-next-line no-console
         console.log(e);
@@ -104,6 +105,26 @@ export default class Graph {
     }
   }
 
+  simplifyFinals() {
+    const rebundantFinalNodes = new Set();
+    const undeletableFinalNodes = new Set();
+    for (const node of this.nodes.values()) {
+      for (const adjecency of node.adjacencies) {
+        if (adjecency.node.isFinal) {
+          if (adjecency.label === '') {
+            rebundantFinalNodes.add(adjecency.node);
+            node.isFinal = true;
+          } else {
+            undeletableFinalNodes.add(adjecency.node);
+          }
+        }
+      }
+    }
+    for (const node of rebundantFinalNodes) {
+      if (!undeletableFinalNodes.has(node)) this.removeVertex(node.label);
+    }
+  }
+
   addVertex(nodeName, isFinal = false) {
     let newNodeName = nodeName;
     if (newNodeName === undefined) newNodeName = this.nodes.size + 1;
@@ -119,7 +140,7 @@ export default class Graph {
   removeVertex(nodeName) {
     const current = this.nodes.get(nodeName);
     if (current) {
-      Array.from(this.nodes.values()).forEach((node) => node.removeAllAdjacent(current));
+      Array.from(this.nodes.values()).forEach((node) => node.removeAllAdjacencies(current));
     }
     return this.nodes.delete(nodeName);
   }
