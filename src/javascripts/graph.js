@@ -24,9 +24,6 @@ export default class Graph {
         this.alphabet = new Set();
         this.start = this.addVertex(undefined, true);
         this.invalid = true;
-
-        // eslint-disable-next-line no-console
-        console.log(e);
         this.errorMessage = e.message;
       }
     } else {
