@@ -12,13 +12,17 @@ export default class Graph {
       this.nodes = new Map();
       this.alphabet = new Set();
 
-      const nodeIn = this.addVertex(undefined);
-      const nodeOut = this.addVertex(undefined, true);
-      this.start = nodeIn;
       try {
+        const nodeIn = this.addVertex(undefined);
+        const nodeOut = this.addVertex(undefined, true);
+        this.start = nodeIn;
         this.addRegex(nodeIn, nodeOut, regex);
         this.simplifyFinals();
       } catch (e) {
+        this.nodes = new Map();
+        this.alphabet = new Set();
+        this.start = this.addVertex(undefined, true);
+
         // eslint-disable-next-line no-console
         console.log(e);
       }
