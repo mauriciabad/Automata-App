@@ -6,8 +6,9 @@ export default class Graph {
     regex, regexValidity, states, transitions, final, start, alphabet, comments,
   }) {
     this.title = comments ? comments[0] : 'Graph';
+    this.fromRegex = regex !== '' && regexValidity.parentheses;
 
-    if (regex !== '' && regexValidity.parentheses) {
+    if (this.fromRegex) {
       this.nodes = new Map();
       this.alphabet = new Set();
 
@@ -221,7 +222,7 @@ export default class Graph {
     const edgesInDotFormat = [];
 
     for (const node of this.nodes.values()) {
-      nodesInDotFormat.push(`"${node.label}"${node.isFinal ? ' [shape=doublecircle]' : ''}`);
+      nodesInDotFormat.push(`"${node.label}" [${this.fromRegex ? 'label= "", ' : ''}${node.isFinal ? 'shape=doublecircle' : ''}]`);
 
       for (const adjacency of node.adjacencies) {
         edgesInDotFormat.push(`"${node.label}" -> "${adjacency.node.label}" [label="${adjacency.label || 'ε'}"]`);
