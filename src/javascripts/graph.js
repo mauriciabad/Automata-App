@@ -6,7 +6,8 @@ export default class Graph {
     regex, regexValidity, states, transitions, final, start, alphabet, comments,
   }) {
     this.title = comments ? comments[0] : 'Graph';
-    this.fromRegex = regex !== '' && regexValidity.parentheses;
+    this.invalid = false;
+    this.fromRegex = regex !== '';
 
     if (this.fromRegex) {
       this.nodes = new Map();
@@ -22,9 +23,11 @@ export default class Graph {
         this.nodes = new Map();
         this.alphabet = new Set();
         this.start = this.addVertex(undefined, true);
+        this.invalid = true;
 
         // eslint-disable-next-line no-console
         console.log(e);
+        this.errorMessage = e.message;
       }
     } else {
       this.nodes = new Map();
@@ -78,6 +81,7 @@ export default class Graph {
 
   addRegex(nodeIn, nodeOut, regex = ['']) {
     const operator = regex[0];
+    if (operator === '(' || operator === ')') throw Error('Invalid regex: \nMissing operator');
     const operands = [];
     let level = 0;
     let operandBegining = 2;
@@ -97,14 +101,14 @@ export default class Graph {
 
     operands.push(regex.slice(operandBegining, regex.length - 1));
 
-    if (level !== 0) throw Error('Parenthesis are wrong');
+    if (level !== 0) throw Error('Invalid regex: \nParenthesis are wrong');
 
     switch (operator) {
       case '*': this.addRegexRepeat(nodeIn, nodeOut, operands); break;
       case '.': this.addRegexAdd(nodeIn, nodeOut, operands); break;
       case '|': this.addRegexOr(nodeIn, nodeOut, operands); break;
-      case '': throw Error('No operands in a operation');
-      case '(': case ')': throw Error('Missing operator (*.|)');
+      case '': case undefined: throw Error('Invalid regex: \nMissing operands');
+      case '(': case ')': throw Error('Invalid regex: \nMissing operator');
       default: this.addRegexBasic(nodeIn, nodeOut, regex); break;
     }
   }
@@ -217,7 +221,7 @@ export default class Graph {
   */
 
   isValidPath(word) {
-    let originNodes = new Set(this.start.epsilonAccessibleNodes());
+    let originNodes = new Set(this.start ? this.start.epsilonAccessibleNodes() : []);
 
     for (const letter of word) {
       const nextOriginNodes = new Set();
@@ -243,6 +247,18 @@ export default class Graph {
   }
 
   toDotFormat() {
+    if (this.invalid) {
+      return `digraph "${this.title}" {
+  "${this.errorMessage.replace(/"/g, '\\"') || 'Invalid input'}" [shape="plaintext" width=3];
+}`;
+    }
+
+    if (this.nodes.size === 0) {
+      return `digraph "${this.title}" {
+  "Empty" [shape="plaintext" width=3 fontcolor="#666666"];
+}`;
+    }
+
     const nodesInDotFormat = [];
     const edgesInDotFormat = [];
 
@@ -260,7 +276,7 @@ export default class Graph {
   "_" [label= "", shape=point]
   ${nodesInDotFormat.join('\n  ')}
 
-  "_" -> "${this.start.label || '_'}"
+  "_" -> "${this.start ? this.start.label || '_' : '_'}"
   ${edgesInDotFormat.join('\n  ')}
 }`;
   }

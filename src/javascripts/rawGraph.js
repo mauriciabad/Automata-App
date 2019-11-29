@@ -31,7 +31,12 @@ export default class RawGraph {
     const wordsMatches = (str.match(regxParser.words) || ['', ''])[1].matchAll(regxParser.word);
 
     this.comments = Array.from(commentMatches, (match) => match[1]);
-    this.regex = (regexMatch ? regexMatch[2] : '').replace(/[^\w,().*|]+/g, '').replace(/(\w)(?=\w)/g, '$1,').replace(/(\))(?=[\w,(.*|])/g, '$1,').replace(/,+/g, ',');
+    this.regex = (regexMatch ? regexMatch[2] : '')
+      .replace(/[^\w,().*|]+/g, '')
+      .replace(/(\w)(?=\w)/g, '$1,')
+      .replace(/(\))(?=[\w,(.*|])/g, '$1,')
+      .replace(/,+/g, ',')
+      .replace(/,\)/g, ')');
     this.regex += ')'.repeat(Math.max(0, missingParentheses(this.regex.match(/(\(|\))/g) || [])));
     this.regexValidity = {
       parentheses: checkParentheses(this.regex.match(/(\(|\))/g) || []),
@@ -62,11 +67,11 @@ export default class RawGraph {
       accepted: afirmative.includes(match[2].toLowerCase()),
     }));
 
-    if (this.states.length === 0) this.states = ['1'];
+    // if (this.states.length === 0) this.states = ['1'];
     // eslint-disable-next-line prefer-destructuring
-    if (this.final.length === 0) this.final = this.states[0];
+    // if (this.final.length === 0) this.final = this.states[0];
 
     // eslint-disable-next-line prefer-destructuring
-    this.start = this.states[0];
+    this.start = this.states ? this.states[0] : undefined;
   }
 }
