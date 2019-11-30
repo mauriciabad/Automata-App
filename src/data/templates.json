@@ -22,7 +22,7 @@
   "Regex *a.*b": "# Regex *a.*b\nregex: .(*(a),*(b))\n\ndfa: n\nfinite: n\n\nwords:\nba,n\nbba,n\nbbba,n\n\nbaa,n\nbbaa,n\nbbbaa,n\n\nbaaa,n\nbbaaa,n\nbbbaaa,n\n\n,y\na,y\naa,y\naaa,y\naaaa,y\naaaaa,y\n\nb,y\nbb,y\nbbb,y\nbbbb,y\nbbbbb,y\n\nab,y\nabb,y\nabbb,y\nabbbb,y\nabbbbb,y\n\naab,y\naaab,y\naaaab,y\naaaaab,y\n\naabb,y\naaabbb,y\naaaabbbb,y\naaaaabbbbb,y\nend.\n",
   "Regex *a|*b": "# Regex *a|*b\nregex: |(*(a),*(b))\n\ndfa: n\nfinite: n\n\nwords:\n,y\na,y\nb,y\naaa,y\nbbb,y\nab,n\nba,n\naaabbb,n\nababab,n\nbababa,n\nend.\n",
   "Regex *(*(a.b)|c)": "# Regex *(*(a.b)|c)\nregex: *(|(*(.(a,b)),c))\n\ndfa: n\nfinite: n\n\nwords:\n,y\nc,y\nab,y\nabab,y\nababc,y\ncabcab,y\nend.\n",
-  "Regex (a|b)|(c|d)": "# Regex a|b|c|d\nregex: |(|(a,b),|(c,d))\n\ndfa: n\nfinite: y\n\nwords:\n,n\na,n\nb,n\nc,n\nd,n\nz,n\n\na,n\naa,n\nab,n\nac,n\nad,n\n\naz,y\nbz,y\ncz,y\ndz,y\n\nend.\n",
+  "Regex (a|b)|(c|d)": "# Regex (a|b)|(c|d)\nregex: |(|(a,b),|(c,d))\n\ndfa: n\nfinite: y\n\nwords:\n,n\na,y\nb,y\nc,y\nd,y\n\naa,n\nab,n\nac,n\nad,n\n\nend.\n",
   "Regex (a|b|c|d)": "# Regex (a|b|c|d)\nregex: |(a,b,c,d)\n\ndfa: n\nfinite: y\n\nwords:\n,n\na,y\nb,y\nc,y\nd,y\n\naa,n\nab,n\nac,n\nad,n\n\nend.\n",
   "Regex (a|b|c|d).z": "# Regex (a|b|c|d).z\nregex: .(|(|(a,b),|(c,d)),z)\n\ndfa: n\nfinite: y\n\nwords:\n,n\na,n\nb,n\nc,n\nd,n\nz,n\n\na,n\naa,n\nab,n\nac,n\nad,n\n\naz,y\nbz,y\ncz,y\ndz,y\n\nend.\n"
 }
