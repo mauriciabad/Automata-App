@@ -90,20 +90,32 @@ export default class Node {
     const visited = new Set();
     const visitList = [this];
 
-    while (visitList.length !== 0) {
-      const node = visitList.pop();
-      path.push(node);
+    this.epsilonLoopsRec(loops, path, visited, visitList);
 
-      if (visited.has(node)) {
+    return loops;
+  }
+
+  epsilonLoopsRec(loops, path, visited, visitList) {
+    if (visitList.length === 0) return;
+
+    const node = visitList.pop();
+    path.push(node);
+
+    if (visited.has(node)) {
+      if (path.includes(node)) {
         loops.push(new Set(path.slice(path.indexOf(node) + 1)));
-      } else {
-        visited.add(node);
-        const adjecentEpsilonNodes = node.adjacencies
-          .filter((adjacency) => adjacency.label === '')
-          .map((adjacency) => adjacency.node);
-        visitList.push(...adjecentEpsilonNodes);
+      }
+    } else {
+      visited.add(node);
+      const adjecentEpsilonNodes = node.adjacencies
+        .filter((adjacency) => adjacency.label === '')
+        .map((adjacency) => adjacency.node);
+      for (const eNode of adjecentEpsilonNodes) {
+        visitList.push(eNode);
+        path.push(eNode);
+        this.epsilonLoopsRec(loops, path, visited, visitList);
+        path.pop();
       }
     }
-    return loops;
   }
 }

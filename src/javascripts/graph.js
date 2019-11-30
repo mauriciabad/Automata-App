@@ -18,8 +18,7 @@ export default class Graph {
         const nodeOut = this.addVertex(undefined, true);
         this.start = nodeIn;
         this.addRegex(nodeIn, nodeOut, regex);
-        this.simplifyConsecutiveEpsilons();
-        // this.simplifyEpsilonLoops();
+        this.simplify();
       } catch (e) {
         this.nodes = new Map();
         this.alphabet = new Set();
@@ -133,22 +132,52 @@ export default class Graph {
     }
   }
 
+  nodesOrigins() {
+    const nodesOrigins = new Map();
+
+    for (const node of this.nodes.values()) {
+      for (const adjecency of node.adjacencies) {
+        if (!Array.isArray(nodesOrigins.get(adjecency.node))) nodesOrigins.set(adjecency.node, []);
+        nodesOrigins.get(adjecency.node).push(node);
+      }
+    }
+    return nodesOrigins;
+  }
+
   simplifyEpsilonLoops() {
+    const nodesOrigins = this.nodesOrigins();
+
     for (const loop of this.start.epsilonLoops()) {
-      const firstNode = Array.from(loop)[0];
+      const firstNode = Array.from(loop).reduce(
+        (oldNode, node) => (node === this.start ? node : oldNode),
+        Array.from(loop)[0],
+      );
 
       for (const node of loop) {
-        for (const adjecency of node.adjacencies) {
-          firstNode.addAdjacency(adjecency.node, adjecency.label);
+        if (node !== firstNode) {
+          for (const adjecency of node.adjacencies) {
+            if (adjecency.label !== '') {
+              firstNode.addAdjacency(adjecency.node, adjecency.label);
+            }
+          }
+          for (const originNode of nodesOrigins.get(node)) {
+            for (const originNodeAdjecency of node.adjacencies) {
+              if (originNode === originNodeAdjecency.node) {
+                if (originNode === firstNode && originNodeAdjecency.label !== '') {
+                  originNode.addAdjacency(firstNode, originNodeAdjecency.label);
+                }
+              }
+            }
+          }
+          this.removeVertex(node.label);
         }
-        this.removeVertex(node.label);
       }
     }
   }
 
   simplifyConsecutiveEpsilons() {
     const undeletableEpsilonNodes = new Set([this.start]);
-    const nodesOrigins = new Map();
+    const nodesOrigins = this.nodesOrigins();
 
     for (const node of this.nodes.values()) {
       for (const adjecency of node.adjacencies) {
@@ -156,8 +185,6 @@ export default class Graph {
           undeletableEpsilonNodes.add(node);
           undeletableEpsilonNodes.add(adjecency.node);
         }
-        if (!Array.isArray(nodesOrigins.get(adjecency.node))) nodesOrigins.set(adjecency.node, []);
-        nodesOrigins.get(adjecency.node).push(node);
       }
     }
 
@@ -184,6 +211,11 @@ export default class Graph {
         node.isFinal = true;
       }
     }
+  }
+
+  simplify() {
+    this.simplifyConsecutiveEpsilons();
+    this.simplifyEpsilonLoops();
   }
 
   addVertex(nodeName, isFinal = false) {
