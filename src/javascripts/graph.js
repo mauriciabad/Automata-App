@@ -156,6 +156,7 @@ export default class Graph {
       for (const node of loop) {
         if (node !== firstNode) {
           for (const adjecency of node.adjacencies) {
+            if (adjecency.node.isFinal) firstNode.isFinal = true;
             if (adjecency.label !== '') {
               firstNode.addAdjacency(adjecency.node, adjecency.label);
             }
