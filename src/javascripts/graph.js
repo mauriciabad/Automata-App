@@ -19,6 +19,7 @@ export default class Graph {
         this.start = nodeIn;
         this.addRegex(nodeIn, nodeOut, regex);
         this.simplifyConsecutiveEpsilons();
+        // this.simplifyEpsilonLoops();
       } catch (e) {
         this.nodes = new Map();
         this.alphabet = new Set();
@@ -129,6 +130,19 @@ export default class Graph {
     }
     for (const node of rebundantFinalNodes) {
       if (!undeletableFinalNodes.has(node)) this.removeVertex(node.label);
+    }
+  }
+
+  simplifyEpsilonLoops() {
+    for (const loop of this.start.epsilonLoops()) {
+      const firstNode = Array.from(loop)[0];
+
+      for (const node of loop) {
+        for (const adjecency of node.adjacencies) {
+          firstNode.addAdjacency(adjecency.node, adjecency.label);
+        }
+        this.removeVertex(node.label);
+      }
     }
   }
 
@@ -270,7 +284,9 @@ export default class Graph {
       for (const node of originNodes) {
         for (const adjacency of node.adjacencies) {
           if (adjacency.label === letter) {
-            adjacency.node.epsilonAccessibleNodes().forEach(nextOriginNodes.add, nextOriginNodes);
+            for (const node2 of adjacency.node.epsilonAccessibleNodes()) {
+              nextOriginNodes.add(node2);
+            }
           }
         }
       }

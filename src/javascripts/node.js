@@ -81,6 +81,29 @@ export default class Node {
       }
     }
 
-    return Array.from(accessibleNodes);
+    return accessibleNodes;
+  }
+
+  epsilonLoops() {
+    const loops = [];
+    const path = [];
+    const visited = new Set();
+    const visitList = [this];
+
+    while (visitList.length !== 0) {
+      const node = visitList.pop();
+      path.push(node);
+
+      if (visited.has(node)) {
+        loops.push(new Set(path.slice(path.indexOf(node) + 1)));
+      } else {
+        visited.add(node);
+        const adjecentEpsilonNodes = node.adjacencies
+          .filter((adjacency) => adjacency.label === '')
+          .map((adjacency) => adjacency.node);
+        visitList.push(...adjecentEpsilonNodes);
+      }
+    }
+    return loops;
   }
 }
