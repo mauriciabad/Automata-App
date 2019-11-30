@@ -112,33 +112,15 @@ export default class Graph {
     }
   }
 
-  simplifyFinals() {
-    const rebundantFinalNodes = new Set();
-    const undeletableFinalNodes = new Set();
-    for (const node of this.nodes.values()) {
-      for (const adjecency of node.adjacencies) {
-        if (adjecency.node.isFinal) {
-          if (adjecency.label === '') {
-            rebundantFinalNodes.add(adjecency.node);
-            node.isFinal = true;
-          } else {
-            undeletableFinalNodes.add(adjecency.node);
-          }
-        }
-      }
-    }
-    for (const node of rebundantFinalNodes) {
-      if (!undeletableFinalNodes.has(node)) this.removeVertex(node.label);
-    }
-  }
-
   nodesOrigins() {
     const nodesOrigins = new Map();
 
     for (const node of this.nodes.values()) {
       for (const adjecency of node.adjacencies) {
-        if (!Array.isArray(nodesOrigins.get(adjecency.node))) nodesOrigins.set(adjecency.node, []);
-        nodesOrigins.get(adjecency.node).push(node);
+        if (!nodesOrigins.has(adjecency.node)) {
+          nodesOrigins.set(adjecency.node, new Set());
+        }
+        nodesOrigins.get(adjecency.node).add(node);
       }
     }
     return nodesOrigins;
@@ -161,7 +143,7 @@ export default class Graph {
               firstNode.addAdjacency(adjecency.node, adjecency.label);
             }
           }
-          for (const originNode of nodesOrigins.get(node)) {
+          for (const originNode of nodesOrigins.get(node).values()) {
             for (const originNodeAdjecency of node.adjacencies) {
               if (originNode === originNodeAdjecency.node) {
                 if (originNode === firstNode && originNodeAdjecency.label !== '') {
@@ -195,16 +177,16 @@ export default class Graph {
           const destinationNode = adjecency.node;
           if (node.isFinal) destinationNode.isFinal = true;
 
-          for (const originNode of nodesOrigins.get(node)) {
+          for (const originNode of nodesOrigins.get(node).values()) {
             if (originNode !== destinationNode) {
               originNode.addAdjacency(destinationNode, '');
-              nodesOrigins.get(destinationNode).push(originNode);
+              nodesOrigins.get(destinationNode).add(originNode);
             }
           }
         }
-        if (node.adjacencies.length === 0) {
-          for (const originNode of nodesOrigins.get(node)) {
-            originNode.isFinal = true;
+        if (node.adjacencies.length === 0 && nodesOrigins.has(node)) {
+          for (const originNode of nodesOrigins.get(node).values()) {
+            originNode.isFinal = node.isFinal;
           }
         }
 
