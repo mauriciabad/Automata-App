@@ -18,7 +18,7 @@ export default class Graph {
         const nodeOut = this.addVertex(undefined, true);
         this.start = nodeIn;
         this.addRegex(nodeIn, nodeOut, regex);
-        // this.simplifyConsecutiveEpsilons();
+        this.simplifyConsecutiveEpsilons();
       } catch (e) {
         this.nodes = new Map();
         this.alphabet = new Set();
@@ -53,9 +53,11 @@ export default class Graph {
 
   addRegexOr(nodeIn, nodeOut, operands) {
     for (const operand of operands) {
-      const node = this.addVertex(undefined);
-      node.addAdjacency(nodeOut, '');
-      this.addRegex(nodeIn, node, operand);
+      const nodeIn2 = this.addVertex(undefined);
+      const nodeOut2 = this.addVertex(undefined);
+      nodeIn.addAdjacency(nodeIn2, '');
+      nodeOut2.addAdjacency(nodeOut, '');
+      this.addRegex(nodeIn2, nodeOut2, operand);
     }
   }
 
@@ -152,7 +154,10 @@ export default class Graph {
           if (node.isFinal) destinationNode.isFinal = true;
 
           for (const originNode of nodesOrigins.get(node)) {
-            originNode.addAdjacency(destinationNode, '');
+            if (originNode !== destinationNode) {
+              originNode.addAdjacency(destinationNode, '');
+              nodesOrigins.get(destinationNode).push(originNode);
+            }
           }
         }
         if (node.adjacencies.length === 0) {
