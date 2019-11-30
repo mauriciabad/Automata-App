@@ -4,7 +4,7 @@ import Node from './node';
 export default class Graph {
   constructor({
     regex, states, transitions, final, start, alphabet, comments,
-  }) {
+  }, simplify = false) {
     this.title = comments ? comments[0] : 'Graph';
     this.invalid = false;
     this.fromRegex = regex !== '';
@@ -18,7 +18,6 @@ export default class Graph {
         const nodeOut = this.addVertex(undefined, true);
         this.start = nodeIn;
         this.addRegex(nodeIn, nodeOut, regex);
-        this.simplify();
       } catch (e) {
         this.nodes = new Map();
         this.alphabet = new Set();
@@ -39,6 +38,8 @@ export default class Graph {
         this.addEdge(edge.origin, edge.destination, edge.label);
       }
     }
+
+    if (simplify) this.simplify();
   }
 
   addRegexAdd(nodeIn, nodeOut, operands) {

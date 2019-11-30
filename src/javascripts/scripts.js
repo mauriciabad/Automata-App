@@ -6,10 +6,10 @@ import RawGraph from './rawGraph';
 import templates from '../data/templates';
 
 const graphElem = document.getElementById('graph');
-const graphTitleElem = document.getElementById('graph-title');
 const inputElem = document.getElementById('input');
 const outputElem = document.getElementById('output');
 const uploadElem = document.getElementById('upload');
+const simplifyElem = document.getElementById('simplify');
 const wordsElem = document.getElementById('wordList');
 const selectTemplateElem = document.getElementById('selectTemplate');
 const infoDfaElem = document.getElementById('infoDfa');
@@ -44,7 +44,7 @@ function readData() {
   // Read data
   localStorage.setItem('rawGraph', inputElem.value);
   data = new RawGraph(inputElem.value);
-  graph = new Graph(data);
+  graph = new Graph(data, simplifyElem.checked);
   // console.log(data);
   // console.log(graph);
 
@@ -55,7 +55,6 @@ function readData() {
   viz.renderSVGElement(graph.toDotFormat()).then((element) => {
     graphElem.innerHTML = '';
     graphElem.appendChild(element);
-    graphTitleElem.textContent = data.comments ? data.comments[0] : '';
   }).catch(() => {
     viz = new Viz({ Module, render });
   });
@@ -117,6 +116,7 @@ function openTemplate() {
 readData();
 
 inputElem.addEventListener('input', readData);
+simplifyElem.addEventListener('input', readData);
 uploadElem.addEventListener('change', readFileAsString);
 selectTemplateElem.addEventListener('change', openTemplate);
 inputTestElem.addEventListener('input', testWord);

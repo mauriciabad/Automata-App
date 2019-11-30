@@ -159,6 +159,8 @@ img {
 .box__title--sub {
   color: #666;
   font-size: 0.6667em;
+  margin: 5px 0.5em;
+  float: right;
 }
 
 .grid-graph {
