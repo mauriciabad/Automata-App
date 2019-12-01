@@ -26,5 +26,8 @@
   "Regex (a|b)|(c|d)": "# Regex (a|b)|(c|d)\nregex: |(|(a,b),|(c,d))\n\ndfa: n\nfinite: y\n\nwords:\n,n\na,y\nb,y\nc,y\nd,y\n\naa,n\nab,n\nac,n\nad,n\n\nend.\n",
   "Regex (a|b|c|d)": "# Regex (a|b|c|d)\nregex: |(a,b,c,d)\n\ndfa: n\nfinite: y\n\nwords:\n,n\na,y\nb,y\nc,y\nd,y\n\naa,n\nab,n\nac,n\nad,n\n\nend.\n",
   "Regex (a|b|c|d).z": "# Regex (a|b|c|d).z\nregex: .(|(|(a,b),|(c,d)),z)\n\ndfa: n\nfinite: y\n\nwords:\n,n\na,n\nb,n\nc,n\nd,n\nz,n\n\na,n\naa,n\nab,n\nac,n\nad,n\n\naz,y\nbz,y\ncz,y\ndz,y\n\nend.\n",
+  "Regex (a.b).(c.d)": "# Regex (a.b).(c.d)\nregex: .(.(a,b),.(c,d))\n\ndfa: n\nfinite: y\n\nwords:\nabcd,y\ndcba,n\n,n\na,n\nb,n\nc,n\nd,n\n\naa,n\nab,n\nac,n\nad,n\n\nend.\n",
+  "Regex (a.b.c.d)": "# Regex (a.b.c.d)\nregex: .(a,b,c,d)\n\ndfa: n\nfinite: y\n\nwords:\nabcd,y\ndcba,n\n,n\na,n\nb,n\nc,n\nd,n\n\naa,n\nab,n\nac,n\nad,n\n\nend.\n",
+  "Regex (a.b.c.d)|z": "# Regex (a.b.c.d)|z\nregex: |(.(.(a,b),.(c,d)),z)\n\ndfa: n\nfinite: y\n\nwords:\nabcd,y\ndcba,n\n,n\na,n\nb,n\nc,n\nd,n\nz,y\n\na,n\naa,n\nab,n\nac,n\nad,n\n\naz,n\nbz,n\ncz,n\ndz,n\n\nend.\n",
   "Regex *****a": "# Regex *****a\nregex: *(*(*(*(*(a)))))\n\ndfa: n\nfinite: n\n\nwords:\n,y\na,y\naa,y\naaa,y\naaaa,y\naaaaa,y\nend.\n"
 }
