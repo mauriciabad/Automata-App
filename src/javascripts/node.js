@@ -9,7 +9,7 @@ export default class Node {
   }
 
   addAdjacency(node, label) {
-    this._adjacencies.add({ node, label });
+    if (!this.hasAdjacency(node, label)) this._adjacencies.add({ node, label });
   }
 
   isAdjecent({ node, label }) {
