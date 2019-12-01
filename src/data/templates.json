@@ -16,6 +16,7 @@
   "Finite 1": "# Finite 1 \nalphabet: a,b\nstates: 1,2,3\nfinal: 2\ntransitions:\n1,a --> 2\n1,b --> 3\n3,b --> 3\nend.\n\ndfa: n\nfinite: y\n",
   "Finite 2": "# Finite 2\nalphabet: ox\nstates: 1,2,3\nfinal: 2\ntransitions:\n1,o --> 2\n2,x --> 3\n3,x --> 3\nend.\n\ndfa: n\nfinite: y\n",
   "Finite 3": "# Tricky Finite 3\nalphabet: ox\nstates: 1,2,3,4,5\nfinal: 2\ntransitions:\n1,o --> 2\n2,x --> 3\n3,_ --> 4\n4,_ --> 5\n5,_ --> 3\n\nend.\n\ndfa: n\nfinite: y\n",
+  "Finite 4": "# Finite 4\nalphabet: a,b\nstates: 1,2,3,4\nfinal: 2\ntransitions:\n1,a --> 2\n3,b --> 4\n1,b --> 3\n1,b --> 4\nend.\n\ndfa: n\nfinite: y\n\nwords:\n,n\na,y\nb,n\nbb,n\nab,n\nend.",
   "Regex *a": "# Regex *a\nregex: *(a)\n\ndfa: n\nfinite: n\n\nwords:\n,y\na,y\naa,y\naaa,y\naaaa,y\naaaaa,y\nend.\n",
   "Regex a.b": "# Regex a.b\nregex: .(a,b)\n\ndfa: n\nfinite: y\n\nwords:\n,n\na,n\nb,n\naa,n\nab,y\nba,n\nbb,n\n\naaa,n\naab,n\naba,n\nabb,n\nbaa,n\nbab,n\nbba,n\nbbb,n\n\naaaa,n\naaab,n\naaba,n\naabb,n\nabaa,n\nabab,n\nabba,n\nabbb,n\nbaaa,n\nbaab,n\nbaba,n\nbabb,n\nbbaa,n\nbbab,n\nbbba,n\nbbbb,n\nend.\n",
   "Regex a|b": "# Regex a|b\nregex: |(a,b)\n\ndfa: n\nfinite: y\n\nwords:\n,n\na,y\nb,y\naa,n\nab,n\nba,n\nbb,n\n\naaa,n\naab,n\naba,n\nabb,n\nbaa,n\nbab,n\nbba,n\nbbb,n\n\naaaa,n\naaab,n\naaba,n\naabb,n\nabaa,n\nabab,n\nabba,n\nabbb,n\nbaaa,n\nbaab,n\nbaba,n\nbabb,n\nbbaa,n\nbbab,n\nbbba,n\nbbbb,n\nend.\n",
