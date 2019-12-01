@@ -141,9 +141,7 @@ export default class Graph {
           for (const adjecency of node.adjacencies) {
             if (adjecency.node.isFinal && adjecency.label === '') firstNode.isFinal = true;
 
-            if (adjecency.label !== '') {
-              firstNode.addAdjacency(adjecency.node, adjecency.label);
-            }
+            firstNode.addAdjacency(adjecency.node, adjecency.label);
           }
           for (const originNode of nodesOrigins.get(node).values()) {
             for (const originNodeAdjecency of node.adjacencies) {
