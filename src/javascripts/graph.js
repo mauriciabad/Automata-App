@@ -229,23 +229,24 @@ export default class Graph {
 
     for (const startAdjecency of this.start.adjacencies) {
       const { node } = startAdjecency;
-
-      let skipable = nodesOrigins.get(node).size === 1;
-      if (skipable) {
-        for (const adj of [...nodesOrigins.get(node)][0].adjacencies) {
-          if (adj.node === node && adj.label !== '') {
-            skipable = false;
-            break;
+      if (node !== this.start) {
+        let skipable = nodesOrigins.get(node).size === 1;
+        if (skipable) {
+          for (const adj of [...nodesOrigins.get(node)][0].adjacencies) {
+            if (adj.node === node && adj.label !== '') {
+              skipable = false;
+              break;
+            }
           }
         }
-      }
 
-      if (skipable && startAdjecency.label === '') {
-        for (const adjecency of node.adjacencies) {
-          this.start.addAdjacency(adjecency.node, adjecency.label);
+        if (skipable && startAdjecency.label === '') {
+          for (const adjecency of node.adjacencies) {
+            this.start.addAdjacency(adjecency.node, adjecency.label);
+          }
+          if (node.isFinal) this.start.isFinal = true;
+          this.removeVertex(node.label);
         }
-        if (node.isFinal) this.start.isFinal = true;
-        this.removeVertex(node.label);
       }
     }
   }
@@ -258,10 +259,10 @@ export default class Graph {
 
   simplify() {
     this.simplifyConsecutiveEpsilons();
-    this.simplifyEpsilonLoops();
+    // this.simplifyEpsilonLoops();
     this.simplifySkipableNodes();
-    this.simplifySelfEpsilonLoops();
     this.simplifyStart();
+    this.simplifySelfEpsilonLoops();
   }
 
   addVertex(nodeName, isFinal = false) {
