@@ -176,7 +176,12 @@ img {
   grid-area: infoFinite;
   opacity: 0.25;
 }
-.grid-graph__graph { grid-area: graph; }
+
+.grid-graph__graph {
+  grid-area: graph;
+  display: grid;
+  place-items: center;
+}
 
 .info__icon-container {
   height: 3rem;

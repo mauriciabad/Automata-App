@@ -1,7 +1,9 @@
+/* eslint-disable import/no-webpack-loader-syntax */
 /* eslint-disable no-console */
 import 'babel-polyfill';
-import Viz from 'viz.js/viz';
-import { Module, render } from 'viz.js/full.render';
+import Viz from 'viz.js';
+// eslint-disable-next-line import/no-unresolved
+import workerURL from 'file-loader!viz.js/full.render';
 import Graph from './graph';
 import RawGraph from './rawGraph';
 import templates from '../data/templates';
@@ -30,7 +32,7 @@ let data;
 let graph;
 let graphSvg = {};
 
-let viz = new Viz({ Module, render });
+let viz = new Viz({ workerURL });
 
 async function testWord() {
   const word = inputTestElem.value.trim();
@@ -44,15 +46,19 @@ async function testWord() {
 }
 
 async function displayGraph() {
-  graphElem.innerHTML = '';
-  if (graphSvg[simplifyElem.checked]) {
-    graphElem.appendChild(graphSvg[simplifyElem.checked]);
+  const simplified = simplifyElem.checked;
+
+  if (graphSvg[simplified]) {
+    graphElem.innerHTML = '';
+    graphElem.appendChild(graphSvg[simplified]);
   } else {
+    graphElem.innerHTML = '<div class="hexdots-loader"> </div>';
     viz.renderSVGElement(graph.toDotFormat(simplifyElem.checked)).then((element) => {
+      graphElem.innerHTML = '';
       graphElem.appendChild(element);
       graphSvg[simplifyElem.checked] = element;
     }).catch(() => {
-      viz = new Viz({ Module, render });
+      viz = new Viz({ workerURL });
     });
   }
 }
