@@ -201,7 +201,7 @@ export default class Graph {
     const nodesOrigins = this.nodesOrigins();
 
     for (const node of this.nodes.values()) {
-      if (node !== this.start && !node.isFinal) {
+      if (node !== this.start && !node.isFinal && node.adjacencies.length !== 0) {
         let skipable = true;
         for (const adjecency of node.adjacencies) {
           if (adjecency.label !== '') {
