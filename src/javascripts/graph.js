@@ -398,7 +398,7 @@ export default class Graph {
     const edgesInDotFormat = [];
 
     for (const node of this.nodes.values()) {
-      nodesInDotFormat.push(`"${node.label}" [${node.isFinal ? 'shape=doublecircle' : ''}]`);
+      nodesInDotFormat.push(`"${node.label}" [${this.fromRegex ? 'label=""' : ''} ${node.isFinal ? ' shape=doublecircle' : ''}]`);
 
       for (const adjacency of node.adjacencies) {
         edgesInDotFormat.push(`"${node.label}" -> "${adjacency.node.label}" [label="${adjacency.label || 'ε'}"]`);
