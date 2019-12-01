@@ -198,9 +198,36 @@ export default class Graph {
     }
   }
 
+  simplifySkipableNodes() {
+    const nodesOrigins = this.nodesOrigins();
+
+    for (const node of this.nodes.values()) {
+      if (node !== this.start && !node.isFinal) {
+        let skipable = true;
+        for (const adjecency of node.adjacencies) {
+          if (adjecency.label !== '') {
+            skipable = false;
+            break;
+          }
+        }
+        if (skipable) {
+          for (const originNode of nodesOrigins.get(node).values()) {
+            for (const originNodeAdjecency of originNode.adjacencies) {
+              for (const destinationNode of node.adjecentNodes) {
+                originNode.addAdjacency(destinationNode, originNodeAdjecency.label);
+              }
+            }
+          }
+          this.removeVertex(node.label);
+        }
+      }
+    }
+  }
+
   simplify() {
     this.simplifyConsecutiveEpsilons();
     this.simplifyEpsilonLoops();
+    this.simplifySkipableNodes();
   }
 
   addVertex(nodeName, isFinal = false) {
@@ -337,7 +364,7 @@ export default class Graph {
     const edgesInDotFormat = [];
 
     for (const node of this.nodes.values()) {
-      nodesInDotFormat.push(`"${node.label}" [${this.fromRegex ? 'label= "", ' : ''}${node.isFinal ? 'shape=doublecircle' : ''}]`);
+      nodesInDotFormat.push(`"${node.label}" [${node.isFinal ? 'shape=doublecircle' : ''}]`);
 
       for (const adjacency of node.adjacencies) {
         edgesInDotFormat.push(`"${node.label}" -> "${adjacency.node.label}" [label="${adjacency.label || 'ε'}"]`);
