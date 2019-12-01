@@ -46,7 +46,7 @@ function readData() {
   localStorage.setItem('rawGraph', inputElem.value);
   localStorage.setItem('simplify', simplifyElem.checked);
   data = new RawGraph(inputElem.value);
-  graph = new Graph(data, simplifyElem.checked);
+  graph = new Graph(data);
   // console.log(data);
   // console.log(graph);
 
@@ -54,7 +54,7 @@ function readData() {
   outputElem.textContent = JSON.stringify(data, null, 2);
 
   // Display graph
-  viz.renderSVGElement(graph.toDotFormat()).then((element) => {
+  viz.renderSVGElement(graph.toDotFormat(simplifyElem.checked)).then((element) => {
     graphElem.innerHTML = '';
     graphElem.appendChild(element);
   }).catch(() => {

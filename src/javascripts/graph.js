@@ -2,12 +2,10 @@
 import Node from './node';
 
 export default class Graph {
-  constructor({
-    regex, states, transitions, final, start, alphabet, comments,
-  }, simplify = false) {
-    this.title = comments ? comments[0] : 'Graph';
+  constructor(data, simplify = true) {
+    this.title = data.comments ? data.comments[0] : 'Graph';
     this.invalid = false;
-    this.fromRegex = regex !== '';
+    this.fromRegex = data.regex !== '';
 
     if (this.fromRegex) {
       this.nodes = new Map();
@@ -17,7 +15,7 @@ export default class Graph {
         const nodeIn = this.addVertex(undefined);
         const nodeOut = this.addVertex(undefined, true);
         this.start = nodeIn;
-        this.addRegex(nodeIn, nodeOut, regex);
+        this.addRegex(nodeIn, nodeOut, data.regex);
       } catch (e) {
         this.nodes = new Map();
         this.alphabet = new Set();
@@ -27,19 +25,22 @@ export default class Graph {
       }
     } else {
       this.nodes = new Map();
-      this.alphabet = new Set(alphabet);
+      this.alphabet = new Set(data.alphabet);
 
-      for (const nodeName of states) {
-        const node = this.addVertex(nodeName, final.includes(nodeName));
-        if (nodeName === start) this.start = node;
+      for (const nodeName of data.states) {
+        const node = this.addVertex(nodeName, data.final.includes(nodeName));
+        if (nodeName === data.start) this.start = node;
       }
 
-      for (const edge of transitions) {
+      for (const edge of data.transitions) {
         this.addEdge(edge.origin, edge.destination, edge.label);
       }
     }
 
-    if (simplify) this.simplify();
+    if (simplify) {
+      this.simplify();
+      this.original = new Graph(data, false);
+    }
   }
 
   addRegexAdd(nodeIn, nodeOut, operands) {
@@ -381,15 +382,17 @@ export default class Graph {
     return false;
   }
 
-  toDotFormat() {
-    if (this.invalid) {
-      return `digraph "${this.title}" {
-  "${this.errorMessage.replace(/"/g, '\\"') || 'Invalid input'}" [shape="plaintext" width=3];
+  toDotFormat(simplify = false) {
+    const graph = simplify || !this.original ? this : this.original;
+
+    if (graph.invalid) {
+      return `digraph "${graph.title}" {
+  "${graph.errorMessage.replace(/"/g, '\\"') || 'Invalid input'}" [shape="plaintext" width=3];
 }`;
     }
 
-    if (this.nodes.size === 0) {
-      return `digraph "${this.title}" {
+    if (graph.nodes.size === 0) {
+      return `digraph "${graph.title}" {
   "Empty" [shape="plaintext" width=3 fontcolor="#666666"];
 }`;
     }
@@ -397,21 +400,21 @@ export default class Graph {
     const nodesInDotFormat = [];
     const edgesInDotFormat = [];
 
-    for (const node of this.nodes.values()) {
-      nodesInDotFormat.push(`"${node.label}" [${this.fromRegex ? 'label=""' : ''} ${node.isFinal ? ' shape=doublecircle' : ''}]`);
+    for (const node of graph.nodes.values()) {
+      nodesInDotFormat.push(`"${node.label}" [${graph.fromRegex ? 'label=""' : ''} ${node.isFinal ? ' shape=doublecircle' : ''}]`);
 
       for (const adjacency of node.adjacencies) {
         edgesInDotFormat.push(`"${node.label}" -> "${adjacency.node.label}" [label="${adjacency.label || 'ε'}"]`);
       }
     }
 
-    return `digraph "${this.title}" {
+    return `digraph "${graph.title}" {
   rankdir=LR;
   node [shape="circle"];
   "_" [label= "", shape=point]
   ${nodesInDotFormat.join('\n  ')}
 
-  "_" -> "${this.start ? this.start.label || '_' : '_'}"
+  "_" -> "${graph.start ? graph.start.label || '_' : '_'}"
   ${edgesInDotFormat.join('\n  ')}
 }`;
   }
