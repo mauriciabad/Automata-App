@@ -114,7 +114,7 @@ export default class Graph {
   }
 
   nodesOrigins() {
-    const nodesOrigins = new Map([[this.start, new Set()]]);
+    const nodesOrigins = new Map();
 
     for (const node of this.nodes.values()) {
       for (const adjecency of node.adjacencies) {
@@ -224,10 +224,44 @@ export default class Graph {
     }
   }
 
+  simplifyStart() {
+    const nodesOrigins = this.nodesOrigins();
+
+    for (const startAdjecency of this.start.adjacencies) {
+      const { node } = startAdjecency;
+
+      let skipable = nodesOrigins.get(node).size === 1;
+      if (skipable) {
+        for (const adj of [...nodesOrigins.get(node)][0].adjacencies) {
+          if (adj.node === node && adj.label !== '') {
+            skipable = false;
+            break;
+          }
+        }
+      }
+
+      if (skipable && startAdjecency.label === '') {
+        for (const adjecency of node.adjacencies) {
+          this.start.addAdjacency(adjecency.node, adjecency.label);
+        }
+        if (node.isFinal) this.start.isFinal = true;
+        this.removeVertex(node.label);
+      }
+    }
+  }
+
+  simplifySelfEpsilonLoops() {
+    for (const node of this.nodes.values()) {
+      node.removeAdjacency(node, '');
+    }
+  }
+
   simplify() {
     this.simplifyConsecutiveEpsilons();
     this.simplifyEpsilonLoops();
     this.simplifySkipableNodes();
+    this.simplifySelfEpsilonLoops();
+    this.simplifyStart();
   }
 
   addVertex(nodeName, isFinal = false) {
