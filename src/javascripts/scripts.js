@@ -41,6 +41,15 @@ function testWord() {
   }
 }
 
+function displayGraph() {
+  viz.renderSVGElement(graph.toDotFormat(simplifyElem.checked)).then((element) => {
+    graphElem.innerHTML = '';
+    graphElem.appendChild(element);
+  }).catch(() => {
+    viz = new Viz({ Module, render });
+  });
+}
+
 function readData() {
   // Read data
   localStorage.setItem('rawGraph', inputElem.value);
@@ -54,12 +63,7 @@ function readData() {
   outputElem.textContent = JSON.stringify(data, null, 2);
 
   // Display graph
-  viz.renderSVGElement(graph.toDotFormat(simplifyElem.checked)).then((element) => {
-    graphElem.innerHTML = '';
-    graphElem.appendChild(element);
-  }).catch(() => {
-    viz = new Viz({ Module, render });
-  });
+  displayGraph();
 
   // Test Dfa
   const isDfa = graph.isDfa();
@@ -118,7 +122,7 @@ function openTemplate() {
 readData();
 
 inputElem.addEventListener('input', readData);
-simplifyElem.addEventListener('input', readData);
+simplifyElem.addEventListener('input', displayGraph);
 uploadElem.addEventListener('change', readFileAsString);
 selectTemplateElem.addEventListener('change', openTemplate);
 inputTestElem.addEventListener('input', testWord);
