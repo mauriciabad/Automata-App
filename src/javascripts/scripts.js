@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import 'babel-polyfill';
 import Viz from 'viz.js/viz';
 import { Module, render } from 'viz.js/full.render';
 import Graph from './graph';
@@ -27,10 +28,11 @@ const selectTemplatePlaceholderElem = document.getElementById('selectTemplatePla
 
 let data;
 let graph;
+let graphSvg = {};
 
 let viz = new Viz({ Module, render });
 
-function testWord() {
+async function testWord() {
   const word = inputTestElem.value.trim();
   localStorage.setItem('word', word);
 
@@ -41,21 +43,27 @@ function testWord() {
   }
 }
 
-function displayGraph() {
-  viz.renderSVGElement(graph.toDotFormat(simplifyElem.checked)).then((element) => {
-    graphElem.innerHTML = '';
-    graphElem.appendChild(element);
-  }).catch(() => {
-    viz = new Viz({ Module, render });
-  });
+async function displayGraph() {
+  graphElem.innerHTML = '';
+  if (graphSvg[simplifyElem.checked]) {
+    graphElem.appendChild(graphSvg[simplifyElem.checked]);
+  } else {
+    viz.renderSVGElement(graph.toDotFormat(simplifyElem.checked)).then((element) => {
+      graphElem.appendChild(element);
+      graphSvg[simplifyElem.checked] = element;
+    }).catch(() => {
+      viz = new Viz({ Module, render });
+    });
+  }
 }
 
-function readData() {
+async function readData() {
   // Read data
   localStorage.setItem('rawGraph', inputElem.value);
   localStorage.setItem('simplify', simplifyElem.checked);
   data = new RawGraph(inputElem.value);
   graph = new Graph(data);
+  graphSvg = {};
   // console.log(data);
   // console.log(graph);
 
@@ -97,7 +105,7 @@ function readData() {
   testWord();
 }
 
-function readFileAsString() {
+async function readFileAsString() {
   const { files } = this;
   if (files.length >= 0) {
     const reader = new FileReader();
@@ -112,7 +120,7 @@ function readFileAsString() {
   }
 }
 
-function openTemplate() {
+async function openTemplate() {
   if (selectTemplateElem.value) {
     inputElem.value = templates[selectTemplateElem.value];
     readData();
