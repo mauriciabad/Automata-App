@@ -114,7 +114,7 @@ export default class Graph {
   }
 
   nodesOrigins() {
-    const nodesOrigins = new Map();
+    const nodesOrigins = new Map([[this.start, new Set()]]);
 
     for (const node of this.nodes.values()) {
       for (const adjecency of node.adjacencies) {
