@@ -93,7 +93,7 @@ function readData() {
   wordsElem.innerHTML = data.words.reduce((total, word) => `${total}<li class="word-list__item" data-icon="${graph.isValidPath(word.word)}" data-original="${word.accepted}"><span class="word-list__word">${word.word !== '' ? word.word : '&nbsp;'}</span></li>`, '');
 
   // Test custon word
-  inputTestElem.pattern = `^ *[${data.alphabet.join('')}]* *$`;
+  inputTestElem.pattern = `^ *[${[...graph.alphabet].join('')}]* *$`;
   testWord();
 }
 
