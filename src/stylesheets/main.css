@@ -55,6 +55,8 @@ img {
   overflow: auto;
   scroll-behavior: smooth;
   height: 0;
+  word-break: break-all;
+  white-space: pre-wrap;
 }
 
 .box__content--input {
