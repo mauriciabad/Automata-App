@@ -18,6 +18,7 @@ const inputTestElem = document.getElementById('inputTest');
 const inputTestIconElem = document.getElementById('inputTestIcon');
 
 inputTestElem.value = localStorage.getItem('word');
+simplifyElem.checked = localStorage.getItem('simplify');
 const storedRawGraph = localStorage.getItem('rawGraph');
 if (storedRawGraph) inputElem.value = storedRawGraph;
 if (!inputElem.value) inputElem.value = templates.Default;
@@ -43,6 +44,7 @@ function testWord() {
 function readData() {
   // Read data
   localStorage.setItem('rawGraph', inputElem.value);
+  localStorage.setItem('simplify', simplifyElem.checked);
   data = new RawGraph(inputElem.value);
   graph = new Graph(data, simplifyElem.checked);
   // console.log(data);
