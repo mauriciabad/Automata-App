@@ -12,6 +12,7 @@ const graphElem = document.getElementById('graph');
 const inputElem = document.getElementById('input');
 const outputElem = document.getElementById('output');
 const uploadElem = document.getElementById('upload');
+const saveElem = document.getElementById('save');
 const simplifyElem = document.getElementById('simplify');
 const dfaElem = document.getElementById('dfa');
 const wordsElem = document.getElementById('wordList');
@@ -113,6 +114,9 @@ async function readData() {
       dfa: (dfaElem.checked) ? new Graph(data, 'dfa') : undefined,
     };
     graphSvg = { simplified: undefined, normal: undefined, dfa: undefined };
+
+    saveElem.setAttribute('href', `data:text/plain;charset=utf-8,${encodeURIComponent(graph[getGraphType()].toRawText())}`);
+    saveElem.setAttribute('download', `${graph[getGraphType()].title}.txt`);
 
     inputTestElem.pattern = `^ *[${[...graph[getGraphType()].alphabet].join('')}]* *$`;
 

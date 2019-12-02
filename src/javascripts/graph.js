@@ -3,12 +3,11 @@
 import Node from './node';
 
 export default class Graph {
-  constructor({
-    comments = [], regex = '', alphabet = [], states = [], final = [], start, transitions = [],
-  }, type = 'original') {
-    this.title = comments.length >= 1 ? comments[0] : 'Graph';
+  constructor(data, type = 'original') {
+    this.rawData = data;
+    this.title = data.comments ? data.comments[0] : 'Graph';
     this.invalid = false;
-    this.fromRegex = regex !== '';
+    this.fromRegex = !!data.regex;
     this.type = type;
 
     if (this.fromRegex) {
@@ -19,20 +18,20 @@ export default class Graph {
         const nodeIn = this.addVertex(undefined);
         const nodeOut = this.addVertex(undefined, true);
         this.start = nodeIn;
-        this.addRegex(nodeIn, nodeOut, regex);
+        this.addRegex(nodeIn, nodeOut, data.regex);
       } catch (e) {
         this.invalidate(e.message);
       }
     } else {
       this.nodes = new Map();
-      this.alphabet = new Set(alphabet);
+      this.alphabet = new Set(data.alphabet || []);
 
-      for (const nodeName of states) {
-        const node = this.addVertex(nodeName, final.includes(nodeName));
-        if (nodeName === start) this.start = node;
+      for (const nodeName of data.states || []) {
+        const node = this.addVertex(nodeName, (data.final || []).includes(nodeName));
+        if (nodeName === data.start) this.start = node;
       }
 
-      for (const edge of transitions) {
+      for (const edge of data.transitions || []) {
         this.addEdge(edge.origin, edge.destination, edge.label);
       }
 
@@ -400,7 +399,7 @@ export default class Graph {
     return this._dfaGraph;
   }
 
-  toRawGraph() {
+  newRawData() {
     const transitions = [];
 
     for (const node of this.nodes.values()) {
@@ -414,13 +413,27 @@ export default class Graph {
     }
 
     return {
-      comments: [this.title],
       alphabet: [...this.alphabet],
       states: [...this.nodes.values()].map((node) => node.label),
       start: this.start.label,
       transitions,
       final: [...this.nodes.values()].filter((node) => node.isFinal).map((node) => node.label),
     };
+  }
+
+  toRawText() {
+    const data = this.newRawData();
+
+    return `${this.rawData.comments.reduce((total, comment) => `${total}# ${comment}\n`, '')}alphabet: ${data.alphabet.join('')}
+states: ${data.states.join(',')}
+final: ${data.final.join(',')}
+transitions: ${data.transitions.reduce((total, transition) => `${total}${transition.origin},${transition.label} --> ${transition.destination}\n`, '\n')}end.
+
+dfa: ${data.isDfa ? 'y' : 'n'}
+finite: ${data.isFinite ? 'y' : 'n'}
+
+words: ${this.rawData.words.reduce((total, word) => `${total}${word.word},${word.accepted ? 'y' : 'n'}\n`, '\n')}end.
+${data.regex ? `\nregex: ${this.rawData.regex}` : ''}`;
   }
 
   // TODO: not working because getAdjacents() returns adjacencies, not nodes
