@@ -383,14 +383,8 @@ export default class Graph {
 
   get isFinite() {
     if (this._isFinite !== undefined) return this._isFinite;
-    this._isFinite = this.evalIsFinite();
+    this._isFinite = this.start.checkIsFinal();
     return this._isFinite;
-  }
-
-  evalIsFinite() {
-    const visitedNodes = [this.start];
-    visitedNodes.pop(); // TODO: Implement real function
-    return false;
   }
 
   get toDfa() {

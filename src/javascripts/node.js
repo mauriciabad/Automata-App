@@ -105,9 +105,11 @@ export default class Node {
       }
     } else {
       visited.add(node);
+
       const adjecentEpsilonNodes = node.adjacencies
         .filter((adjacency) => adjacency.label === '')
         .map((adjacency) => adjacency.node);
+
       for (const eNode of adjecentEpsilonNodes) {
         visitList.push(eNode);
         path.push(eNode);
@@ -115,5 +117,36 @@ export default class Node {
         path.pop();
       }
     }
+  }
+
+  checkIsFinal() {
+    return this.checkIsFinalRec([], new Set(), [this]);
+  }
+
+  checkIsFinalRec(path, visited, visitList) {
+    if (visitList.length === 0) return true;
+
+    const node = visitList.pop();
+    path.push(node);
+
+    if (visited.has(node)) {
+      if (path.includes(node)) {
+        for (const pathNode of path) {
+          if (pathNode.isFinal) return false;
+        }
+      }
+    } else {
+      visited.add(node);
+
+      for (const adjacency of node.adjacencies) {
+        visitList.push(adjacency.node);
+        path.push(adjacency.node);
+
+        if (!this.checkIsFinalRec(path, visited, visitList)) return false;
+
+        path.pop();
+      }
+    }
+    return true;
   }
 }
