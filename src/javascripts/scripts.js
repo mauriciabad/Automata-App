@@ -86,7 +86,7 @@ async function displayGraph() {
   const type = getGraphType();
 
   saveElem.setAttribute('href', `data:text/plain;charset=utf-8,${encodeURIComponent(graph[type].toRawText())}`);
-  saveElem.setAttribute('download', `${graph[type].title}.txt`);
+  saveElem.setAttribute('download', `${graph[type].title}-${type}.txt`);
 
   if (graphSvg[type]) {
     graphElem.innerHTML = '';
