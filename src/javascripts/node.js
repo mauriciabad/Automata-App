@@ -119,20 +119,24 @@ export default class Node {
     }
   }
 
-  checkIsFinal() {
-    return this.checkIsFinalRec([], new Set(), [this]);
+  nodesInLoop() {
+    const loopNodes = new Set();
+
+    this.nodesInLoopRec(loopNodes, [], new Set(), [this]);
+
+    return loopNodes;
   }
 
-  checkIsFinalRec(path, visited, visitList) {
-    if (visitList.length === 0) return true;
+  nodesInLoopRec(loopNodes, path, visited, visitList) {
+    if (visitList.length === 0) return;
 
     const node = visitList.pop();
     path.push(node);
 
     if (visited.has(node)) {
       if (path.includes(node)) {
-        for (const pathNode of path) {
-          if (pathNode.isFinal) return false;
+        for (const loopNode of path.slice(path.indexOf(node) + 1)) {
+          loopNodes.add(loopNode);
         }
       }
     } else {
@@ -142,7 +146,38 @@ export default class Node {
         visitList.push(adjacency.node);
         path.push(adjacency.node);
 
-        if (!this.checkIsFinalRec(path, visited, visitList)) return false;
+        this.nodesInLoopRec(loopNodes, path, visited, visitList);
+
+        path.pop();
+      }
+    }
+  }
+
+  checkIsFinal() {
+    const nodesInLoop = this.nodesInLoop();
+    return this.checkIsFinalRec(nodesInLoop, [], new Set(), [this]);
+  }
+
+  checkIsFinalRec(nodesInLoop, path, visited, visitList) {
+    if (visitList.length === 0) return true;
+
+    const node = visitList.pop();
+    path.push(node);
+
+    if (!visited.has(node)) {
+      visited.add(node);
+
+      if (node.isFinal) {
+        for (const pathNode of path) {
+          if (nodesInLoop.has(pathNode)) return false;
+        }
+      }
+
+      for (const adjacency of node.adjacencies) {
+        visitList.push(adjacency.node);
+        path.push(adjacency.node);
+
+        if (!this.checkIsFinalRec(nodesInLoop, path, visited, visitList)) return false;
 
         path.pop();
       }
