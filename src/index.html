@@ -27,10 +27,14 @@
     </div>
     <div class="box box--graph">
       <h2 class="box__title">Graph
-        <div class="toggle">
-          <input type="checkbox" class="check" id="simplify" checked><b class="b switch"></b><b class="b track"></b>
+        <div class="toggle toggle--simplify">
+          <input type="checkbox" class="check check--simplify" id="simplify" checked><b class="b switch"></b><b class="b track"></b>
         </div>
-        <span class="box__title--sub">Simplify</span>
+        <label for="simplifyToggle" class="box__title--sub">Simplify</label>
+        <div class="toggle toggle--dfa">
+          <input type="checkbox" class="check check--dfa" id="dfa" checked><b class="b switch"></b><b class="b track"></b>
+        </div>
+        <label for="dfaToggle" class="box__title--sub">DFA</label>
       </h2>
       <div class="box__content box__content--graph grid-graph">
         <div class="grid-graph__graph" id="graph"></div>

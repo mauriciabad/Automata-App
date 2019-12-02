@@ -1,11 +1,14 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-restricted-syntax */
 import Node from './node';
 
 export default class Graph {
-  constructor(data, simplify = true) {
-    this.title = data.comments ? data.comments[0] : 'Graph';
+  constructor({
+    comments = [], regex = '', alphabet = [], states = [], final = [], start, transitions = [],
+  }, fromGraph = undefined) {
+    this.title = comments.length >= 1 ? comments[0] : 'Graph';
     this.invalid = false;
-    this.fromRegex = data.regex !== '';
+    this.fromRegex = regex !== '';
 
     if (this.fromRegex) {
       this.nodes = new Map();
@@ -15,32 +18,42 @@ export default class Graph {
         const nodeIn = this.addVertex(undefined);
         const nodeOut = this.addVertex(undefined, true);
         this.start = nodeIn;
-        this.addRegex(nodeIn, nodeOut, data.regex);
+        this.addRegex(nodeIn, nodeOut, regex);
       } catch (e) {
-        this.nodes = new Map();
-        this.alphabet = new Set();
-        this.start = this.addVertex(undefined, false);
-        this.invalid = true;
-        this.errorMessage = e.message;
+        this.invalidate(e.message);
       }
     } else {
       this.nodes = new Map();
-      this.alphabet = new Set(data.alphabet);
+      this.alphabet = new Set(alphabet);
 
-      for (const nodeName of data.states) {
-        const node = this.addVertex(nodeName, data.final.includes(nodeName));
-        if (nodeName === data.start) this.start = node;
+      for (const nodeName of states) {
+        const node = this.addVertex(nodeName, final.includes(nodeName));
+        if (nodeName === start) this.start = node;
       }
 
-      for (const edge of data.transitions) {
+      for (const edge of transitions) {
         this.addEdge(edge.origin, edge.destination, edge.label);
       }
+
+      if (!this.start) this.invalidate('Missing start node');
     }
 
-    if (simplify) {
+
+    if (fromGraph === undefined) {
       this.simplify();
-      this.original = new Graph(data, false);
+
+      this.original = new Graph({
+        comments, regex, alphabet, states, final, start, transitions,
+      }, this);
     }
+  }
+
+  invalidate(message) {
+    this.nodes = new Map();
+    this.alphabet = new Set();
+    this.start = this.addVertex(undefined, false);
+    this.invalid = true;
+    this.errorMessage = message;
   }
 
   addRegexAdd(nodeIn, nodeOut, operands) {
@@ -315,7 +328,13 @@ export default class Graph {
     return [sourceNode, destinationNode, label];
   }
 
-  isDfa() {
+  get isDfa() {
+    if (this._isDfa !== undefined) return this._isDfa;
+    this._isDfa = this.evalIsDfa();
+    return this._isDfa;
+  }
+
+  evalIsDfa() {
     for (const node of this.nodes.values()) {
       const foundLetters = new Set();
 
@@ -326,13 +345,35 @@ export default class Graph {
 
       if (foundLetters.size !== this.alphabet.size) return false;
     }
+
     return true;
   }
 
-  isFinite() {
+  get isFinite() {
+    if (this._isFinite !== undefined) return this._isFinite;
+    this._isFinite = this.evalIsFinite();
+    return this._isFinite;
+  }
+
+  evalIsFinite() {
     const visitedNodes = [this.start];
     visitedNodes.pop(); // TODO: Implement real function
     return false;
+  }
+
+  get toDfa() {
+    if (this._dfaGraph !== undefined) return this._dfaGraph;
+    this.generateDfa();
+    return this._dfaGraph;
+  }
+
+  generateDfa() {
+    this._dfaGraph = new Graph({
+      comments: [this.title],
+      alphabet: [...this.alphabet],
+      states: [...this.nodes.values()].map((node) => node.label),
+      start: [...this.nodes.values()][0].label,
+    });
   }
 
   // TODO: not working because getAdjacents() returns adjacencies, not nodes

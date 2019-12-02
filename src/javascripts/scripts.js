@@ -13,6 +13,7 @@ const inputElem = document.getElementById('input');
 const outputElem = document.getElementById('output');
 const uploadElem = document.getElementById('upload');
 const simplifyElem = document.getElementById('simplify');
+const dfaElem = document.getElementById('dfa');
 const wordsElem = document.getElementById('wordList');
 const selectTemplateElem = document.getElementById('selectTemplate');
 const infoDfaElem = document.getElementById('infoDfa');
@@ -21,7 +22,8 @@ const inputTestElem = document.getElementById('inputTest');
 const inputTestIconElem = document.getElementById('inputTestIcon');
 
 inputTestElem.value = localStorage.getItem('word');
-simplifyElem.checked = localStorage.getItem('simplify');
+simplifyElem.checked = localStorage.getItem('simplify') === 'true';
+dfaElem.checked = localStorage.getItem('dfa') === 'true';
 const storedRawGraph = localStorage.getItem('rawGraph');
 if (storedRawGraph) inputElem.value = storedRawGraph;
 if (!inputElem.value) inputElem.value = templates.Default;
@@ -30,11 +32,13 @@ const selectTemplatePlaceholderElem = document.getElementById('selectTemplatePla
 
 let data;
 let graph;
+let graphDfa;
+let graphNoDfa;
 let graphSvg = {};
 
 let viz = new Viz({ workerURL });
 
-async function testWord() {
+async function testCustomWord() {
   const word = inputTestElem.value.trim();
   localStorage.setItem('word', word);
 
@@ -45,42 +49,7 @@ async function testWord() {
   }
 }
 
-async function displayGraph() {
-  const simplified = simplifyElem.checked;
-
-  if (graphSvg[simplified]) {
-    graphElem.innerHTML = '';
-    graphElem.appendChild(graphSvg[simplified]);
-  } else {
-    graphElem.innerHTML = '<div class="hexdots-loader"> </div>';
-    viz.renderSVGElement(graph.toDotFormat(simplifyElem.checked)).then((element) => {
-      graphElem.innerHTML = '';
-      graphElem.appendChild(element);
-      graphSvg[simplifyElem.checked] = element;
-    }).catch(() => {
-      viz = new Viz({ workerURL });
-    });
-  }
-}
-
-async function readData() {
-  // Read data
-  localStorage.setItem('rawGraph', inputElem.value);
-  localStorage.setItem('simplify', simplifyElem.checked);
-  data = new RawGraph(inputElem.value);
-  graph = new Graph(data);
-  graphSvg = {};
-  // console.log(data);
-  // console.log(graph);
-
-  // Display ouput
-  outputElem.textContent = JSON.stringify(data, null, 2);
-
-  // Display graph
-  displayGraph();
-
-  // Test Dfa
-  const isDfa = graph.isDfa();
+async function testDfa() {
   infoDfaElem.classList.remove(
     'info__icon-container--false',
     'info__icon-container--true',
@@ -88,11 +57,11 @@ async function readData() {
     'info__icon-container--unknown',
     'info__icon-container--warning',
   );
-  infoDfaElem.classList.add(`info__icon-container--${isDfa ? 'true' : 'false'}`);
-  if (data.dfa !== isDfa) infoDfaElem.classList.add('info__icon-container--warning');
+  infoDfaElem.classList.add(`info__icon-container--${graph.isDfa ? 'true' : 'false'}`);
+  if (data.dfa !== graph.isDfa) infoDfaElem.classList.add('info__icon-container--warning');
+}
 
-  // Test finite
-  const isFinite = graph.isFinite();
+async function testFinite() {
   infoFiniteElem.classList.remove(
     'info__icon-container--false',
     'info__icon-container--true',
@@ -100,15 +69,75 @@ async function readData() {
     'info__icon-container--unknown',
     'info__icon-container--warning',
   );
-  infoFiniteElem.classList.add(`info__icon-container--${isFinite ? 'true' : 'false'}`);
-  if (data.finite !== isFinite) infoFiniteElem.classList.add('info__icon-container--warning');
+  infoFiniteElem.classList.add(`info__icon-container--${graph.isFinite ? 'true' : 'false'}`);
+  if (data.finite !== graph.isFinite) infoFiniteElem.classList.add('info__icon-container--warning');
+}
 
-  // Test words
+async function testWords() {
   wordsElem.innerHTML = data.words.reduce((total, word) => `${total}<li class="word-list__item" data-icon="${graph.isValidPath(word.word)}" data-original="${word.accepted}"><span class="word-list__word">${word.word !== '' ? word.word : '&nbsp;'}</span></li>`, '');
+}
 
-  // Test custon word
+async function displayGraph() {
+  localStorage.setItem('simplify', simplifyElem.checked);
+
+  if (graphSvg[simplifyElem.checked][dfaElem.checked]) {
+    graphElem.innerHTML = '';
+    graphElem.appendChild(graphSvg[simplifyElem.checked][dfaElem.checked]);
+  } else {
+    graphElem.innerHTML = '<div class="hexdots-loader"> </div>';
+
+    viz.renderSVGElement(graph.toDotFormat(simplifyElem.checked)).then((element) => {
+      graphElem.innerHTML = '';
+      graphElem.appendChild(element);
+      graphSvg[simplifyElem.checked][dfaElem.checked] = element;
+    }).catch(() => {
+      viz = new Viz({ workerURL });
+    });
+  }
+}
+
+async function readData() {
+  localStorage.setItem('rawGraph', inputElem.value);
+  localStorage.setItem('dfa', dfaElem.checked);
+  localStorage.setItem('simplify', simplifyElem.checked);
+
+  data = new RawGraph(inputElem.value);
+
+  graphNoDfa = new Graph(data);
+  if (dfaElem.checked) graphDfa = graphNoDfa.toDfa;
+  graph = dfaElem.checked ? graphDfa : graphNoDfa;
+
+  graphSvg = {
+    true: { true: undefined, false: undefined },
+    false: { true: undefined, false: undefined },
+  };
+
   inputTestElem.pattern = `^ *[${[...graph.alphabet].join('')}]* *$`;
-  testWord();
+
+  outputElem.textContent = JSON.stringify(data, null, 2);
+
+  displayGraph();
+
+  testDfa();
+  testFinite();
+
+  testWords();
+  testCustomWord();
+}
+
+async function updateDfa() {
+  localStorage.setItem('dfa', dfaElem.checked);
+
+  if (dfaElem.checked) graphDfa = graphNoDfa.toDfa;
+  graph = dfaElem.checked ? graphDfa : graphNoDfa;
+
+  displayGraph();
+
+  testDfa();
+  testFinite();
+
+  testWords();
+  testCustomWord();
 }
 
 async function readFileAsString() {
@@ -137,6 +166,7 @@ readData();
 
 inputElem.addEventListener('input', readData);
 simplifyElem.addEventListener('input', displayGraph);
+dfaElem.addEventListener('input', updateDfa);
 uploadElem.addEventListener('change', readFileAsString);
 selectTemplateElem.addEventListener('change', openTemplate);
-inputTestElem.addEventListener('input', testWord);
+inputTestElem.addEventListener('input', testCustomWord);

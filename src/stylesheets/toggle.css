@@ -32,7 +32,7 @@
 }
 
 .check:checked ~ .track {
-  box-shadow: inset 0 0 0 20px #4bd863;
+  box-shadow: inset 0 0 0 20px #7bd88f;
 }
 
 .check:checked ~ .switch {
@@ -67,4 +67,12 @@
   transition: 0.35s cubic-bezier(0.785, 0.135, 0.15, 0.86);
   box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.05);
   border-radius: 40px;
+}
+
+.toggle--dfa {
+  margin-right: 1rem;
+}
+
+.check--dfa:checked ~ .track {
+  box-shadow: inset 0 0 0 20px #948ae3;
 }
