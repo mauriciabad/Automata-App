@@ -100,6 +100,12 @@ async function displayGraph() {
       graphSvg[type] = element;
     }).catch(() => {
       viz = new Viz({ workerURL });
+
+      viz.renderSVGElement('digraph "Graph" { "Graph too big,\nskiping drawing" [shape="plaintext" width=3];}').then((element) => {
+        graphElem.innerHTML = '';
+        graphElem.appendChild(element);
+        graphSvg[type] = element;
+      }).catch(() => { viz = new Viz({ workerURL }); });
     });
   }
 }
