@@ -143,12 +143,10 @@ export default class Node {
 
       for (const adjacency of node.adjacencies) {
         visitList.push(adjacency.node);
-
         this.nodesInLoopRec(loopNodes, path, visited, visitList);
-
-        path.pop();
       }
     }
+    path.pop();
   }
 
   checkIsFinal() {
@@ -173,18 +171,16 @@ export default class Node {
 
       for (const adjacency of node.adjacencies) {
         visitList.push(adjacency.node);
-
         if (!this.checkIsFinalRec(nodesInLoop, path, visited, visitList)) return false;
-
-        path.pop();
       }
     }
+    path.pop();
     return true;
   }
 
   acceptedStrings() {
     const accepted = new Set();
-    this.acceptedStringsRec(accepted, [], new Set(), [{ node: this, label: '' }, ...this.adjacencies]);
+    this.acceptedStringsRec(accepted, [], new Set(), [{ node: this, label: '' }]);
     return [...accepted].sort();
   }
 
@@ -199,10 +195,11 @@ export default class Node {
 
       if (adjacency.node.isFinal) accepted.add(path.join(''));
 
-      visitList.push(...adjacency.node.adjacencies);
+      for (const nextAdjacency of adjacency.node.adjacencies) {
+        visitList.push(nextAdjacency);
+        this.acceptedStringsRec(accepted, path, visited, visitList);
+      }
     }
-
     path.pop();
-    this.acceptedStringsRec(accepted, path, visited, visitList);
   }
 }
