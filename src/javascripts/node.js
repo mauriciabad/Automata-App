@@ -186,7 +186,7 @@ export default class Node {
 
   acceptedStringsRec(accepted, path, visited, visitList) {
     if (visitList.length === 0) return;
-    if (path.length >= 10 || accepted.size() >= 100) return;
+    if (path.length >= 10 || accepted.size >= 200) return;
 
     const adjacency = visitList.pop();
     path.push(adjacency.label);
