@@ -433,7 +433,7 @@ dfa: ${data.isDfa ? 'y' : 'n'}
 finite: ${data.isFinite ? 'y' : 'n'}
 
 words: ${this.rawData.words.reduce((total, word) => `${total}${word.word},${word.accepted ? 'y' : 'n'}\n`, '\n')}end.
-${data.regex ? `\nregex: ${this.rawData.regex}` : ''}`;
+${this.rawData.regex ? `\nregex: ${this.rawData.regex}` : ''}`;
   }
 
   // TODO: not working because getAdjacents() returns adjacencies, not nodes
