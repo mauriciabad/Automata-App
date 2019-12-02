@@ -112,7 +112,6 @@ export default class Node {
 
       for (const eNode of adjecentEpsilonNodes) {
         visitList.push(eNode);
-        path.push(eNode);
         this.epsilonLoopsRec(loops, path, visited, visitList);
         path.pop();
       }
@@ -144,7 +143,6 @@ export default class Node {
 
       for (const adjacency of node.adjacencies) {
         visitList.push(adjacency.node);
-        path.push(adjacency.node);
 
         this.nodesInLoopRec(loopNodes, path, visited, visitList);
 
@@ -175,7 +173,6 @@ export default class Node {
 
       for (const adjacency of node.adjacencies) {
         visitList.push(adjacency.node);
-        path.push(adjacency.node);
 
         if (!this.checkIsFinalRec(nodesInLoop, path, visited, visitList)) return false;
 
