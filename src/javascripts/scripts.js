@@ -31,19 +31,23 @@ selectTemplateElem.innerHTML = Object.keys(templates).reduce((total, templateNam
 const selectTemplatePlaceholderElem = document.getElementById('selectTemplatePlaceholder');
 
 let data;
-let graph;
-let graphDfa;
-let graphNoDfa;
-let graphSvg = {};
+let graph = { simplified: undefined, normal: undefined, dfa: undefined };
+let graphSvg = { simplified: undefined, normal: undefined, dfa: undefined };
 
 let viz = new Viz({ workerURL });
+
+function getGraphType() {
+  if (dfaElem.checked) return 'dfa';
+  if (simplifyElem.checked) return 'simplified';
+  return 'normal';
+}
 
 async function testCustomWord() {
   const word = inputTestElem.value.trim();
   localStorage.setItem('word', word);
 
   if (inputTestElem.checkValidity()) {
-    inputTestIconElem.dataset.icon = graph.isValidPath(word) ? 'true' : 'false';
+    inputTestIconElem.dataset.icon = graph[getGraphType()].isValidPath(word) ? 'true' : 'false';
   } else {
     inputTestIconElem.dataset.icon = 'wrong';
   }
@@ -57,8 +61,8 @@ async function testDfa() {
     'info__icon-container--unknown',
     'info__icon-container--warning',
   );
-  infoDfaElem.classList.add(`info__icon-container--${graph.isDfa ? 'true' : 'false'}`);
-  if (data.dfa !== graph.isDfa) infoDfaElem.classList.add('info__icon-container--warning');
+  infoDfaElem.classList.add(`info__icon-container--${graph[getGraphType()].isDfa ? 'true' : 'false'}`);
+  if (data.dfa !== graph[getGraphType()].isDfa) infoDfaElem.classList.add('info__icon-container--warning');
 }
 
 async function testFinite() {
@@ -69,27 +73,27 @@ async function testFinite() {
     'info__icon-container--unknown',
     'info__icon-container--warning',
   );
-  infoFiniteElem.classList.add(`info__icon-container--${graph.isFinite ? 'true' : 'false'}`);
-  if (data.finite !== graph.isFinite) infoFiniteElem.classList.add('info__icon-container--warning');
+  infoFiniteElem.classList.add(`info__icon-container--${graph[getGraphType()].isFinite ? 'true' : 'false'}`);
+  if (data.finite !== graph[getGraphType()].isFinite) infoFiniteElem.classList.add('info__icon-container--warning');
 }
 
 async function testWords() {
-  wordsElem.innerHTML = data.words.reduce((total, word) => `${total}<li class="word-list__item" data-icon="${graph.isValidPath(word.word)}" data-original="${word.accepted}"><span class="word-list__word">${word.word !== '' ? word.word : '&nbsp;'}</span></li>`, '');
+  wordsElem.innerHTML = data.words.reduce((total, word) => `${total}<li class="word-list__item" data-icon="${graph[getGraphType()].isValidPath(word.word)}" data-original="${word.accepted}"><span class="word-list__word">${word.word !== '' ? word.word : '&nbsp;'}</span></li>`, '');
 }
 
 async function displayGraph() {
-  localStorage.setItem('simplify', simplifyElem.checked);
+  const type = getGraphType();
 
-  if (graphSvg[simplifyElem.checked][dfaElem.checked]) {
+  if (graphSvg[type]) {
     graphElem.innerHTML = '';
-    graphElem.appendChild(graphSvg[simplifyElem.checked][dfaElem.checked]);
+    graphElem.appendChild(graphSvg[type]);
   } else {
     graphElem.innerHTML = '<div class="hexdots-loader"> </div>';
 
-    viz.renderSVGElement(graph.toDotFormat(simplifyElem.checked)).then((element) => {
+    viz.renderSVGElement(graph[type].toDotFormat()).then((element) => {
       graphElem.innerHTML = '';
       graphElem.appendChild(element);
-      graphSvg[simplifyElem.checked][dfaElem.checked] = element;
+      graphSvg[type] = element;
     }).catch(() => {
       viz = new Viz({ workerURL });
     });
@@ -103,16 +107,14 @@ async function readData() {
   if (JSON.stringify(data) !== JSON.stringify(newData)) {
     data = newData;
 
-    graphNoDfa = new Graph(data);
-    if (dfaElem.checked) graphDfa = graphNoDfa.toDfa;
-    graph = dfaElem.checked ? graphDfa : graphNoDfa;
-
-    graphSvg = {
-      true: { true: undefined, false: undefined },
-      false: { true: undefined, false: undefined },
+    graph = {
+      simplified: new Graph(data, 'simplified'),
+      normal: new Graph(data, 'original'),
+      dfa: (dfaElem.checked) ? new Graph(data, 'dfa') : undefined,
     };
+    graphSvg = { simplified: undefined, normal: undefined, dfa: undefined };
 
-    inputTestElem.pattern = `^ *[${[...graph.alphabet].join('')}]* *$`;
+    inputTestElem.pattern = `^ *[${[...graph[getGraphType()].alphabet].join('')}]* *$`;
 
     outputElem.textContent = JSON.stringify(data, null, 2);
 
@@ -127,10 +129,7 @@ async function readData() {
 }
 
 async function updateDfa() {
-  localStorage.setItem('dfa', dfaElem.checked);
-
-  if (dfaElem.checked) graphDfa = graphNoDfa.toDfa;
-  graph = dfaElem.checked ? graphDfa : graphNoDfa;
+  if (dfaElem.checked) graph.dfa = new Graph(data, 'dfa');
 
   displayGraph();
 
@@ -166,8 +165,20 @@ async function openTemplate() {
 readData();
 
 inputElem.addEventListener('input', readData);
-simplifyElem.addEventListener('input', displayGraph);
-dfaElem.addEventListener('input', updateDfa);
 uploadElem.addEventListener('change', readFileAsString);
 selectTemplateElem.addEventListener('change', openTemplate);
 inputTestElem.addEventListener('input', testCustomWord);
+simplifyElem.addEventListener('input', () => {
+  localStorage.setItem('simplify', simplifyElem.checked);
+  if (!simplifyElem.checked) dfaElem.checked = false;
+  localStorage.setItem('dfa', dfaElem.checked);
+
+  displayGraph();
+});
+dfaElem.addEventListener('input', () => {
+  localStorage.setItem('dfa', dfaElem.checked);
+  if (dfaElem.checked) simplifyElem.checked = true;
+  localStorage.setItem('simplify', simplifyElem.checked);
+
+  updateDfa();
+});

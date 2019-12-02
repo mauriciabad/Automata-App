@@ -23,6 +23,7 @@ export default class Node {
     for (const adjacency of this._adjacencies) {
       if (adjacency.node === node && adjacency.label === label) {
         this._adjacencies.delete(adjacency);
+        break;
       }
     }
   }
@@ -52,7 +53,7 @@ export default class Node {
   }
 
   get adjacencies() {
-    return Array.from(this._adjacencies);
+    return [...this._adjacencies];
   }
 
   get adjecentNodes() {
@@ -60,15 +61,15 @@ export default class Node {
     for (const adjacency of this._adjacencies) {
       adjecentNodes.add(adjacency.node);
     }
-    return Array.from(adjecentNodes);
+    return [...adjecentNodes];
   }
 
   get labels() {
     const labels = new Set();
     for (const adjacency of this._adjacencies) {
-      labels.add(adjacency.node);
+      labels.add(adjacency.label);
     }
-    return Array.from(labels);
+    return [...labels];
   }
 
   epsilonAccessibleNodes(accessibleNodes = new Set([this])) {

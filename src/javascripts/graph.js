@@ -5,10 +5,11 @@ import Node from './node';
 export default class Graph {
   constructor({
     comments = [], regex = '', alphabet = [], states = [], final = [], start, transitions = [],
-  }, fromGraph = undefined) {
+  }, type = 'original') {
     this.title = comments.length >= 1 ? comments[0] : 'Graph';
     this.invalid = false;
     this.fromRegex = regex !== '';
+    this.type = type;
 
     if (this.fromRegex) {
       this.nodes = new Map();
@@ -38,13 +39,19 @@ export default class Graph {
       if (!this.start) this.invalidate('Missing start node');
     }
 
-
-    if (fromGraph === undefined) {
-      this.simplify();
-
-      this.original = new Graph({
-        comments, regex, alphabet, states, final, start, transitions,
-      }, this);
+    switch (this.type) {
+      case 'dfa':
+        this.simplify();
+        this.simplifyPowerset();
+        this.addSink();
+        break;
+      case 'simplified':
+        this.simplify();
+        break;
+      default:
+      case 'original':
+      case 'normal':
+        break;
     }
   }
 
@@ -270,12 +277,38 @@ export default class Graph {
     }
   }
 
+  simplifyPowerset() {
+    for (const node of this.nodes.values()) {
+      for (const accesibleNode of node.epsilonAccessibleNodes()) {
+        if (accesibleNode.isFinal) node.isFinal = true;
+        for (const accesibleNodeAdjacency of accesibleNode.adjacencies) {
+          if (accesibleNodeAdjacency.label !== '')node.addAdjacency(accesibleNodeAdjacency.node, accesibleNodeAdjacency.label);
+        }
+      }
+      for (const adjacency of node.adjacencies) {
+        if (adjacency.label === '') node.removeAdjacency(adjacency.node, adjacency.label);
+      }
+    }
+  }
+
   simplify() {
     this.simplifyConsecutiveEpsilons();
     this.simplifyEpsilonLoops();
     this.simplifyStart();
     this.simplifySkipableNodes();
     this.simplifySelfEpsilonLoops();
+  }
+
+  addSink() {
+    const sink = this.addVertex('Sink');
+    for (const letter of this.alphabet) {
+      sink.addAdjacency(sink, letter);
+    }
+    for (const node of this.nodes.values()) {
+      for (const letter of this.alphabet) {
+        if (!node.isAdjecent({ label: letter })) node.addAdjacency(sink, letter);
+      }
+    }
   }
 
   addVertex(nodeName, isFinal = false) {
@@ -367,13 +400,27 @@ export default class Graph {
     return this._dfaGraph;
   }
 
-  generateDfa() {
-    this._dfaGraph = new Graph({
+  toRawGraph() {
+    const transitions = [];
+
+    for (const node of this.nodes.values()) {
+      for (const adjacency of node.adjacencies) {
+        transitions.push({
+          origin: node.label,
+          destination: adjacency.node.label,
+          label: adjacency.label,
+        });
+      }
+    }
+
+    return {
       comments: [this.title],
       alphabet: [...this.alphabet],
       states: [...this.nodes.values()].map((node) => node.label),
-      start: [...this.nodes.values()][0].label,
-    });
+      start: this.start.label,
+      transitions,
+      final: [...this.nodes.values()].filter((node) => node.isFinal).map((node) => node.label),
+    };
   }
 
   // TODO: not working because getAdjacents() returns adjacencies, not nodes
@@ -423,17 +470,15 @@ export default class Graph {
     return false;
   }
 
-  toDotFormat(simplify = false) {
-    const graph = simplify || !this.original ? this : this.original;
-
-    if (graph.invalid) {
-      return `digraph "${graph.title}" {
-  "${graph.errorMessage.replace(/"/g, '\\"') || 'Invalid input'}" [shape="plaintext" width=3];
+  toDotFormat() {
+    if (this.invalid) {
+      return `digraph "${this.title}" {
+  "${this.errorMessage.replace(/"/g, '\\"') || 'Invalid input'}" [shape="plaintext" width=3];
 }`;
     }
 
-    if (graph.nodes.size === 0) {
-      return `digraph "${graph.title}" {
+    if (this.nodes.size === 0) {
+      return `digraph "${this.title}" {
   "Empty" [shape="plaintext" width=3 fontcolor="#666666"];
 }`;
     }
@@ -441,21 +486,21 @@ export default class Graph {
     const nodesInDotFormat = [];
     const edgesInDotFormat = [];
 
-    for (const node of graph.nodes.values()) {
-      nodesInDotFormat.push(`"${node.label}" [${graph.fromRegex ? 'label=""' : ''} ${node.isFinal ? ' shape=doublecircle' : ''}]`);
+    for (const node of this.nodes.values()) {
+      nodesInDotFormat.push(`"${node.label}" [${this.fromRegex ? 'label=""' : ''} ${node.isFinal ? ' shape=doublecircle' : ''}]`);
 
       for (const adjacency of node.adjacencies) {
         edgesInDotFormat.push(`"${node.label}" -> "${adjacency.node.label}" [label="${adjacency.label || 'ε'}"]`);
       }
     }
 
-    return `digraph "${graph.title}" {
+    return `digraph "${this.title}" {
   rankdir=LR;
   node [shape="circle"];
   "_" [label= "", shape=point]
   ${nodesInDotFormat.join('\n  ')}
 
-  "_" -> "${graph.start ? graph.start.label || '_' : '_'}"
+  "_" -> "${this.start ? this.start.label || '_' : '_'}"
   ${edgesInDotFormat.join('\n  ')}
 }`;
   }
