@@ -494,7 +494,7 @@ ${this.rawData.regex ? `\nregex: ${this.rawData.regex}` : ''}`;
     const edgesInDotFormat = [];
 
     for (const node of this.nodes.values()) {
-      nodesInDotFormat.push(`"${node.label}" [${this.fromRegex ? 'label=""' : ''} ${node.isFinal ? ' shape=doublecircle' : ''}]`);
+      nodesInDotFormat.push(`"${node.label}" [${this.fromRegex && node.label !== 'Sink' ? 'label=""' : ''} ${node.isFinal ? ' shape=doublecircle' : ''}]`);
 
       for (const adjacency of node.adjacencies) {
         edgesInDotFormat.push(`"${node.label}" -> "${adjacency.node.label}" [label="${adjacency.label || 'ε'}"]`);
