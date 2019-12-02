@@ -63,7 +63,7 @@ async function testDfa() {
     'info__icon-container--warning',
   );
   infoDfaElem.classList.add(`info__icon-container--${graph[getGraphType()].isDfa ? 'true' : 'false'}`);
-  if (data.dfa !== graph[getGraphType()].isDfa) infoDfaElem.classList.add('info__icon-container--warning');
+  if (getGraphType() !== 'dfa' && data.dfa !== graph[getGraphType()].isDfa) infoDfaElem.classList.add('info__icon-container--warning');
 }
 
 async function testFinite() {
