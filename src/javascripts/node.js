@@ -87,11 +87,8 @@ export default class Node {
 
   epsilonLoops() {
     const loops = [];
-    const path = [];
-    const visited = new Set();
-    const visitList = [this];
 
-    this.epsilonLoopsRec(loops, path, visited, visitList);
+    this.epsilonLoopsRec(loops, [], new Set(), [this]);
 
     return loops;
   }
