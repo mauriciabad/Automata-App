@@ -42,7 +42,6 @@ export default class Graph {
     switch (this.type) {
       case 'dfa':
         this.simplify();
-        this.simplifyPowerset();
         this.addSink();
         break;
       case 'simplified':
@@ -277,7 +276,7 @@ export default class Graph {
     }
   }
 
-  simplifyPowerset() {
+  simplifyPowersetAlgorithm() {
     for (const node of this.nodes.values()) {
       for (const accesibleNode of node.epsilonAccessibleNodes()) {
         if (accesibleNode.isFinal) node.isFinal = true;
@@ -297,6 +296,7 @@ export default class Graph {
     this.simplifyStart();
     this.simplifySkipableNodes();
     this.simplifySelfEpsilonLoops();
+    this.simplifyPowersetAlgorithm();
   }
 
   addSink() {
