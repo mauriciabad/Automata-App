@@ -136,10 +136,11 @@ export default class Graph {
     const nodesOrigins = new Map();
 
     for (const node of this.nodes.values()) {
+      nodesOrigins.set(node, new Set());
+    }
+
+    for (const node of this.nodes.values()) {
       for (const adjecency of node.adjacencies) {
-        if (!nodesOrigins.has(adjecency.node)) {
-          nodesOrigins.set(adjecency.node, new Set());
-        }
         nodesOrigins.get(adjecency.node).add(node);
       }
     }
