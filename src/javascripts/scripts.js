@@ -98,31 +98,32 @@ async function displayGraph() {
 
 async function readData() {
   localStorage.setItem('rawGraph', inputElem.value);
-  localStorage.setItem('dfa', dfaElem.checked);
-  localStorage.setItem('simplify', simplifyElem.checked);
 
-  data = new RawGraph(inputElem.value);
+  const newData = new RawGraph(inputElem.value);
+  if (JSON.stringify(data) !== JSON.stringify(newData)) {
+    data = newData;
 
-  graphNoDfa = new Graph(data);
-  if (dfaElem.checked) graphDfa = graphNoDfa.toDfa;
-  graph = dfaElem.checked ? graphDfa : graphNoDfa;
+    graphNoDfa = new Graph(data);
+    if (dfaElem.checked) graphDfa = graphNoDfa.toDfa;
+    graph = dfaElem.checked ? graphDfa : graphNoDfa;
 
-  graphSvg = {
-    true: { true: undefined, false: undefined },
-    false: { true: undefined, false: undefined },
-  };
+    graphSvg = {
+      true: { true: undefined, false: undefined },
+      false: { true: undefined, false: undefined },
+    };
 
-  inputTestElem.pattern = `^ *[${[...graph.alphabet].join('')}]* *$`;
+    inputTestElem.pattern = `^ *[${[...graph.alphabet].join('')}]* *$`;
 
-  outputElem.textContent = JSON.stringify(data, null, 2);
+    outputElem.textContent = JSON.stringify(data, null, 2);
 
-  displayGraph();
+    displayGraph();
 
-  testDfa();
-  testFinite();
+    testDfa();
+    testFinite();
 
-  testWords();
-  testCustomWord();
+    testWords();
+    testCustomWord();
+  }
 }
 
 async function updateDfa() {
