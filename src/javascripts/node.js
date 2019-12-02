@@ -200,6 +200,7 @@ export default class Node {
         this.acceptedStringsRec(accepted, path, visited, visitList);
       }
     }
+    visited.delete(adjacency);
     path.pop();
   }
 }
