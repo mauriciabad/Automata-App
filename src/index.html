@@ -57,12 +57,17 @@
       </div>
     </div>
     <div class="box box--tests">
-      <h2 class="box__title">Tests</h2>
+      <h2 class="box__title">Words</h2>
       <div class="test" id="inputTestIcon" data-icon="false">
         <input type="text" id="inputTest" class="test__input" pattern="^ *(\w*) *$" placeholder="Test accepted word">
       </div>
       <div class="box__content box__content--tests" id="tests">
-        <ul class="word-list" id="wordList"></ul>
+        <h3>From input</h3>
+        <h3>All accepted</h3>
+        <div class="word-list-column">
+          <ul class="word-list" id="wordList"></ul>
+          <ul class="word-list" id="wordListAll" data-infinite="true"></ul>
+        </div>
       </div>
     </div>
   </div>
