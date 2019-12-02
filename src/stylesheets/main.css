@@ -283,17 +283,17 @@ h3 { margin: 1em 0 0.5em; }
 }
 
 .word-list[data-infinite="true"]::after {
-  content: '...';
+  /* content: '...';
+  margin: -2.5rem 0 0 3rem; */
+  content: '∞';
+  margin: -1rem 0 0 1.5rem;
   font-size: 4rem;
-  margin: -2.5rem 0 0 3rem;
   line-height: 1;
   display: block;
   color: #888;
 }
 
 .word-list[data-infinite="true"]:empty::after {
-  content: '∞';
-  margin: -1rem 0 0 1.5rem;
   position: fixed;
 }
 

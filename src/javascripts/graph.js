@@ -393,6 +393,12 @@ export default class Graph {
     return this._dfaGraph;
   }
 
+  get acceptedStrings() {
+    if (this._acceptedStrings !== undefined) return this._acceptedStrings;
+    this._acceptedStrings = this.start.acceptedStrings();
+    return this._acceptedStrings;
+  }
+
   newRawData() {
     const transitions = [];
 
@@ -429,25 +435,6 @@ finite: ${data.isFinite ? 'y' : 'n'}
 words: ${this.rawData.words.reduce((total, word) => `${total}${word.word},${word.accepted ? 'y' : 'n'}\n`, '\n')}end.
 ${this.rawData.regex ? `\nregex: ${this.rawData.regex}` : ''}`;
   }
-
-  // TODO: not working because getAdjacents() returns adjacencies, not nodes
-  /*
-  * dfs(first = this.start) {
-    const visited = new Map();
-    const visitList = [];
-
-    visitList.push(first);
-
-    while (visitList.length !== 0) {
-      const node = visitList.pop();
-      if (node && !visited.has(node)) {
-        yield node;
-        visited.set(node);
-        visitList.push(...node.getAdjacents());
-      }
-    }
-  }
-  */
 
   isValidPath(word) {
     let originNodes = new Set(this.start ? this.start.epsilonAccessibleNodes() : []);

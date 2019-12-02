@@ -181,4 +181,28 @@ export default class Node {
     }
     return true;
   }
+
+  acceptedStrings() {
+    const accepted = new Set();
+    this.acceptedStringsRec(accepted, [], new Set(), [{ node: this, label: '' }, ...this.adjacencies]);
+    return [...accepted].sort();
+  }
+
+  acceptedStringsRec(accepted, path, visited, visitList) {
+    if (visitList.length === 0) return;
+
+    const adjacency = visitList.pop();
+    path.push(adjacency.label);
+
+    if (!visited.has(adjacency)) {
+      visited.add(adjacency);
+
+      if (adjacency.node.isFinal) accepted.add(path.join(''));
+
+      visitList.push(...adjacency.node.adjacencies);
+    }
+
+    path.pop();
+    this.acceptedStringsRec(accepted, path, visited, visitList);
+  }
 }

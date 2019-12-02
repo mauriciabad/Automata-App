@@ -16,6 +16,7 @@ const saveElem = document.getElementById('save');
 const simplifyElem = document.getElementById('simplify');
 const dfaElem = document.getElementById('dfa');
 const wordsElem = document.getElementById('wordList');
+const allWordsElem = document.getElementById('wordListAll');
 const selectTemplateElem = document.getElementById('selectTemplate');
 const infoDfaElem = document.getElementById('infoDfa');
 const infoFiniteElem = document.getElementById('infoFinite');
@@ -82,6 +83,11 @@ async function testWords() {
   wordsElem.innerHTML = data.words.reduce((total, word) => `${total}<li class="word-list__item" data-icon="${graph[getGraphType()].isValidPath(word.word)}" data-original="${word.accepted}"><span class="word-list__word">${word.word !== '' ? word.word : '&nbsp;'}</span></li>`, '');
 }
 
+async function displayAllAcceptedStrings() {
+  allWordsElem.innerHTML = graph[getGraphType()].acceptedStrings.reduce((total, word) => `${total}<li class="word-list__item" data-icon="true"><span class="word-list__word">${word !== '' ? word : '&nbsp;'}</span></li>`, '');
+  allWordsElem.dataset.infinite = !graph[getGraphType()].isFinite;
+}
+
 async function displayGraph() {
   const type = getGraphType();
 
@@ -135,6 +141,8 @@ async function readData() {
 
     testWords();
     testCustomWord();
+
+    displayAllAcceptedStrings();
   }
 }
 
@@ -148,6 +156,8 @@ async function updateDfa() {
 
   testWords();
   testCustomWord();
+
+  displayAllAcceptedStrings();
 }
 
 async function readFileAsString() {
