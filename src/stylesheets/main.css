@@ -159,6 +159,7 @@ h3 { margin: 1em 0 0.5em; }
 
 .select {
   grid-area: select;
+  cursor: pointer;
 }
 
 .select,
