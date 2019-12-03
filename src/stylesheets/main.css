@@ -312,8 +312,9 @@ h3 { margin: 1em 0 0.5em; }
   padding: 0;
   margin: 0;
   list-style: none;
-  position: relative;
-  align-self: self-start;
+  position: sticky;
+  bottom: 0;
+  align-self: end;
 }
 
 .word-list__word {
