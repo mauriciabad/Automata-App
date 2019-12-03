@@ -314,7 +314,7 @@ h3 { margin: 1em 0 0.5em; }
   list-style: none;
   position: sticky;
   bottom: 0;
-  align-self: end;
+  align-self: start;
 }
 
 .word-list__word {
