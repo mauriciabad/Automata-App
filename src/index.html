@@ -30,14 +30,16 @@
         <a class="save" id="save" download="graph.txt" href="data:text/plain;charset=utf-8,">
           <img class="save__icon" src="./images/save_alt-24px.svg" alt="💾">
         </a>
-        <div class="toggle toggle--simplify">
-          <input type="checkbox" class="check check--simplify" id="simplify" checked><b class="b switch"></b><b class="b track"></b>
+        <div class="toggle-group" id="toggleGroup">
+          <div class="toggle toggle--simplify">
+            <input type="checkbox" class="check check--simplify" id="simplify" checked><b class="b switch"></b><b class="b track"></b>
+          </div>
+          <label for="simplifyToggle" class="box__title--sub">Simplify</label>
+          <div class="toggle toggle--dfa">
+            <input type="checkbox" class="check check--dfa" id="dfa" checked><b class="b switch"></b><b class="b track"></b>
+          </div>
+          <label for="dfaToggle" class="box__title--sub">DFA</label>
         </div>
-        <label for="simplifyToggle" class="box__title--sub">Simplify</label>
-        <div class="toggle toggle--dfa">
-          <input type="checkbox" class="check check--dfa" id="dfa" checked><b class="b switch"></b><b class="b track"></b>
-        </div>
-        <label for="dfaToggle" class="box__title--sub">DFA</label>
       </h2>
       <div class="box__content box__content--graph grid-graph">
         <div class="grid-graph__graph" id="graph"></div>

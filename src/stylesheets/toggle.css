@@ -76,3 +76,7 @@
 .check--dfa:checked ~ .track {
   box-shadow: inset 0 0 0 20px #948ae3;
 }
+
+.check:disabled {
+  cursor: not-allowed;
+}

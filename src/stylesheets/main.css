@@ -267,6 +267,15 @@ h3 { margin: 1em 0 0.5em; }
   pointer-events: none;
 }
 
+.noAllWords > h3:nth-child(2),
+.noAllWords #wordListAll {
+  display: none;
+}
+
+.noAllWords > .word-list-column {
+  grid-template: 1fr / 1fr;
+}
+
 .word-list-column {
   display: grid;
   grid-template: 1fr / 1fr 1fr;
@@ -350,3 +359,11 @@ h3 { margin: 1em 0 0.5em; }
 [data-icon="false"]::before { content: '❌'; }
 [data-icon="unknown"]::before { content: '❓'; }
 [data-icon="wrong"]::before { content: '⚠'; }
+
+.toggle-group {
+  opacity: 1;
+  float: right;
+
+  /* transition: opacity 200ms ease-out; */
+}
+.toggle-group__faded { opacity: 0.25; }

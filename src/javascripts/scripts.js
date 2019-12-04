@@ -22,6 +22,8 @@ const infoDfaElem = document.getElementById('infoDfa');
 const infoFiniteElem = document.getElementById('infoFinite');
 const inputTestElem = document.getElementById('inputTest');
 const inputTestIconElem = document.getElementById('inputTestIcon');
+const toggleGroupElem = document.getElementById('toggleGroup');
+const testsElem = document.getElementById('tests');
 
 inputTestElem.value = localStorage.getItem('word');
 simplifyElem.checked = localStorage.getItem('simplify') === 'true';
@@ -127,6 +129,26 @@ async function readData() {
   const newData = new RawGraph(inputElem.value);
   if (JSON.stringify(data) !== JSON.stringify(newData)) {
     data = newData;
+
+    if (data.stack) {
+      dfaElem.checked = false;
+      simplifyElem.checked = false;
+
+      localStorage.setItem('dfa', dfaElem.checked);
+      localStorage.setItem('simplify', simplifyElem.checked);
+
+      dfaElem.disabled = true;
+      simplifyElem.disabled = true;
+
+      toggleGroupElem.classList.add('toggle-group__faded');
+      testsElem.classList.add('noAllWords');
+    } else {
+      dfaElem.disabled = false;
+      simplifyElem.disabled = false;
+
+      toggleGroupElem.classList.remove('toggle-group__faded');
+      testsElem.classList.remove('noAllWords');
+    }
 
     graph = {
       simplified: new Graph(data, 'simplified'),
