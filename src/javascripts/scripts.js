@@ -38,6 +38,8 @@ let graphSvg = { simplified: undefined, normal: undefined, dfa: undefined };
 
 let viz = new Viz({ workerURL });
 
+let testStringRemovePattern = /\W+/g;
+
 function getGraphType() {
   if (dfaElem.checked) return 'dfa';
   if (simplifyElem.checked) return 'simplified';
@@ -45,7 +47,10 @@ function getGraphType() {
 }
 
 async function testCustomWord() {
-  const word = inputTestElem.value.trim();
+  const word = inputTestElem.value.replace(testStringRemovePattern, '');
+
+  inputTestElem.value = word;
+
   localStorage.setItem('word', word);
 
   if (inputTestElem.checkValidity()) {
@@ -130,7 +135,8 @@ async function readData() {
     };
     graphSvg = { simplified: undefined, normal: undefined, dfa: undefined };
 
-    inputTestElem.pattern = `^ *[${[...graph[getGraphType()].alphabet].join('')}]* *$`;
+    inputTestElem.pattern = `^[${[...graph[getGraphType()].alphabet].join('')}]*$`;
+    testStringRemovePattern = new RegExp(`[^${[...graph[getGraphType()].alphabet].join('')}]+`, 'g');
 
     outputElem.textContent = JSON.stringify(data, null, 2);
 
