@@ -274,14 +274,6 @@ h3 { margin: 1em 0 0.5em; }
   grid-area: list;
 }
 
-.word-list__item[data-icon="true"][data-original="false"]::before {
-  text-shadow: 0 0 8px #368a39;
-}
-
-.word-list__item[data-icon="false"][data-original="true"]::before {
-  text-shadow: 0 0 8px #ff5d2a;
-}
-
 .word-list[data-infinite="true"]::after {
   /* content: '...';
   margin: -2.5rem 0 0 3rem; */
@@ -329,13 +321,31 @@ h3 { margin: 1em 0 0.5em; }
   position: relative;
 }
 
-.word-list__item::before {
+.word-list__item[data-icon="true"][data-original="false"]::after {
+  content: '❌';
+}
+
+.word-list__item[data-icon="false"][data-original="true"]::after {
+  content: '✔';
+}
+
+.word-list__item::before,
+.word-list__item::after {
   content: '';
   position: absolute;
   line-height: 1.5;
+  left: 0;
 }
 
-[data-icon]::before { font-family: 'Apple Color Emoji', 'Android Emoji', 'Segoe UI Emoji', EmojiSymbols, Symbola, sans-serif; }
+.word-list__item::before { z-index: 1; }
+
+.word-list__item::after {
+  opacity: 0.25;
+  transform: scale(1.25);
+}
+
+[data-icon]::before,
+[data-icon]::after { font-family: 'Apple Color Emoji', 'Android Emoji', 'Segoe UI Emoji', EmojiSymbols, Symbola, sans-serif; }
 [data-icon="true"]::before { content: '✔'; }
 [data-icon="false"]::before { content: '❌'; }
 [data-icon="unknown"]::before { content: '❓'; }
