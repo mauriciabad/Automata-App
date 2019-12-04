@@ -396,7 +396,7 @@ export default class Graph {
 
   get acceptedStrings() {
     if (this._acceptedStrings !== undefined) return this._acceptedStrings;
-    this._acceptedStrings = this.start.acceptedStrings();
+    this._acceptedStrings = this.isFinite() ? this.start.acceptedStrings() : [];
     return this._acceptedStrings;
   }
 
