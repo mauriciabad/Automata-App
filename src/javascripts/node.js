@@ -8,8 +8,12 @@ export default class Node {
     this._adjacencies = new Set();
   }
 
-  addAdjacency(node, label) {
-    if (!this.hasAdjacency(node, label)) this._adjacencies.add({ node, label });
+  addAdjacency(node, label, stackPop = '', stackPush = '') {
+    if (!this.hasAdjacency(node, label, stackPop, stackPush)) {
+      this._adjacencies.add({
+        node, label, stackPop, stackPush,
+      });
+    }
   }
 
   isAdjecent({ node, label }) {
@@ -19,13 +23,8 @@ export default class Node {
     return this.hasAdjacency(node, label);
   }
 
-  removeAdjacency(node, label) {
-    for (const adjacency of this._adjacencies) {
-      if (adjacency.node === node && adjacency.label === label) {
-        this._adjacencies.delete(adjacency);
-        break;
-      }
-    }
+  removeAdjacency(node, label, stackPop = '', stackPush = '') {
+    this._adjacencies.delete(this.getAdjacency(node, label, stackPop, stackPush));
   }
 
   removeAllAdjacencies(node) {
@@ -39,17 +38,22 @@ export default class Node {
     }
   }
 
-  getAdjacency(node, label) {
+  getAdjacency(node, label, stackPop = '', stackPush = '') {
     for (const adjacency of this._adjacencies) {
-      if (adjacency.node === node && adjacency.label === label) {
+      if (
+        adjacency.node === node
+        && adjacency.label === label
+        && adjacency.stackPop === stackPop
+        && adjacency.stackPush === stackPush
+      ) {
         return adjacency;
       }
     }
     return undefined;
   }
 
-  hasAdjacency(node, label) {
-    return this.getAdjacency(node, label) !== undefined;
+  hasAdjacency(node, label, stackPop = '', stackPush = '') {
+    return this.getAdjacency(node, label, stackPop, stackPush) !== undefined;
   }
 
   get adjacencies() {

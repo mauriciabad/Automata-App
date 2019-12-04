@@ -35,8 +35,8 @@ selectTemplateElem.innerHTML = Object.keys(templates).reduce((total, templateNam
 const selectTemplatePlaceholderElem = document.getElementById('selectTemplatePlaceholder');
 
 let data;
-let graph = { simplified: undefined, normal: undefined, dfa: undefined };
-let graphSvg = { simplified: undefined, normal: undefined, dfa: undefined };
+let graph = { simplified: undefined, original: undefined, dfa: undefined };
+let graphSvg = { simplified: undefined, original: undefined, dfa: undefined };
 
 let viz = new Viz({ workerURL });
 
@@ -45,7 +45,7 @@ let testStringRemovePattern = /\W+/g;
 function getGraphType() {
   if (dfaElem.checked) return 'dfa';
   if (simplifyElem.checked) return 'simplified';
-  return 'normal';
+  return 'original';
 }
 
 async function testCustomWord() {
@@ -151,11 +151,11 @@ async function readData() {
     }
 
     graph = {
-      simplified: new Graph(data, 'simplified'),
-      normal: new Graph(data, 'original'),
-      dfa: (dfaElem.checked) ? new Graph(data, 'dfa') : undefined,
+      simplified: (!data.stack) ? new Graph(data, 'simplified') : undefined,
+      original: new Graph(data, 'original'),
+      dfa: (dfaElem.checked && !data.stack) ? new Graph(data, 'dfa') : undefined,
     };
-    graphSvg = { simplified: undefined, normal: undefined, dfa: undefined };
+    graphSvg = { simplified: undefined, original: undefined, dfa: undefined };
 
     inputTestElem.pattern = `^[${[...graph[getGraphType()].alphabet].join('')}]*$`;
     testStringRemovePattern = new RegExp(`[^${[...graph[getGraphType()].alphabet].join('')}]+`, 'g');

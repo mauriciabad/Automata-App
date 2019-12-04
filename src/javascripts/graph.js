@@ -9,6 +9,8 @@ export default class Graph {
     this.invalid = false;
     this.fromRegex = !!data.regex;
     this.type = type;
+    this.isPda = !!data.stack;
+    this.stack = data.stack;
 
     if (this.fromRegex) {
       this.nodes = new Map();
@@ -32,7 +34,7 @@ export default class Graph {
       }
 
       for (const edge of data.transitions || []) {
-        this.addEdge(edge.origin, edge.destination, edge.label);
+        this.addEdge(edge.origin, edge.destination, edge.label, edge.stack.remove, edge.stack.add);
       }
 
       if (!this.start) this.invalidate('Missing start node');
@@ -48,7 +50,6 @@ export default class Graph {
         break;
       default:
       case 'original':
-      case 'normal':
         break;
     }
   }
@@ -291,22 +292,26 @@ export default class Graph {
   }
 
   simplify() {
-    this.simplifyConsecutiveEpsilons();
-    this.simplifyEpsilonLoops();
-    this.simplifyStart();
-    this.simplifySkipableNodes();
-    this.simplifySelfEpsilonLoops();
-    this.simplifyPowersetAlgorithm();
+    if (!this.isPda) {
+      this.simplifyConsecutiveEpsilons();
+      this.simplifyEpsilonLoops();
+      this.simplifyStart();
+      this.simplifySkipableNodes();
+      this.simplifySelfEpsilonLoops();
+      this.simplifyPowersetAlgorithm();
+    }
   }
 
   addSink() {
-    const sink = this.addVertex('Sink');
-    for (const letter of this.alphabet) {
-      sink.addAdjacency(sink, letter);
-    }
-    for (const node of this.nodes.values()) {
+    if (!this.isPda) {
+      const sink = this.addVertex('Sink');
       for (const letter of this.alphabet) {
-        if (!node.isAdjecent({ label: letter })) node.addAdjacency(sink, letter);
+        sink.addAdjacency(sink, letter);
+      }
+      for (const node of this.nodes.values()) {
+        for (const letter of this.alphabet) {
+          if (!node.isAdjecent({ label: letter })) node.addAdjacency(sink, letter);
+        }
       }
     }
   }
@@ -333,23 +338,21 @@ export default class Graph {
     return this.nodes.delete(nodeName);
   }
 
-  addEdge(source, destination, label) {
+  addEdge(source, destination, label, stackPop = '', stackPush = '') {
     const sourceNode = this.addVertex(source);
     const destinationNode = this.addVertex(destination);
 
-    sourceNode.addAdjacency(destinationNode, label);
-
-    return [sourceNode, destinationNode, label];
+    sourceNode.addAdjacency(destinationNode, label, stackPop, stackPush);
   }
 
-  removeEdge(source, destination, label) {
+  removeEdge(source, destination, label, stackPop = '', stackPush = '') {
     const sourceNode = this.nodes.get(source);
     const destinationNode = this.nodes.get(destination);
 
     if (sourceNode) {
       if (destinationNode) {
         if (label !== undefined) {
-          sourceNode.removeAdjacent(destinationNode, label);
+          sourceNode.removeAdjacent(destinationNode, label, stackPop, stackPush);
         } else {
           sourceNode.removeAllAdjacencies(destinationNode);
         }
@@ -409,6 +412,10 @@ export default class Graph {
           origin: node.label,
           destination: adjacency.node.label,
           label: adjacency.label,
+          stack: {
+            remove: adjacency.stackPop,
+            add: adjacency.stackPush,
+          },
         });
       }
     }
@@ -417,6 +424,7 @@ export default class Graph {
       alphabet: [...this.alphabet],
       states: [...this.nodes.values()].map((node) => node.label),
       start: this.start.label,
+      stack: [...this.stack],
       transitions,
       final: [...this.nodes.values()].filter((node) => node.isFinal).map((node) => node.label),
     };
@@ -426,9 +434,9 @@ export default class Graph {
     const data = this.newRawData();
 
     return `${this.rawData.comments.reduce((total, comment) => `${total}# ${comment}\n`, '')}alphabet: ${data.alphabet.join('')}
-states: ${data.states.join(',')}
+${this.isPda ? `stack: ${data.stack.join('')}\n` : ''}states: ${data.states.join(',')}
 final: ${data.final.join(',')}
-transitions: ${data.transitions.reduce((total, transition) => `${total}${transition.origin},${transition.label} --> ${transition.destination}\n`, '\n')}end.
+transitions: ${data.transitions.reduce((total, transition) => `${total}${transition.origin},${transition.label}${transition.stack.add || transition.stack.remove ? ` [${transition.stack.add || '_'},${transition.stack.remove || '_'}]` : ''} --> ${transition.destination}\n`, '\n')}end.
 
 dfa: ${data.isDfa ? 'y' : 'n'}
 finite: ${data.isFinite ? 'y' : 'n'}
@@ -485,7 +493,7 @@ ${this.rawData.regex ? `\nregex: ${this.rawData.regex}` : ''}`;
       nodesInDotFormat.push(`"${node.label}" [${this.fromRegex && node.label !== 'Sink' ? 'label=""' : ''} ${node.isFinal ? ' shape=doublecircle' : ''}]`);
 
       for (const adjacency of node.adjacencies) {
-        edgesInDotFormat.push(`"${node.label}" -> "${adjacency.node.label}" [label="${adjacency.label || 'ε'}"]`);
+        edgesInDotFormat.push(`"${node.label}" -> "${adjacency.node.label}" [label="${adjacency.label || 'ε'}${adjacency.stackPush || adjacency.stackPop ? `, ${adjacency.stackPush || 'ε'} → ${adjacency.stackPop || 'ε'}` : ''}"]`);
       }
     }
 
