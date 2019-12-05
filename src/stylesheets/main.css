@@ -35,7 +35,7 @@ h3 { margin: 1em 0 0; }
 
 .grid {
   display: grid;
-  grid-template: 1fr 1fr / 1fr 1fr;
+  grid-template: 1fr 2fr / 2fr 1fr;
   grid-template-areas:
     'input output'
     'graph tests';
@@ -89,10 +89,7 @@ h3 { margin: 1em 0 0; }
 
 .box__content--input {
   display: grid;
-  grid-template: 1fr min-content / 1fr 1fr;
-  grid-template-areas:
-    'textBox upload'
-    'textBox select';
+  grid-template: 1fr / 1fr 1fr 1fr;
   gap: 1rem;
   overflow: visible;
 }
@@ -101,7 +98,6 @@ h3 { margin: 1em 0 0; }
 
 .input_box {
   font-family: 'Roboto Mono', monospace;
-  grid-area: textBox;
   resize: none;
   outline: none;
   border: none;
@@ -120,7 +116,6 @@ h3 { margin: 1em 0 0; }
 }
 
 .upload {
-  grid-area: upload;
   border: dashed 1rem #0002;
   border-radius: 1rem;
   position: relative;
@@ -155,11 +150,10 @@ h3 { margin: 1em 0 0; }
 }
 
 .upload__icon {
-  height: 5rem;
+  height: 4rem;
 }
 
 .select {
-  grid-area: select;
   cursor: pointer;
 }
 
