@@ -63,6 +63,8 @@ async function testCustomWord() {
 }
 
 async function testDfa() {
+  const type = getGraphType();
+
   infoDfaElem.classList.remove(
     'info__icon-container--false',
     'info__icon-container--true',
@@ -70,11 +72,14 @@ async function testDfa() {
     'info__icon-container--unknown',
     'info__icon-container--warning',
   );
-  infoDfaElem.classList.add(`info__icon-container--${graph[getGraphType()].isDfa ? 'true' : 'false'}`);
-  if (getGraphType() !== 'dfa' && data.dfa !== graph[getGraphType()].isDfa) infoDfaElem.classList.add('info__icon-container--warning');
+  infoDfaElem.classList.add(`info__icon-container--${graph[type].isDfa ? 'true' : 'false'}`);
+  if (type !== 'dfa' && data.dfa !== graph[type].isDfa) infoDfaElem.classList.add('info__icon-container--warning');
 }
 
 async function testFinite() {
+  let type = getGraphType();
+  if (type === 'original') type = 'simplified';
+
   infoFiniteElem.classList.remove(
     'info__icon-container--false',
     'info__icon-container--true',
@@ -83,11 +88,11 @@ async function testFinite() {
     'info__icon-container--warning',
   );
 
-  let result = graph[getGraphType()].isFinite ? 'true' : 'false';
-  if (graph[getGraphType()].isPda) result = 'unknown';
+  let result = graph[type].isFinite ? 'true' : 'false';
+  if (graph[type].isPda) result = 'unknown';
 
   infoFiniteElem.classList.add(`info__icon-container--${result}`);
-  if (data.finite !== graph[getGraphType()].isFinite && !graph[getGraphType()].isPda) infoFiniteElem.classList.add('info__icon-container--warning');
+  if (data.finite !== graph[type].isFinite && !graph[type].isPda) infoFiniteElem.classList.add('info__icon-container--warning');
 }
 
 async function testWords() {
