@@ -31,8 +31,8 @@ dfaElem.checked = localStorage.getItem('dfa') === 'true';
 const storedRawGraph = localStorage.getItem('rawGraph');
 if (storedRawGraph) inputElem.value = storedRawGraph;
 if (!inputElem.value) inputElem.value = templates.Wooow;
-selectTemplateElem.innerHTML = Object.keys(templates).reduce((total, templateName) => `${total}<option value="${templateName}">${templateName}</option>`, '<option value="" selected disabled style="display: none;" id="selectTemplatePlaceholder">Template</option>');
-const selectTemplatePlaceholderElem = document.getElementById('selectTemplatePlaceholder');
+// templates = { ...localStorage.getItem('customTemplates'), templates };
+selectTemplateElem.innerHTML = Object.keys(templates).reduce((total, templateName, i) => `${total} <input type="radio" name="template" id="template-${i}" value="${templateName}"><label for="template-${i}">${templateName}</label>`, '');
 
 let data;
 let graph = { simplified: undefined, original: undefined, dfa: undefined };
@@ -200,18 +200,16 @@ async function readFileAsString() {
       inputElem.value = event.target.result;
       readData();
       uploadElem.value = null;
+      localStorage.setItem('customTemplates', { ...localStorage.getItem('customTemplates'), [files[0].name]: event.target.result });
+      document.querySelector(`input[name="template"][value="${files[0].name}"]`).checked = true;
     };
     reader.readAsText(files[0]);
-    selectTemplatePlaceholderElem.textContent = files[0].name;
-    selectTemplatePlaceholderElem.selected = true;
   }
 }
 
 async function openTemplate() {
-  if (selectTemplateElem.value) {
-    inputElem.value = templates[selectTemplateElem.value];
-    readData();
-  }
+  inputElem.value = templates[document.querySelector('input[name="template"]:checked').value];
+  readData();
 }
 
 readData();
