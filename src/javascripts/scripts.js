@@ -82,8 +82,12 @@ async function testFinite() {
     'info__icon-container--unknown',
     'info__icon-container--warning',
   );
-  infoFiniteElem.classList.add(`info__icon-container--${graph[getGraphType()].isFinite ? 'true' : 'false'}`);
-  if (data.finite !== graph[getGraphType()].isFinite) infoFiniteElem.classList.add('info__icon-container--warning');
+
+  let result = graph[getGraphType()].isFinite ? 'true' : 'false';
+  if (graph[getGraphType()].isPda) result = 'unknown';
+
+  infoFiniteElem.classList.add(`info__icon-container--${result}`);
+  if (data.finite !== graph[getGraphType()].isFinite && !graph[getGraphType()].isPda) infoFiniteElem.classList.add('info__icon-container--warning');
 }
 
 async function testWords() {

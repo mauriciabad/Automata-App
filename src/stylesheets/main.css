@@ -249,6 +249,10 @@ h3 { margin: 1em 0 0.5em; }
   display: block;
 }
 
+.info__icon-container--unknown {
+  opacity: 0.25;
+}
+
 .test__input {
   width: 100%;
   box-sizing: border-box;
