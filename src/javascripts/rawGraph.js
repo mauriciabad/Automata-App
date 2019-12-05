@@ -49,8 +49,8 @@ export default class RawGraph {
       const stackPop = (match[4] === '_') ? '' : match[4] || '';
       const stackPush = (match[5] === '_') ? '' : match[5] || '';
       if (label && !this.alphabet.includes(label)) this.alphabet.push(label);
-      if (stackPush === '' && !this.stack.includes(stackPush)) this.stack.push(stackPush);
-      if (stackPop === '' && !this.stack.includes(stackPop)) this.stack.push(stackPop);
+      if (stackPush !== '' && !this.stack.includes(stackPush)) this.stack += stackPush;
+      if (stackPop !== '' && !this.stack.includes(stackPop)) this.stack += stackPop;
       return {
         origin: match[1] || '',
         destination: match[6] || '',
