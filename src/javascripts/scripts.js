@@ -106,8 +106,11 @@ async function testWords() {
 }
 
 async function displayAllAcceptedStrings() {
-  allWordsElem.innerHTML = graph[getGraphType()].acceptedStrings.reduce((total, word) => `${total}<li class="word-list__item" data-icon="true"><span class="word-list__word">${word !== '' ? word : '&nbsp;'}</span></li>`, '');
-  allWordsElem.dataset.infinite = !graph[getGraphType()].isFinite;
+  let type = getGraphType();
+  if (type === 'original') type = 'simplified';
+
+  allWordsElem.innerHTML = graph[type].acceptedStrings.reduce((total, word) => `${total}<li class="word-list__item" data-icon="true"><span class="word-list__word">${word !== '' ? word : '&nbsp;'}</span></li>`, '');
+  allWordsElem.dataset.infinite = !graph[type].isFinite;
 }
 
 async function displayGraph() {
@@ -147,6 +150,8 @@ async function displayGraph() {
 }
 
 async function readData() {
+  const type = getGraphType();
+
   localStorage.setItem('rawGraph', inputElem.value);
 
   const newData = new RawGraph(inputElem.value);
@@ -180,8 +185,8 @@ async function readData() {
     };
     graphSvg = { simplified: undefined, original: undefined, dfa: undefined };
 
-    inputTestElem.pattern = `^[${[...graph[getGraphType()].alphabet].join('')}]*$`;
-    testStringRemovePattern = new RegExp(`[^${[...graph[getGraphType()].alphabet].join('')}]+`, 'g');
+    inputTestElem.pattern = `^[${[...graph[type].alphabet].join('')}]*$`;
+    testStringRemovePattern = new RegExp(`[^${[...graph[type].alphabet].join('')}]+`, 'g');
 
     outputElem.textContent = JSON.stringify(data, null, 2);
 
