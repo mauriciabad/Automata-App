@@ -348,7 +348,7 @@ h3 { margin: 1em 0 0; }
 .word-list__item::before { z-index: 1; }
 
 .word-list__item::after {
-  opacity: 0.25;
+  opacity: 0.3333;
   transform: scale(1.25);
 }
 
