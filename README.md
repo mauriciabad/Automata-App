@@ -10,3 +10,10 @@ Author: **Maurici Abad**
 - Github: <https://github.com/mauriciabad/>
 
 Boilerplate used https://docs.staticsiteboilerplate.com/
+
+## Build
+
+```bash
+npm install
+npm start
+```
