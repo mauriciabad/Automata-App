@@ -30,7 +30,7 @@ simplifyElem.checked = localStorage.getItem('simplify') === 'true';
 dfaElem.checked = localStorage.getItem('dfa') === 'true';
 const storedRawGraph = localStorage.getItem('rawGraph');
 if (storedRawGraph) inputElem.value = storedRawGraph;
-if (!inputElem.value) inputElem.value = templates.Default;
+if (!inputElem.value) inputElem.value = templates.Wooow;
 selectTemplateElem.innerHTML = Object.keys(templates).reduce((total, templateName) => `${total}<option value="${templateName}">${templateName}</option>`, '<option value="" selected disabled style="display: none;" id="selectTemplatePlaceholder">Template</option>');
 const selectTemplatePlaceholderElem = document.getElementById('selectTemplatePlaceholder');
 
