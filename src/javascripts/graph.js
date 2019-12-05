@@ -434,7 +434,7 @@ export default class Graph {
     const data = this.newRawData();
 
     return `${this.rawData.comments.reduce((total, comment) => `${total}# ${comment}\n`, '')}alphabet: ${data.alphabet.join('')}
-${this.isPda ? `stack: ${data.stack.join('')}\n` : ''}states: ${data.states.join(',')}
+${data.stack ? `stack: ${data.stack.join('')}\n` : ''}states: ${data.states.join(',')}
 final: ${data.final.join(',')}
 transitions: ${data.transitions.reduce((total, transition) => `${total}${transition.origin},${transition.label}${transition.stack.add || transition.stack.remove ? ` [${transition.stack.add || '_'},${transition.stack.remove || '_'}]` : ''} --> ${transition.destination}\n`, '\n')}end.
 
@@ -445,7 +445,9 @@ words: ${this.rawData.words.reduce((total, word) => `${total}${word.word},${word
 ${this.rawData.regex ? `\nregex: ${this.rawData.regex}` : ''}`;
   }
 
-  isValidPath(word) {
+  isAcceptedString(word) {
+    if (this.isPda) return this.isAcceptedStringPda(word);
+
     let originNodes = new Set(this.start ? this.start.epsilonAccessibleNodes() : []);
 
     for (const letter of word) {
@@ -468,6 +470,45 @@ ${this.rawData.regex ? `\nregex: ${this.rawData.regex}` : ''}`;
 
     for (const node of originNodes) {
       if (node.isFinal) return true;
+    }
+
+    return false;
+  }
+
+  isAcceptedStringPda(word) {
+    let originNodeStacks = this.start.epsilonAccessibleNodesPda();
+
+    for (const letter of word) {
+      const nextOriginNodeStacks = new Set();
+
+      for (const [node, stacks] of originNodeStacks) {
+        for (const stack of stacks) {
+          const pop = stack.slice(-1);
+
+          for (const adjacency of node.adjacencies) {
+            if (adjacency.label === letter && (adjacency.stackPop === '' || adjacency.stackPop === pop)) {
+              if (stack.length <= 1000) {
+                const nextStack = ((adjacency.stackPop === '') ? stack : stack.slice(0, -1)) + adjacency.stackPush;
+
+                for (const [node2, stacks2] of adjacency.node.epsilonAccessibleNodesPda(nextStack)) {
+                  if (!originNodeStacks.has(node2)) originNodeStacks.set(node2, new Set());
+                  originNodeStacks.get(node2).add(...stacks2);
+                }
+              }
+            }
+          }
+        }
+      }
+
+      if (nextOriginNodeStacks.size === 0) return false;
+
+      originNodeStacks = nextOriginNodeStacks;
+    }
+
+    for (const [node, stacks] of originNodeStacks) {
+      for (const stack of stacks) {
+        if (node.isFinal && stack === '') return true;
+      }
     }
 
     return false;

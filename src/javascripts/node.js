@@ -89,6 +89,34 @@ export default class Node {
     return accessibleNodes;
   }
 
+  epsilonAccessibleNodesPda(originalStack = '', nodeStacks = new Map([[this, new Set([originalStack])]])) {
+    for (const [node, stacks] of nodeStacks) {
+      for (const stack of stacks) {
+        const pop = stack.slice(-1);
+
+        for (const adjacency of node.adjacencies) {
+          if (adjacency.label === '' && (adjacency.stackPop === '' || adjacency.stackPop === pop)) {
+            if (stack.length <= 1000) {
+              if (!nodeStacks.has(adjacency.node)) nodeStacks.set(adjacency.node, new Set());
+              if (!nodeStacks.get(adjacency.node).has(stack)) {
+                nodeStacks.get(adjacency.node).add(stack);
+                const nextNodeStacks = adjacency.node.epsilonAccessibleNodesPda(stack, nodeStacks);
+
+                // Add nextNodeStacks to nodeStacks
+                for (const [node2, stacks2] of nextNodeStacks) {
+                  if (!nodeStacks.has(node2)) nodeStacks.set(node2, new Set());
+                  nodeStacks.get(node2).add(...stacks2);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return nodeStacks;
+  }
+
   epsilonLoops() {
     const loops = [];
 

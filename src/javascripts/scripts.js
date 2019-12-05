@@ -56,7 +56,7 @@ async function testCustomWord() {
   localStorage.setItem('word', word);
 
   if (inputTestElem.checkValidity()) {
-    inputTestIconElem.dataset.icon = graph[getGraphType()].isValidPath(word) ? 'true' : 'false';
+    inputTestIconElem.dataset.icon = graph[getGraphType()].isAcceptedString(word) ? 'true' : 'false';
   } else {
     inputTestIconElem.dataset.icon = 'wrong';
   }
@@ -87,7 +87,7 @@ async function testFinite() {
 }
 
 async function testWords() {
-  wordsElem.innerHTML = data.words.reduce((total, word) => `${total}<li class="word-list__item" data-icon="${graph[getGraphType()].isValidPath(word.word)}" data-original="${word.accepted}"><span class="word-list__word">${word.word !== '' ? word.word : '&nbsp;'}</span></li>`, '');
+  wordsElem.innerHTML = data.words.reduce((total, word) => `${total}<li class="word-list__item" data-icon="${graph[getGraphType()].isAcceptedString(word.word)}" data-original="${word.accepted}"><span class="word-list__word">${word.word !== '' ? word.word : '&nbsp;'}</span></li>`, '');
 }
 
 async function displayAllAcceptedStrings() {
