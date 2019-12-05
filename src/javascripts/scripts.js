@@ -125,6 +125,14 @@ async function displayGraph() {
       }).catch(() => { viz = new Viz({ workerURL }); });
     });
   }
+
+  testDfa();
+  testFinite();
+
+  testWords();
+  testCustomWord();
+
+  displayAllAcceptedStrings();
 }
 
 async function readData() {
@@ -167,29 +175,7 @@ async function readData() {
     outputElem.textContent = JSON.stringify(data, null, 2);
 
     displayGraph();
-
-    testDfa();
-    testFinite();
-
-    testWords();
-    testCustomWord();
-
-    displayAllAcceptedStrings();
   }
-}
-
-async function updateDfa() {
-  if (dfaElem.checked) graph.dfa = new Graph(data, 'dfa');
-
-  displayGraph();
-
-  testDfa();
-  testFinite();
-
-  testWords();
-  testCustomWord();
-
-  displayAllAcceptedStrings();
 }
 
 async function readFileAsString() {
@@ -232,5 +218,7 @@ dfaElem.addEventListener('input', () => {
   if (dfaElem.checked) simplifyElem.checked = true;
   localStorage.setItem('simplify', simplifyElem.checked);
 
-  updateDfa();
+  if (dfaElem.checked) graph.dfa = new Graph(data, 'dfa');
+
+  displayGraph();
 });
