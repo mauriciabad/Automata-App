@@ -47,7 +47,7 @@ let viz = new Viz({ workerURL });
 let testStringRemovePattern = /\W+/g;
 
 function getGraphType() {
-  if (graph.original.isPda) return 'pda';
+  if (graph.original && graph.original.isPda) return 'pda';
   if (dfaElem.checked) return 'dfa';
   if (simplifyElem.checked) return 'simplified';
   return 'original';
