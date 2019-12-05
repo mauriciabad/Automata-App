@@ -35,14 +35,19 @@ selectTemplateElem.innerHTML = Object.keys(templates).reduce((total, templateNam
 const selectTemplatePlaceholderElem = document.getElementById('selectTemplatePlaceholder');
 
 let data;
-let graph = { simplified: undefined, original: undefined, dfa: undefined };
-let graphSvg = { simplified: undefined, original: undefined, dfa: undefined };
+let graph = {
+  simplified: undefined, original: undefined, dfa: undefined, pda: undefined,
+};
+let graphSvg = {
+  simplified: undefined, original: undefined, dfa: undefined, pda: undefined,
+};
 
 let viz = new Viz({ workerURL });
 
 let testStringRemovePattern = /\W+/g;
 
 function getGraphType() {
+  if (graph.original.isPda) return 'pda';
   if (dfaElem.checked) return 'dfa';
   if (simplifyElem.checked) return 'simplified';
   return 'original';
@@ -182,8 +187,11 @@ async function readData() {
       simplified: (!data.stack) ? new Graph(data, 'simplified') : undefined,
       original: new Graph(data, 'original'),
       dfa: (dfaElem.checked && !data.stack) ? new Graph(data, 'dfa') : undefined,
+      pda: new Graph(data, 'original'),
     };
-    graphSvg = { simplified: undefined, original: undefined, dfa: undefined };
+    graphSvg = {
+      simplified: undefined, original: undefined, dfa: undefined, pda: undefined,
+    };
 
     inputTestElem.pattern = `^[${[...graph[type].alphabet].join('')}]*$`;
     testStringRemovePattern = new RegExp(`[^${[...graph[type].alphabet].join('')}]+`, 'g');
