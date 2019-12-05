@@ -46,14 +46,18 @@ export default class RawGraph {
       if (match[1] && !this.states.includes(match[1])) this.states.push(match[1]);
       if (match[6] && !this.states.includes(match[6])) this.states.push(match[6]);
       const label = (match[2] === '_') ? '' : match[2] || '';
+      const stackPop = (match[4] === '_') ? '' : match[4] || '';
+      const stackPush = (match[5] === '_') ? '' : match[5] || '';
       if (label && !this.alphabet.includes(label)) this.alphabet.push(label);
+      if (stackPush === '' && !this.stack.includes(stackPush)) this.stack.push(stackPush);
+      if (stackPop === '' && !this.stack.includes(stackPop)) this.stack.push(stackPop);
       return {
         origin: match[1] || '',
         destination: match[6] || '',
         label,
         stack: {
-          remove: (match[4] === '_') ? '' : match[4] || '',
-          add: (match[5] === '_') ? '' : match[5] || '',
+          remove: stackPop,
+          add: stackPush,
         },
       };
     });
