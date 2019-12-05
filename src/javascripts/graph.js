@@ -489,8 +489,9 @@ ${this.rawData.regex ? `\nregex: ${this.rawData.regex}` : ''}`;
             if (adjacency.label === letter && (adjacency.stackPop === '' || adjacency.stackPop === pop)) {
               if (stack.length <= 1000) {
                 const nextStack = ((adjacency.stackPop === '') ? stack : stack.slice(0, -1)) + adjacency.stackPush;
+                const epsilonAccessibleNodes = adjacency.node.epsilonAccessibleNodesPda(nextStack);
 
-                for (const [node2, stacks2] of adjacency.node.epsilonAccessibleNodesPda(nextStack)) {
+                for (const [node2, stacks2] of epsilonAccessibleNodes) {
                   if (!originNodeStacks.has(node2)) originNodeStacks.set(node2, new Set());
                   originNodeStacks.get(node2).add(...stacks2);
                 }
