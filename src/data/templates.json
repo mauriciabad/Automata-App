@@ -1,5 +1,5 @@
 {
-  "Wooow" : "# Wooow\nalphabet: wo\nstates: 1,2,3\nfinal: 3\ntransitions:\n1,w --> 2\n2,o --> 2\n2,w --> 3\nend.\n\ndfa: n\nfinite: n\n\nwords:\n,n\nww,y\nwow,y\nwoooooooooow,y\no,n\nwoo,n\nend.",
+  "Wooow" : "# Wooow\nalphabet: wo\nstates: 1,2,3\nfinal: 3\ntransitions:\n1,w --> 2\n2,o --> 2\n2,w --> 3\nend.\n\ndfa: n\nfinite: n\n\nwords:\n,n\nww,y\nwow,y\nwooow,y\no,n\nwoo,n\nend.",
   "Is DFA": "# DFA Graph\nalphabet: ab\nstates: B,S,C\nfinal: C\ntransitions:\nS,a --> B\nS,b --> B\nB,a --> C\nB,b --> C\nC,a --> S\nC,b --> S\nend.\n\ndfa: y\nfinite: n\n\nwords:\n,n\na,y\nb,y\naa,n\nabbb,y\nbbbb,y\nend.\n",
   "No end": "# Imposible ending\nalphabet: abcde\nstates: 1,2,3\nfinal: 3\ntransitions:\n1,a --> 1\n1,b --> 2\n2,c --> 1\n2,d --> 2\n3,e --> 2\nend.\n\ndfa: n\nfinite: y\n",
   "A or nothing": "# A or nothing\nalphabet: a\nstates: 1,2\nfinal: 2\ntransitions:\n1,a --> 2\n1,_ --> 2\nend.\n\ndfa: n\nfinite: y\n\nwords:\n,y\na,y\naa,n\naaa,n\nend.",
@@ -20,7 +20,7 @@
   "Finite 4": "# Finite 4\nalphabet: ab\nstates: 1,2,3,4\nfinal: 2\ntransitions:\n1,a --> 2\n3,b --> 4\n1,b --> 3\n1,b --> 4\nend.\n\ndfa: n\nfinite: y\n\nwords:\n,n\na,y\nb,n\nbb,n\nab,n\nend.",
   "Finite 5": "# Finite 5\nalphabet: ab\nstates: 1,2,3,4,5\nfinal: 2\ntransitions:\n1,a --> 3\n5,b --> 2\n3,_ --> 4\n4,_ --> 5\n4,_ --> 4\n5,_ --> 3\n\nend.\n\ndfa: n\nfinite: y\n\nwords:\n,n\na,n\nb,n\nab,y\nba,n\naa,n\nbb,n\nend.\n",
   "Finite 6": "# Finite 6\nalphabet: ab\nstates: 1,2,3\nfinal: 2\ntransitions:\n1,a --> 2\n3,b --> 2\n3,b --> 3\nend.\n\ndfa: n\nfinite: y\n\nwords:\n,n\na,y\naa,n\nb,n\nbb,n\nab,n\nba,n\naa\nend.\n",
-  "Regex Wooow": "# Regex Wooow\nregex: .(w,*(o),w)\n\ndfa: n\nfinite: n\n\nwords:\n,n\nww,y\nwow,y\nwoooooooooow,y\no,n\nwoo,n\nend.",
+  "Regex Wooow": "# Regex Wooow\nregex: .(w,*(o),w)\n\ndfa: n\nfinite: n\n\nwords:\n,n\nww,y\nwow,y\nwooow,y\no,n\nwoo,n\nend.",
   "Regex *a": "# Regex *a\nregex: *(a)\n\ndfa: n\nfinite: n\n\nwords:\n,y\na,y\naa,y\naaa,y\naaaa,y\naaaaa,y\nend.\n",
   "Regex a.b": "# Regex a.b\nregex: .(a,b)\n\ndfa: n\nfinite: y\n\nwords:\n,n\na,n\nb,n\naa,n\nab,y\nba,n\nbb,n\n\naaa,n\naab,n\naba,n\nabb,n\nbaa,n\nbab,n\nbba,n\nbbb,n\n\naaaa,n\naaab,n\naaba,n\naabb,n\nabaa,n\nabab,n\nabba,n\nabbb,n\nbaaa,n\nbaab,n\nbaba,n\nbabb,n\nbbaa,n\nbbab,n\nbbba,n\nbbbb,n\nend.\n",
   "Regex a|b": "# Regex a|b\nregex: |(a,b)\n\ndfa: n\nfinite: y\n\nwords:\n,n\na,y\nb,y\naa,n\nab,n\nba,n\nbb,n\n\naaa,n\naab,n\naba,n\nabb,n\nbaa,n\nbab,n\nbba,n\nbbb,n\n\naaaa,n\naaab,n\naaba,n\naabb,n\nabaa,n\nabab,n\nabba,n\nabbb,n\nbaaa,n\nbaab,n\nbaba,n\nbabb,n\nbbaa,n\nbbab,n\nbbba,n\nbbbb,n\nend.\n",
