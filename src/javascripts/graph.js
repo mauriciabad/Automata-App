@@ -436,7 +436,7 @@ export default class Graph {
     return `${this.rawData.comments.reduce((total, comment) => `${total}# ${comment}\n`, '')}alphabet: ${data.alphabet.join('')}
 ${data.stack ? `stack: ${data.stack.join('')}\n` : ''}states: ${data.states.join(',')}
 final: ${data.final.join(',')}
-transitions: ${data.transitions.reduce((total, transition) => `${total}${transition.origin},${transition.label}${transition.stack.add || transition.stack.remove ? ` [${transition.stack.add || '_'},${transition.stack.remove || '_'}]` : ''} --> ${transition.destination}\n`, '\n')}end.
+transitions: ${data.transitions.reduce((total, transition) => `${total}${transition.origin},${transition.label}${transition.stack.add || transition.stack.remove ? ` [${transition.stack.remove || '_'},${transition.stack.add || '_'}]` : ''} --> ${transition.destination}\n`, '\n')}end.
 
 dfa: ${data.isDfa ? 'y' : 'n'}
 finite: ${data.isFinite ? 'y' : 'n'}
@@ -535,7 +535,7 @@ ${this.rawData.regex ? `\nregex: ${this.rawData.regex}` : ''}`;
       nodesInDotFormat.push(`"${node.label}" [${this.fromRegex && node.label !== 'Sink' ? 'label=""' : ''} ${node.isFinal ? ' shape=doublecircle' : ''}]`);
 
       for (const adjacency of node.adjacencies) {
-        edgesInDotFormat.push(`"${node.label}" -> "${adjacency.node.label}" [label="${adjacency.label || 'ε'}${adjacency.stackPush || adjacency.stackPop ? `, ${adjacency.stackPush || 'ε'} → ${adjacency.stackPop || 'ε'}` : ''}"]`);
+        edgesInDotFormat.push(`"${node.label}" -> "${adjacency.node.label}" [label="${adjacency.label || 'ε'}${adjacency.stackPush || adjacency.stackPop ? `, ${adjacency.stackPop || 'ε'} → ${adjacency.stackPush || 'ε'}` : ''}"]`);
       }
     }
 
