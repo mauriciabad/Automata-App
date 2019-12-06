@@ -39,7 +39,7 @@ export default class RawGraph {
       .replace(/,\)/g, ')');
     this.regex += ')'.repeat(Math.max(0, missingParentheses(this.regex.match(/(\(|\))/g) || [])));
     this.alphabet = (alphabetMatch ? alphabetMatch[1] : '').split('').sort();
-    this.stack = (stackMatch ? stackMatch[1] : '');
+    this.stack = (stackMatch ? stackMatch[1] : '').split('').sort();
     this.states = (statesMatch ? statesMatch[1] : '').split(',').map((item) => item.trim()).filter((item) => item !== '');
     this.final = (finalMatch ? finalMatch[1] : '').split(',').map((item) => item.trim()).filter((item) => item !== '');
     this.transitions = Array.from(transitionsMatches, (match) => {
@@ -49,8 +49,8 @@ export default class RawGraph {
       const stackPop = (match[4] === '_') ? '' : match[4] || '';
       const stackPush = (match[5] === '_') ? '' : match[5] || '';
       if (label && !this.alphabet.includes(label)) this.alphabet.push(label);
-      if (stackPush !== '' && !this.stack.includes(stackPush)) this.stack += stackPush;
-      if (stackPop !== '' && !this.stack.includes(stackPop)) this.stack += stackPop;
+      if (stackPush !== '' && !this.stack.includes(stackPush)) this.stack.push(stackPush);
+      if (stackPop !== '' && !this.stack.includes(stackPop)) this.stack.push(stackPop);
       return {
         origin: match[1] || '',
         destination: match[6] || '',

@@ -163,7 +163,8 @@ async function readData() {
   if (JSON.stringify(data) !== JSON.stringify(newData)) {
     data = newData;
 
-    if (data.stack) {
+
+    if (data.stack.length > 0) {
       dfaElem.checked = false;
       simplifyElem.checked = false;
 
@@ -184,9 +185,9 @@ async function readData() {
     }
 
     graph = {
-      simplified: (!data.stack) ? new Graph(data, 'simplified') : undefined,
+      simplified: (data.stack.length === 0) ? new Graph(data, 'simplified') : undefined,
       original: new Graph(data, 'original'),
-      dfa: (dfaElem.checked && !data.stack) ? new Graph(data, 'dfa') : undefined,
+      dfa: (dfaElem.checked && data.stack.length === 0) ? new Graph(data, 'dfa') : undefined,
       pda: new Graph(data, 'original'),
     };
     graphSvg = {

@@ -9,7 +9,7 @@ export default class Graph {
     this.invalid = false;
     this.fromRegex = !!data.regex;
     this.type = type;
-    this.isPda = !!data.stack;
+    this.isPda = data.stack.length > 0;
     this.stack = data.stack;
 
     if (this.fromRegex) {
