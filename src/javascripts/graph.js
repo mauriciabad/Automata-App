@@ -479,7 +479,7 @@ ${this.rawData.regex ? `\nregex: ${this.rawData.regex}` : ''}`;
     let originNodeStacks = this.start.epsilonAccessibleNodesPda();
 
     for (const letter of word) {
-      const nextOriginNodeStacks = new Set();
+      const nextOriginNodeStacks = new Map();
 
       for (const [node, stacks] of originNodeStacks) {
         for (const stack of stacks) {
@@ -492,8 +492,8 @@ ${this.rawData.regex ? `\nregex: ${this.rawData.regex}` : ''}`;
                 const epsilonAccessibleNodes = adjacency.node.epsilonAccessibleNodesPda(nextStack);
 
                 for (const [node2, stacks2] of epsilonAccessibleNodes) {
-                  if (!originNodeStacks.has(node2)) originNodeStacks.set(node2, new Set());
-                  originNodeStacks.get(node2).add(...stacks2);
+                  if (!nextOriginNodeStacks.has(node2)) nextOriginNodeStacks.set(node2, new Set());
+                  nextOriginNodeStacks.get(node2).add(...stacks2);
                 }
               }
             }
