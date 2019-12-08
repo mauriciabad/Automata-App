@@ -302,15 +302,9 @@ export default class Graph {
   }
 
   addSink() {
-    if (!this.isPda) {
-      const sink = this.addVertex('Sink');
+    for (const node of this.nodes.values()) {
       for (const letter of this.alphabet) {
-        sink.addAdjacency(sink, letter);
-      }
-      for (const node of this.nodes.values()) {
-        for (const letter of this.alphabet) {
-          if (!node.isAdjecent({ label: letter })) node.addAdjacency(sink, letter);
-        }
+        if (!node.isAdjecent({ label: letter })) this.addEdge(node.label, 'Sink', letter);
       }
     }
   }
@@ -373,7 +367,7 @@ export default class Graph {
       }
     }
 
-    // this.addSink();
+    this.addSink();
   }
 
   addVertex(nodeName, isFinal = false) {
