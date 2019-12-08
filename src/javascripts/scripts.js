@@ -80,8 +80,11 @@ async function testDfa() {
     'info__icon-container--unknown',
     'info__icon-container--warning',
   );
-  infoDfaElem.classList.add(`info__icon-container--${graph[type].isDfa ? 'true' : 'false'}`);
-  if (type !== 'dfa' && data.dfa !== graph[type].isDfa) infoDfaElem.classList.add('info__icon-container--warning');
+  let result = graph[type].isDfa ? 'true' : 'false';
+  if (graph[type].isPda) result = 'unknown';
+
+  infoDfaElem.classList.add(`info__icon-container--${result}`);
+  if (data.dfa !== graph[type].isDfa && !graph[type].isPda) infoDfaElem.classList.add('info__icon-container--warning');
 }
 
 async function testFinite() {
