@@ -42,8 +42,7 @@ export default class Graph {
 
     switch (this.type) {
       case 'dfa':
-        this.simplify();
-        this.addSink();
+        this.toDfa();
         break;
       case 'simplified':
         this.simplify();
@@ -316,6 +315,63 @@ export default class Graph {
     }
   }
 
+  alphabetAsMap() {
+    return new Map([...this.alphabet].map((letter) => [letter, new Set()]));
+  }
+
+  toDfa() {
+    const listNodes = new Map([...this.nodes.keys()]
+      .map((nodeName) => [nodeName, this.alphabetAsMap()]));
+
+    for (const [nodeName, listLetters] of listNodes) {
+      const node = this.nodes.get(nodeName);
+
+      for (const adjacency of node.adjacencies) {
+        listLetters.get(adjacency.label).add(adjacency.node.label);
+      }
+
+      for (const epsilonAccessibleNode of node.epsilonAccessibleNodes()) {
+        for (const adjacency of epsilonAccessibleNode.adjacencies) {
+          listLetters.get(adjacency.label).add(adjacency.node.label);
+        }
+      }
+    }
+
+    const finalNodes = new Set([...this.finalNodes].map((node) => node.label));
+
+    const newNodes = new Set([this.start.label]);
+
+    this.nodes.clear();
+
+    for (const composedNodeName of newNodes) {
+      if (composedNodeName.split(', ').reduce((total, node2) => total || finalNodes.has(node2), false)) {
+        this.addVertex(composedNodeName).isFinal = true;
+      }
+
+      const listNodes2 = this.alphabetAsMap();
+
+      for (const nodeName of composedNodeName.split(', ')) {
+        for (const [letter, accesibleNodes] of listNodes.get(nodeName)) {
+          for (const node2 of accesibleNodes) {
+            listNodes2.get(letter).add(node2);
+          }
+        }
+      }
+
+      for (const [letter, accesibleNodes] of listNodes2) {
+        if (accesibleNodes.size !== 0) {
+          const newNodeName = [...accesibleNodes].join(', ');
+
+          newNodes.add(newNodeName);
+
+          this.addEdge(composedNodeName, newNodeName, letter);
+        }
+      }
+    }
+
+    // this.addSink();
+  }
+
   addVertex(nodeName, isFinal = false) {
     let newNodeName = nodeName;
     if (newNodeName === undefined) newNodeName = this.nodes.size + 1;
@@ -391,16 +447,14 @@ export default class Graph {
     return this._isFinite;
   }
 
-  get toDfa() {
-    if (this._dfaGraph !== undefined) return this._dfaGraph;
-    this.generateDfa();
-    return this._dfaGraph;
-  }
-
   get acceptedStrings() {
     if (this._acceptedStrings !== undefined) return this._acceptedStrings;
     this._acceptedStrings = this.isFinite ? this.start.acceptedStrings() : [];
     return this._acceptedStrings;
+  }
+
+  get finalNodes() {
+    return new Set([...this.nodes.values()].filter((node) => node.isFinal));
   }
 
   newRawData() {
