@@ -232,8 +232,10 @@ export default class Graph {
         if (skipable) {
           for (const originNode of nodesOrigins.get(node).values()) {
             for (const originNodeAdjecency of originNode.adjacencies) {
-              for (const destinationNode of node.adjecentNodes) {
-                originNode.addAdjacency(destinationNode, originNodeAdjecency.label);
+              if (originNodeAdjecency.node === node) {
+                for (const destinationNode of node.adjecentNodes) {
+                  originNode.addAdjacency(destinationNode, originNodeAdjecency.label);
+                }
               }
             }
           }
