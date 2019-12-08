@@ -236,17 +236,13 @@ selectTemplateElem.addEventListener('change', openTemplate);
 inputTestElem.addEventListener('input', testCustomWord);
 simplifyElem.addEventListener('input', () => {
   localStorage.setItem('simplify', simplifyElem.checked);
-  if (!simplifyElem.checked) dfaElem.checked = false;
-  localStorage.setItem('dfa', dfaElem.checked);
 
   displayGraph();
 });
 dfaElem.addEventListener('input', () => {
   localStorage.setItem('dfa', dfaElem.checked);
-  if (dfaElem.checked) simplifyElem.checked = true;
-  localStorage.setItem('simplify', simplifyElem.checked);
 
-  if (dfaElem.checked) graph.dfa = new Graph(data, 'dfa');
+  if (dfaElem.checked && !graph.dfa) graph.dfa = new Graph(data, 'dfa');
 
   displayGraph();
 });
