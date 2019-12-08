@@ -359,13 +359,13 @@ export default class Graph {
     this.start = this.addVertex(startNodeName);
 
     for (const composedNodeName of newNodes) {
-      if (composedNodeName.split(', ').reduce((total, node2) => total || finalNodes.has(node2), false)) {
+      if (composedNodeName.split(',').reduce((total, node2) => total || finalNodes.has(node2), false)) {
         this.addVertex(composedNodeName).isFinal = true;
       }
 
       const listNodes2 = this.alphabetAsMap();
 
-      for (const nodeName of composedNodeName.split(', ')) {
+      for (const nodeName of composedNodeName.split(',')) {
         for (const [letter, accesibleNodes] of listNodes.get(nodeName)) {
           for (const node2 of accesibleNodes) {
             listNodes2.get(letter).add(node2);
@@ -375,7 +375,7 @@ export default class Graph {
 
       for (const [letter, accesibleNodes] of listNodes2) {
         if (accesibleNodes.size !== 0) {
-          const newNodeName = [...accesibleNodes].join(', ');
+          const newNodeName = [...accesibleNodes].join(',');
 
           newNodes.add(newNodeName);
 
@@ -601,7 +601,7 @@ ${this.rawData.regex ? `\nregex: ${this.rawData.regex}` : ''}`;
     const edgesInDotFormat = [];
 
     for (const node of this.nodes.values()) {
-      nodesInDotFormat.push(`"${node.label}" [${this.fromRegex && node.label !== 'Sink' ? 'label=""' : ''} ${node.isFinal ? ' shape=doublecircle' : ''}]`);
+      nodesInDotFormat.push(`"${node.label}" [${this.fromRegex && node.label !== 'Sink' ? 'label=""' : `label="${node.label.replace(/(\w,\w,\w,\w,)/g, '$1\n')}"`} ${node.isFinal ? ' shape=doublecircle' : ''}]`);
 
       for (const adjacency of node.adjacencies) {
         edgesInDotFormat.push(`"${node.label}" -> "${adjacency.node.label}" [label="${adjacency.label || 'ε'}${adjacency.stackPush || adjacency.stackPop ? `, ${adjacency.stackPop || 'ε'} → ${adjacency.stackPush || 'ε'}` : ''}"]`);
