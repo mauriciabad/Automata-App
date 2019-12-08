@@ -327,12 +327,16 @@ export default class Graph {
       const node = this.nodes.get(nodeName);
 
       for (const adjacency of node.adjacencies) {
-        listLetters.get(adjacency.label).add(adjacency.node.label);
+        if (adjacency.label !== '') {
+          listLetters.get(adjacency.label).add(adjacency.node.label);
+        }
       }
 
       for (const epsilonAccessibleNode of node.epsilonAccessibleNodes()) {
         for (const adjacency of epsilonAccessibleNode.adjacencies) {
-          listLetters.get(adjacency.label).add(adjacency.node.label);
+          if (adjacency.label !== '') {
+            listLetters.get(adjacency.label).add(adjacency.node.label);
+          }
         }
       }
     }
