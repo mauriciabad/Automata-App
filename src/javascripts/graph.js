@@ -281,11 +281,22 @@ export default class Graph {
       for (const accesibleNode of node.epsilonAccessibleNodes()) {
         if (accesibleNode.isFinal) node.isFinal = true;
         for (const accesibleNodeAdjacency of accesibleNode.adjacencies) {
-          if (accesibleNodeAdjacency.label !== '')node.addAdjacency(accesibleNodeAdjacency.node, accesibleNodeAdjacency.label);
+          if (accesibleNodeAdjacency.label !== '') node.addAdjacency(accesibleNodeAdjacency.node, accesibleNodeAdjacency.label);
         }
       }
       for (const adjacency of node.adjacencies) {
         if (adjacency.label === '') node.removeAdjacency(adjacency.node, adjacency.label);
+      }
+    }
+  }
+
+  simplifyEpsilonToFinal() {
+    for (const node of this.nodes.values()) {
+      for (const accesibleNode of node.epsilonAccessibleNodes()) {
+        if (node !== accesibleNode && accesibleNode.isFinal) {
+          node.isFinal = true;
+          if (accesibleNode.adjacencies.length === 0) node.removeAdjacency(accesibleNode, '');
+        }
       }
     }
   }
@@ -297,6 +308,7 @@ export default class Graph {
       this.simplifyStart();
       this.simplifySkipableNodes();
       this.simplifySelfEpsilonLoops();
+      this.simplifyEpsilonToFinal();
       this.simplifyPowersetAlgorithm();
     }
   }
