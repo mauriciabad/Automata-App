@@ -336,10 +336,12 @@ export default class Graph {
     }
 
     const finalNodes = new Set([...this.finalNodes].map((node) => node.label));
-
-    const newNodes = new Set([this.start.label]);
+    const startNodeName = this.start.label;
+    const newNodes = new Set([startNodeName]);
 
     this.nodes.clear();
+
+    this.start = this.addVertex(startNodeName);
 
     for (const composedNodeName of newNodes) {
       if (composedNodeName.split(', ').reduce((total, node2) => total || finalNodes.has(node2), false)) {
