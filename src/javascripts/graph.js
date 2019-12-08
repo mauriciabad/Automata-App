@@ -327,6 +327,7 @@ export default class Graph {
       }
 
       for (const epsilonAccessibleNode of node.epsilonAccessibleNodes()) {
+        if (epsilonAccessibleNode.isFinal) node.isFinal = true;
         for (const adjacency of epsilonAccessibleNode.adjacencies) {
           if (adjacency.label !== '') {
             listLetters.get(adjacency.label).add(adjacency.node.label);
@@ -374,7 +375,7 @@ export default class Graph {
 
   addVertex(nodeName, isFinal = false) {
     let newNodeName = nodeName;
-    if (newNodeName === undefined) newNodeName = this.nodes.size + 1;
+    if (newNodeName === undefined) newNodeName = (this.nodes.size + 1).toString();
 
     if (this.nodes.has(newNodeName)) {
       return this.nodes.get(newNodeName);

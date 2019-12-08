@@ -158,8 +158,6 @@ async function displayGraph() {
 }
 
 async function readData() {
-  const type = getGraphType();
-
   localStorage.setItem('rawGraph', inputElem.value);
 
   const newData = new RawGraph(inputElem.value);
@@ -196,6 +194,8 @@ async function readData() {
     graphSvg = {
       simplified: undefined, original: undefined, dfa: undefined, pda: undefined,
     };
+
+    const type = getGraphType();
 
     inputTestElem.pattern = `^[${[...graph[type].alphabet].join('')}]*$`;
     testStringRemovePattern = new RegExp(`[^${[...graph[type].alphabet].join('')}]+`, 'g');
