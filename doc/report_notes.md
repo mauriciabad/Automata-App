@@ -6,6 +6,9 @@
 - Regex are autofixed
 - SVGs and graphs are saved
 - Explain all simplifications
+- svg spinner and web worker
+- Webpack
+- eslint
 
 ### Wrong inputs accepted
 
