@@ -4,52 +4,58 @@ import Node from './node';
 
 export default class Graph {
   constructor(data, type = 'original') {
-    this.rawData = data;
-    this.title = data.comments ? data.comments[0] : 'Graph';
-    this.invalid = false;
-    this.fromRegex = !!data.regex;
-    this.type = type;
-    this.isPda = data.stack.length > 0;
-    this.stack = data.stack;
+    try {
+      this.rawData = data;
+      this.title = data.comments ? data.comments[0] : 'Graph';
+      this.invalid = false;
+      this.fromRegex = !!data.regex;
+      this.type = type;
+      this.isPda = data.stack.length > 0;
+      this.stack = data.stack;
 
-    if (this.fromRegex) {
-      this.nodes = new Map();
-      this.alphabet = new Set();
+      if (this.fromRegex) {
+        this.nodes = new Map();
+        this.alphabet = new Set();
 
-      try {
-        const nodeIn = this.addVertex(undefined);
-        const nodeOut = this.addVertex(undefined, true);
-        this.start = nodeIn;
-        this.addRegex(nodeIn, nodeOut, data.regex);
-      } catch (e) {
-        this.invalidate(e.message);
+        try {
+          const nodeIn = this.addVertex(undefined);
+          const nodeOut = this.addVertex(undefined, true);
+          this.start = nodeIn;
+          this.addRegex(nodeIn, nodeOut, data.regex);
+        } catch (e) {
+          this.invalidate(e.message);
+        }
+      } else {
+        this.nodes = new Map();
+        this.alphabet = new Set(data.alphabet || []);
+
+        for (const nodeName of data.states || []) {
+          const node = this.addVertex(nodeName, (data.final || []).includes(nodeName));
+          if (nodeName === data.start) this.start = node;
+        }
+
+        for (const edge of data.transitions || []) {
+          this.addEdge(edge.origin, edge.destination, edge.label, edge.stack.remove, edge.stack.add);
+        }
+
+        if (!this.start) this.invalidate('Missing start node');
       }
-    } else {
-      this.nodes = new Map();
-      this.alphabet = new Set(data.alphabet || []);
 
-      for (const nodeName of data.states || []) {
-        const node = this.addVertex(nodeName, (data.final || []).includes(nodeName));
-        if (nodeName === data.start) this.start = node;
+      switch (this.type) {
+        case 'dfa':
+          this.toDfa();
+          break;
+        case 'simplified':
+          this.simplify();
+          break;
+        default:
+        case 'original':
+          break;
       }
-
-      for (const edge of data.transitions || []) {
-        this.addEdge(edge.origin, edge.destination, edge.label, edge.stack.remove, edge.stack.add);
-      }
-
-      if (!this.start) this.invalidate('Missing start node');
-    }
-
-    switch (this.type) {
-      case 'dfa':
-        this.toDfa();
-        break;
-      case 'simplified':
-        this.simplify();
-        break;
-      default:
-      case 'original':
-        break;
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+      this.invalidate('Error creating graph');
     }
   }
 
@@ -328,63 +334,69 @@ export default class Graph {
   }
 
   toDfa() {
-    const listNodes = new Map([...this.nodes.keys()]
-      .map((nodeName) => [nodeName, this.alphabetAsMap()]));
+    try {
+      const listNodes = new Map([...this.nodes.keys()]
+        .map((nodeName) => [nodeName, this.alphabetAsMap()]));
 
-    for (const [nodeName, listLetters] of listNodes) {
-      const node = this.nodes.get(nodeName);
+      for (const [nodeName, listLetters] of listNodes) {
+        const node = this.nodes.get(nodeName);
 
-      for (const adjacency of node.adjacencies) {
-        if (adjacency.label !== '') {
-          listLetters.get(adjacency.label).add(adjacency.node.label);
-        }
-      }
-
-      for (const epsilonAccessibleNode of node.epsilonAccessibleNodes()) {
-        if (epsilonAccessibleNode.isFinal) node.isFinal = true;
-        for (const adjacency of epsilonAccessibleNode.adjacencies) {
+        for (const adjacency of node.adjacencies) {
           if (adjacency.label !== '') {
             listLetters.get(adjacency.label).add(adjacency.node.label);
           }
         }
-      }
-    }
 
-    const finalNodes = new Set([...this.finalNodes].map((node) => node.label));
-    const startNodeName = this.start.label;
-    const newNodes = new Set([startNodeName]);
-
-    this.nodes.clear();
-
-    this.start = this.addVertex(startNodeName);
-
-    for (const composedNodeName of newNodes) {
-      if (composedNodeName.split(',').reduce((total, node2) => total || finalNodes.has(node2), false)) {
-        this.addVertex(composedNodeName).isFinal = true;
-      }
-
-      const listNodes2 = this.alphabetAsMap();
-
-      for (const nodeName of composedNodeName.split(',')) {
-        for (const [letter, accesibleNodes] of listNodes.get(nodeName)) {
-          for (const node2 of accesibleNodes) {
-            listNodes2.get(letter).add(node2);
+        for (const epsilonAccessibleNode of node.epsilonAccessibleNodes()) {
+          if (epsilonAccessibleNode.isFinal) node.isFinal = true;
+          for (const adjacency of epsilonAccessibleNode.adjacencies) {
+            if (adjacency.label !== '') {
+              listLetters.get(adjacency.label).add(adjacency.node.label);
+            }
           }
         }
       }
 
-      for (const [letter, accesibleNodes] of listNodes2) {
-        if (accesibleNodes.size !== 0) {
-          const newNodeName = [...accesibleNodes].join(',');
+      const finalNodes = new Set([...this.finalNodes].map((node) => node.label));
+      const startNodeName = this.start.label;
+      const newNodes = new Set([startNodeName]);
 
-          newNodes.add(newNodeName);
+      this.nodes.clear();
 
-          this.addEdge(composedNodeName, newNodeName, letter);
+      this.start = this.addVertex(startNodeName);
+
+      for (const composedNodeName of newNodes) {
+        if (composedNodeName.split(',').reduce((total, node2) => total || finalNodes.has(node2), false)) {
+          this.addVertex(composedNodeName).isFinal = true;
+        }
+
+        const listNodes2 = this.alphabetAsMap();
+
+        for (const nodeName of composedNodeName.split(',')) {
+          for (const [letter, accesibleNodes] of listNodes.get(nodeName)) {
+            for (const node2 of accesibleNodes) {
+              listNodes2.get(letter).add(node2);
+            }
+          }
+        }
+
+        for (const [letter, accesibleNodes] of listNodes2) {
+          if (accesibleNodes.size !== 0) {
+            const newNodeName = [...accesibleNodes].join(',');
+
+            newNodes.add(newNodeName);
+
+            this.addEdge(composedNodeName, newNodeName, letter);
+          }
         }
       }
-    }
 
-    this.addSink();
+      this.addSink();
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+      this.invalidate('Error converting to DFA');
+    }
   }
 
   addVertex(nodeName, isFinal = false) {
@@ -442,18 +454,24 @@ export default class Graph {
   }
 
   evalIsDfa() {
-    for (const node of this.nodes.values()) {
-      const foundLetters = new Set();
+    try {
+      for (const node of this.nodes.values()) {
+        const foundLetters = new Set();
 
-      for (const adjacentcy of node.adjacencies) {
-        if (foundLetters.has(adjacentcy.label)) return false;
-        foundLetters.add(adjacentcy.label);
+        for (const adjacentcy of node.adjacencies) {
+          if (foundLetters.has(adjacentcy.label)) return false;
+          foundLetters.add(adjacentcy.label);
+        }
+
+        if (foundLetters.size !== this.alphabet.size) return false;
       }
 
-      if (foundLetters.size !== this.alphabet.size) return false;
+      return true;
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+      return undefined;
     }
-
-    return true;
   }
 
   get isFinite() {
@@ -515,33 +533,39 @@ ${this.rawData.regex ? `\nregex: ${this.rawData.regex}` : ''}`;
   }
 
   isAcceptedString(word) {
-    if (this.isPda) return this.isAcceptedStringPda(word);
+    try {
+      if (this.isPda) return this.isAcceptedStringPda(word);
 
-    let originNodes = new Set(this.start ? this.start.epsilonAccessibleNodes() : []);
+      let originNodes = new Set(this.start ? this.start.epsilonAccessibleNodes() : []);
 
-    for (const letter of word) {
-      const nextOriginNodes = new Set();
+      for (const letter of word) {
+        const nextOriginNodes = new Set();
 
-      for (const originNode of originNodes) {
-        for (const adjacency of originNode.adjacencies) {
-          if (adjacency.label === letter) {
-            for (const epsilonAccessibleNode of adjacency.originNode.epsilonAccessibleNodes()) {
-              nextOriginNodes.add(epsilonAccessibleNode);
+        for (const originNode of originNodes) {
+          for (const adjacency of originNode.adjacencies) {
+            if (adjacency.label === letter) {
+              for (const epsilonAccessibleNode of adjacency.node.epsilonAccessibleNodes()) {
+                nextOriginNodes.add(epsilonAccessibleNode);
+              }
             }
           }
         }
+
+        if (nextOriginNodes.size === 0) return false;
+
+        originNodes = nextOriginNodes;
       }
 
-      if (nextOriginNodes.size === 0) return false;
+      for (const node of originNodes) {
+        if (node.isFinal) return true;
+      }
 
-      originNodes = nextOriginNodes;
+      return false;
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+      return undefined;
     }
-
-    for (const node of originNodes) {
-      if (node.isFinal) return true;
-    }
-
-    return false;
   }
 
   isAcceptedStringPda(word) {

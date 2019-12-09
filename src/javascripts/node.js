@@ -182,8 +182,14 @@ export default class Node {
   }
 
   checkIsFinal() {
-    const nodesInLoop = this.nodesInLoop();
-    return this.checkIsFinalRec(nodesInLoop, [], new Set(), [this]);
+    try {
+      const nodesInLoop = this.nodesInLoop();
+      return this.checkIsFinalRec(nodesInLoop, [], new Set(), [this]);
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+      return undefined;
+    }
   }
 
   checkIsFinalRec(nodesInLoop, path, visited, visitList) {

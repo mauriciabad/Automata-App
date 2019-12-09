@@ -244,7 +244,7 @@ h3 { margin: 1em 0 0; }
 
 .info__icon-container--false .info__icon--false,
 .info__icon-container--true .info__icon--true,
-.info__icon-container--wrong .info__icon--wrong,
+.info__icon-container--undefined .info__icon--undefined,
 .info__icon-container--unknown .info__icon--unknown,
 .info__icon-container--warning .info__icon--warning {
   display: block;
@@ -335,11 +335,13 @@ h3 { margin: 1em 0 0; }
   position: relative;
 }
 
-.word-list__item[data-icon="true"][data-original="false"]::after {
+.word-list__item[data-icon="true"][data-original="false"]::after,
+.word-list__item[data-icon="undefined"][data-original="false"]::after {
   content: '❌';
 }
 
-.word-list__item[data-icon="false"][data-original="true"]::after {
+.word-list__item[data-icon="false"][data-original="true"]::after,
+.word-list__item[data-icon="undefined"][data-original="true"]::after {
   content: '✔';
 }
 
@@ -363,7 +365,7 @@ h3 { margin: 1em 0 0; }
 [data-icon="true"]::before { content: '✔'; }
 [data-icon="false"]::before { content: '❌'; }
 [data-icon="unknown"]::before { content: '❓'; }
-[data-icon="wrong"]::before { content: '⚠'; }
+[data-icon="undefined"]::before { content: '⚠'; }
 
 .toggle-group {
   opacity: 1;

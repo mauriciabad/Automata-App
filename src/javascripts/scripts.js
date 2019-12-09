@@ -72,7 +72,7 @@ async function testCustomWord() {
   if (inputTestElem.checkValidity()) {
     inputTestIconElem.dataset.icon = graph[type].isAcceptedString(word) ? 'true' : 'false';
   } else {
-    inputTestIconElem.dataset.icon = 'wrong';
+    inputTestIconElem.dataset.icon = 'undefined';
   }
 
   saveState();
@@ -84,11 +84,12 @@ async function testDfa() {
   infoDfaElem.classList.remove(
     'info__icon-container--false',
     'info__icon-container--true',
-    'info__icon-container--wrong',
+    'info__icon-container--undefined',
     'info__icon-container--unknown',
     'info__icon-container--warning',
   );
   let result = graph[type].isDfa ? 'true' : 'false';
+  if (graph[type].isDfa === undefined) result = 'undefined';
   if (graph[type].isPda) result = 'unknown';
 
   infoDfaElem.classList.add(`info__icon-container--${result}`);
@@ -102,12 +103,13 @@ async function testFinite() {
   infoFiniteElem.classList.remove(
     'info__icon-container--false',
     'info__icon-container--true',
-    'info__icon-container--wrong',
+    'info__icon-container--undefined',
     'info__icon-container--unknown',
     'info__icon-container--warning',
   );
 
   let result = graph[type].isFinite ? 'true' : 'false';
+  if (graph[type].isFinite === undefined) result = 'warning';
   if (graph[type].isPda) result = 'unknown';
 
   infoFiniteElem.classList.add(`info__icon-container--${result}`);
