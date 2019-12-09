@@ -9,6 +9,7 @@ import RawGraph from './rawGraph';
 import templates from '../data/templates';
 
 const graphElem = document.getElementById('graph');
+const graphTitleElem = document.getElementById('graph-title');
 const inputElem = document.getElementById('input');
 const outputElem = document.getElementById('output');
 const uploadElem = document.getElementById('upload');
@@ -126,6 +127,8 @@ async function displayGraph() {
 
   saveElem.setAttribute('href', `data:text/plain;charset=utf-8,${encodeURIComponent(graph[type].toRawText())}`);
   saveElem.setAttribute('download', `${graph[type].title}-${type}.txt`);
+
+  graphTitleElem.textContent = `${graph[type].title || ''} (${type})`;
 
   if (graphSvg[type]) {
     graphElem.innerHTML = '';

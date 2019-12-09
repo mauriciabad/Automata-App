@@ -189,6 +189,11 @@ h3 { margin: 1em 0 0; }
   float: right;
 }
 
+#graph-title {
+  float: none;
+  margin: 0;
+}
+
 .grid-graph {
   display: grid;
   grid-template: 1fr 1fr / 1fr 4rem;
