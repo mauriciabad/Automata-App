@@ -136,7 +136,52 @@ Also, as an optimization. The svg is only computed once and stored in memory, so
 
 ## Assignment 2: accept string
 
+> Cost: **O(n)** where n = number of letters in the word
 
+For every letter and last accesible node, it saves all the possible accesible nodes, makeing it more eficcient when paths diverge and dthen converge again.
+
+`epsilonAccessibleNodes()` returns all nodes accecible by 0 or any number of silent transitions. It includes the starting node.
+
+```js
+isAcceptedString(word) {
+  if (this.isPda) return this.isAcceptedStringPda(word);
+
+  let originNodes = new Set(this.start ? this.start.epsilonAccessibleNodes() : []);
+
+  for (const letter of word) {
+    const nextOriginNodes = new Set();
+
+    for (const originNode of originNodes) {
+      for (const adjacency of originNode.adjacencies) {
+        if (adjacency.label === letter) {
+          for (const epsilonAccessibleNode of adjacency.originNode.epsilonAccessibleNodes()) {
+            nextOriginNodes.add(epsilonAccessibleNode);
+          }
+        }
+      }
+    }
+
+    if (nextOriginNodes.size === 0) return false;
+
+    originNodes = nextOriginNodes;
+  }
+
+  for (const node of originNodes) {
+    if (node.isFinal) return true;
+  }
+
+  return false;
+}
+```
+
+Icons meaning:
+
+- ❌: Not accepted.
+- ❌ overlaping ✔: Not accepted. But the input file says the opposite.
+- ✔: Accepted.
+- ✔ overlaping ❌: Accepted. But the input file says the opposite.
+
+There's an input where you can test any arbitraty word in real time. Only characters in the aplbabet are allowed, otherwise they'll be removed.
 
 ## Assignment 3: regular expression
 

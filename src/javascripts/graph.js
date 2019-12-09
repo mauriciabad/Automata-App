@@ -522,11 +522,11 @@ ${this.rawData.regex ? `\nregex: ${this.rawData.regex}` : ''}`;
     for (const letter of word) {
       const nextOriginNodes = new Set();
 
-      for (const node of originNodes) {
-        for (const adjacency of node.adjacencies) {
+      for (const originNode of originNodes) {
+        for (const adjacency of originNode.adjacencies) {
           if (adjacency.label === letter) {
-            for (const node2 of adjacency.node.epsilonAccessibleNodes()) {
-              nextOriginNodes.add(node2);
+            for (const epsilonAccessibleNode of adjacency.originNode.epsilonAccessibleNodes()) {
+              nextOriginNodes.add(epsilonAccessibleNode);
             }
           }
         }
