@@ -27,7 +27,7 @@ For parsing I created the `RawGraph` class, that is a regular JavaScript object 
 
 The class has a constructor that accepts a string.
 
-It parses the information using regex and I made them really carfeully, so that they accept a very wide variety of errors.
+It parses the information using regex and I made them really carfeully, so that they accept a very wide variety of errors. When input is unpredictable a nice message is displayed.
 
 #### Accepted input errors
 
@@ -42,7 +42,7 @@ It parses the information using regex and I made them really carfeully, so that 
 - Also parses comments.
 - In regex, unclosed parenthesis are closes at the end.
 - In regex, missing commas are added.
-- In regex, consecutive commas are removed.
+- In regex, consecutive and trailing commas are removed.
 - In regex, `.` and `|` operators accept any number of arguments, like: `|(a,b,c,d,e,...)`.
 
 All this transitions would be accepted:
@@ -81,9 +81,9 @@ const regxParser = {
 };
 ```
 
-## Evaluate if graph is DFA
+### Evaluate if graph is DFA
 
-### Optimitations
+#### Optimitations
 
 1. My implementation stops whenever the condition can't be satisfied anymore, it doesn't have to keep going until the end.
 1. This  value is only evaluated the first time you get the value.
@@ -114,13 +114,39 @@ evalIsDfa() {
 }
 ```
 
+### Graph display
+
+I used [Viz.js](http://viz-js.com/), it's a version of [Graph Viz](http://www.graphviz.org/) compiled to Web assembly. It generates an svg for any graph.
+
+Because generating the svg can take a relatively long time, I do it asyncronously with a web worker and display a loading spinner while it's processing.
+
+If you input a graph with a lot of edges, it runs out of memmory. When that happens, you see the error message, but you can still use all the other functionalities, just without the visualization.
+
+Also, as an optimization. The svg is only computed once and stored in memory, so if you switch the `simplified` toggle on and off really quick, the app is responsive.
+
+#### Errors
+
+- Invalid Input
+- Invalid Regex: Missing operator
+- Invalid Regex: Parenthesis are wrong
+- Invalid Regex: Missing operands
+- Invalid Regex: Missing operator
+- Graph too big, skiping drawing (Other funtionalities still usable)
+- Empty (Other funtionalities still usable)
+
 ## Assignment 2: accept string
 
 
 
 ## Assignment 3: regular expression
 
+### Parsing
 
+- Add `regex: <your regex>` line in the input to use it.
+  - Also accepted: `regex`, `re`, `regexr`, `regular expression` and respective plurals.
+- When `regex:` is present the following fields are ignored:
+`alphabet`, `stack`, `states`, `final` and `transitions`.
+- When a regex graph is generated, the node names are hidden. (Exept the `Sink` node)
 
 ## Assignment 4: finite
 
@@ -134,11 +160,33 @@ evalIsDfa() {
 
 
 
-## Extra: simplify
+## Software design
 
 
 
-## Extra: Webpack & UI
+## Design Documentation
+
+
+
+## UI
 
 - explain graphs and svg are saved
+- Input is saved between sessions
+- Input changes are displayed immediately
+- explain graph title and download
+
+## Testing
+
+
+
+## Other contributions
+
+
+
+### Simplify
+
+
+
+### Webpack
+
 
