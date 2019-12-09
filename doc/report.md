@@ -219,6 +219,7 @@ There's an input where you can test any arbitraty word in real time. Only charac
 - Input is saved between sessions
 - Input changes are displayed immediately
 - explain graph title and download
+- only updated if parsed content changes, not just the raw input
 
 ## Testing
 

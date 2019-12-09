@@ -47,6 +47,13 @@ let viz = new Viz({ workerURL });
 
 let testStringRemovePattern = /\W+/g;
 
+function saveState() {
+  localStorage.setItem('rawGraph', inputElem.value);
+  localStorage.setItem('dfa', dfaElem.checked);
+  localStorage.setItem('simplify', simplifyElem.checked);
+  localStorage.setItem('word', inputTestElem.value);
+}
+
 function getGraphType() {
   if (graph.original && graph.original.isPda) return 'pda';
   if (dfaElem.checked) return 'dfa';
@@ -62,13 +69,13 @@ async function testCustomWord() {
 
   inputTestElem.value = word;
 
-  localStorage.setItem('word', word);
-
   if (inputTestElem.checkValidity()) {
     inputTestIconElem.dataset.icon = graph[type].isAcceptedString(word) ? 'true' : 'false';
   } else {
     inputTestIconElem.dataset.icon = 'wrong';
   }
+
+  saveState();
 }
 
 async function testDfa() {
@@ -158,11 +165,11 @@ async function displayGraph() {
   testCustomWord();
 
   displayAllAcceptedStrings();
+
+  saveState();
 }
 
 async function readData() {
-  localStorage.setItem('rawGraph', inputElem.value);
-
   const newData = new RawGraph(inputElem.value);
   if (JSON.stringify(data) !== JSON.stringify(newData)) {
     data = newData;
@@ -171,9 +178,6 @@ async function readData() {
     if (data.stack.length > 0) {
       dfaElem.checked = false;
       simplifyElem.checked = false;
-
-      localStorage.setItem('dfa', dfaElem.checked);
-      localStorage.setItem('simplify', simplifyElem.checked);
 
       dfaElem.disabled = true;
       simplifyElem.disabled = true;
@@ -237,14 +241,8 @@ inputElem.addEventListener('input', readData);
 uploadElem.addEventListener('change', readFileAsString);
 selectTemplateElem.addEventListener('change', openTemplate);
 inputTestElem.addEventListener('input', testCustomWord);
-simplifyElem.addEventListener('input', () => {
-  localStorage.setItem('simplify', simplifyElem.checked);
-
-  displayGraph();
-});
+simplifyElem.addEventListener('input', displayGraph);
 dfaElem.addEventListener('input', () => {
-  localStorage.setItem('dfa', dfaElem.checked);
-
   if (dfaElem.checked && !graph.dfa) graph.dfa = new Graph(data, 'dfa');
 
   displayGraph();
