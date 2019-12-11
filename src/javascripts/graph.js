@@ -34,8 +34,8 @@ export default class Graph {
           if (nodeName === data.start) this.start = node;
         }
 
-        for (const edge of data.transitions || []) {
-          this.addEdge(edge.origin, edge.destination, edge.label, edge.stack.remove, edge.stack.add);
+        for (const t of data.transitions || []) {
+          this.addEdge(t.origin, t.destination, t.label, t.stack.remove, t.stack.add);
         }
 
         if (!this.start) this.invalidate('Missing start node');

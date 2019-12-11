@@ -131,6 +131,7 @@ Also, as an optimization. The svg is only computed once and stored in memory, so
 - Invalid Regex: Parenthesis are wrong
 - Invalid Regex: Missing operands
 - Invalid Regex: Missing operator
+- Missing start node
 - Graph too big, skiping drawing (Other funtionalities still usable)
 - Empty (Other funtionalities still usable)
 
@@ -154,7 +155,7 @@ isAcceptedString(word) {
     for (const originNode of originNodes) {
       for (const adjacency of originNode.adjacencies) {
         if (adjacency.label === letter) {
-          for (const epsilonAccessibleNode of adjacency.originNode.epsilonAccessibleNodes()) {
+          for (const epsilonAccessibleNode of adjacency.node.epsilonAccessibleNodes()) {
             nextOriginNodes.add(epsilonAccessibleNode);
           }
         }
