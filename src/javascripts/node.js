@@ -125,10 +125,10 @@ export default class Node {
     return loops;
   }
 
-  epsilonLoopsRec(loops, path, visited, visitList) {
-    if (visitList.length === 0) return;
+  epsilonLoopsRec(loops, path, visited, visitNextList) {
+    if (visitNextList.length === 0) return;
 
-    const node = visitList.pop();
+    const node = visitNextList.pop();
     path.push(node);
 
     if (visited.has(node)) {
@@ -143,8 +143,8 @@ export default class Node {
         .map((adjacency) => adjacency.node);
 
       for (const eNode of adjecentEpsilonNodes) {
-        visitList.push(eNode);
-        this.epsilonLoopsRec(loops, path, visited, visitList);
+        visitNextList.push(eNode);
+        this.epsilonLoopsRec(loops, path, visited, visitNextList);
         path.pop();
       }
     }
@@ -158,10 +158,10 @@ export default class Node {
     return loopNodes;
   }
 
-  nodesInLoopRec(loopNodes, path, visited, visitList) {
-    if (visitList.length === 0) return;
+  nodesInLoopRec(loopNodes, path, visited, visitNextList) {
+    if (visitNextList.length === 0) return;
 
-    const node = visitList.pop();
+    const node = visitNextList.pop();
     path.push(node);
 
     if (visited.has(node)) {
@@ -174,17 +174,17 @@ export default class Node {
       visited.add(node);
 
       for (const adjacency of node.adjacencies) {
-        visitList.push(adjacency.node);
-        this.nodesInLoopRec(loopNodes, path, visited, visitList);
+        visitNextList.push(adjacency.node);
+        this.nodesInLoopRec(loopNodes, path, visited, visitNextList);
       }
     }
     path.pop();
   }
 
-  checkIsFinal() {
+  checkIsFinite() {
     try {
       const nodesInLoop = this.nodesInLoop();
-      return this.checkIsFinalRec(nodesInLoop, [], new Set(), [this]);
+      return this.checkIsFiniteRec(nodesInLoop, [], new Set(), [this]);
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e);
@@ -192,10 +192,10 @@ export default class Node {
     }
   }
 
-  checkIsFinalRec(nodesInLoop, path, visited, visitList) {
-    if (visitList.length === 0) return true;
+  checkIsFiniteRec(nodesInLoop, path, visited, visitNextList) {
+    if (visitNextList.length === 0) return true;
 
-    const node = visitList.pop();
+    const node = visitNextList.pop();
     path.push(node);
 
     if (node.isFinal) {
@@ -208,8 +208,8 @@ export default class Node {
       visited.add(node);
 
       for (const adjacency of node.adjacencies) {
-        visitList.push(adjacency.node);
-        if (!this.checkIsFinalRec(nodesInLoop, path, visited, visitList)) return false;
+        visitNextList.push(adjacency.node);
+        if (!this.checkIsFiniteRec(nodesInLoop, path, visited, visitNextList)) return false;
       }
     }
     path.pop();
@@ -222,11 +222,11 @@ export default class Node {
     return [...accepted].sort();
   }
 
-  acceptedStringsRec(accepted, path, visited, visitList) {
-    if (visitList.length === 0) return;
+  acceptedStringsRec(accepted, path, visited, visitNextList) {
+    if (visitNextList.length === 0) return;
     if (path.length >= 10 || accepted.size >= 200) return;
 
-    const adjacency = visitList.pop();
+    const adjacency = visitNextList.pop();
     path.push(adjacency.label);
 
     if (!visited.has(adjacency)) {
@@ -235,8 +235,8 @@ export default class Node {
       if (adjacency.node.isFinal) accepted.add(path.join(''));
 
       for (const nextAdjacency of adjacency.node.adjacencies) {
-        visitList.push(nextAdjacency);
-        this.acceptedStringsRec(accepted, path, visited, visitList);
+        visitNextList.push(nextAdjacency);
+        this.acceptedStringsRec(accepted, path, visited, visitNextList);
       }
     }
     visited.delete(adjacency);

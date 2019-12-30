@@ -116,7 +116,7 @@ evalIsDfa() {
 
 ### Graph display
 
-I used [Viz.js](http://viz-js.com/), it's a version of [Graph Viz](http://www.graphviz.org/) compiled to Web assembly. It generates an svg for any graph.
+I used [Viz.js](http://viz-js.com/), it's a version of [Graph Viz](http://www.graphviz.org/) compiled to Web assembly. It generates asyncronously an svg for any graph.
 
 Because generating the svg can take a relatively long time, I do it asyncronously with a web worker and display a loading spinner while it's processing.
 
@@ -139,7 +139,7 @@ Also, as an optimization. The svg is only computed once and stored in memory, so
 
 > Cost: **O(n)** where n = number of letters in the word
 
-For every letter and last accesible node, it saves all the possible accesible nodes, makeing it more eficcient when paths diverge and dthen converge again.
+For every letter and last accesible node, it saves all the possible accesible nodes, makeing it more eficcient when paths diverge and then converge again.
 
 `epsilonAccessibleNodes()` returns all nodes accecible by 0 or any number of silent transitions. It includes the starting node.
 
@@ -182,7 +182,7 @@ Icons meaning:
 - ✔: Accepted.
 - ✔ overlaping ❌: Accepted. But the input file says the opposite.
 
-There's an input where you can test any arbitraty word in real time. Only characters in the aplbabet are allowed, otherwise they'll be removed.
+There's an input field in the UI where you can test any arbitraty word in real time. Only characters in the automaton aplbabet are allowed, otherwise they'll be removed.
 
 ## Assignment 3: regular expression
 
@@ -196,7 +196,103 @@ There's an input where you can test any arbitraty word in real time. Only charac
 
 ## Assignment 4: finite
 
+> Cost: **O(n)** where n = number of nodes accesible from the start node.
 
+To evaluate if a graph is finite it checks if the value has altredy been evaluated, if not it computes the value.
+
+> **node.checkIsFinite()** returns `false` if exists a loop between the node and any final node. Otherwise it returns `true`. Exept if there's any error, it returns `undefined`.
+
+> **node.nodesInLoop()** returns a set of nodes that are in a loop accessile from the node.
+
+*To state that a graph is finite you need to check all possible paths ending in a final node, but to state the oposite you only need to find a loop betwen the start and end.*
+
+So my algorithm traverses recursively the graph in a dfa style. It finds when the graph is not finite (and stopping) or if it has checked all paths it assumes that the graph is finite.
+
+Notice that if there is no accessible final node from the node, the result must be true.
+
+```js
+export default class Graph {
+  // ...
+  get isFinite() {
+    if (this._isFinite !== undefined) return this._isFinite;
+    this._isFinite = this.start.checkIsFinite();
+    return this._isFinite;
+  }
+  // ...
+}
+```
+
+```js
+export default class Node {
+  // ...
+  checkIsFinite() {
+    try {
+      const nodesInLoop = this.nodesInLoop();
+      return this.checkIsFiniteRec(nodesInLoop, [], new Set(), [this]);
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+      return undefined;
+    }
+  }
+
+  checkIsFiniteRec(nodesInLoop, path, visited, visitNextList) {
+    if (visitNextList.length === 0) return true;
+
+    const node = visitNextList.pop();
+    path.push(node);
+
+    if (node.isFinal) {
+      for (const pathNode of path) {
+        if (nodesInLoop.has(pathNode)) return false;
+      }
+    }
+
+    if (!visited.has(node)) {
+      visited.add(node);
+
+      for (const adjacency of node.adjacencies) {
+        visitNextList.push(adjacency.node);
+        if (!this.checkIsFiniteRec(nodesInLoop, path, visited, visitNextList)) return false;
+      }
+    }
+    path.pop();
+    return true;
+  }
+
+  // ...
+
+  nodesInLoop() {
+    const loopNodes = new Set();
+    this.nodesInLoopRec(loopNodes, [], new Set(), [this]);
+    return loopNodes;
+  }
+
+  nodesInLoopRec(loopNodes, path, visited, visitNextList) {
+    if (visitNextList.length === 0) return;
+
+    const node = visitNextList.pop();
+    path.push(node);
+
+    if (visited.has(node)) {
+      if (path.includes(node)) {
+        for (const loopNode of path.slice(path.indexOf(node) + 1)) {
+          loopNodes.add(loopNode);
+        }
+      }
+    } else {
+      visited.add(node);
+
+      for (const adjacency of node.adjacencies) {
+        visitNextList.push(adjacency.node);
+        this.nodesInLoopRec(loopNodes, path, visited, visitNextList);
+      }
+    }
+    path.pop();
+  }
+  // ...
+}
+```
 
 ## Assignment 5: ndfa
 

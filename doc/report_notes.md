@@ -23,3 +23,8 @@
 - auto adds commas
 - auto removes consecutive commas
 - accepts .(a,b,c,d,e,...) and |(a,b,c,d,e,...)
+
+### Details
+
+- I use `export default` to define ES6 modules. Splitting the code in smaller chunks.
+- The comment `eslint-disable-next-line no-console` disables the linter for the next line because

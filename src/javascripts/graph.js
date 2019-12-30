@@ -476,7 +476,7 @@ export default class Graph {
 
   get isFinite() {
     if (this._isFinite !== undefined) return this._isFinite;
-    this._isFinite = this.start.checkIsFinal();
+    this._isFinite = this.start.checkIsFinite();
     return this._isFinite;
   }
 
