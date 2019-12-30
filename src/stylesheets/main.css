@@ -15,7 +15,10 @@ img {
   user-select: none;
 }
 
-h3 { margin: 1em 0 0; }
+h3 {
+  margin: 1em 0 0;
+  user-select: none;
+}
 
 .save {
   vertical-align: middle;
@@ -180,13 +183,17 @@ h3 { margin: 1em 0 0; }
   height: 100%;
 }
 
-.box__title { margin: 0 0 1rem; }
+.box__title {
+  margin: 0 0 1rem;
+  user-select: none;
+}
 
 .box__title--sub {
   color: #666;
   font-size: 0.6667em;
   margin: 6px 0.5em;
   float: right;
+  user-select: none;
 }
 
 #graph-title {
@@ -233,6 +240,7 @@ h3 { margin: 1em 0 0; }
 .graph-info__text {
   margin: 0.5em 0 0;
   font-weight: bold;
+  user-select: none;
 }
 
 .graph-info {
