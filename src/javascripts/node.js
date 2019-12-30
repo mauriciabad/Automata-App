@@ -198,14 +198,14 @@ export default class Node {
     const node = visitList.pop();
     path.push(node);
 
+    if (node.isFinal) {
+      for (const pathNode of path) {
+        if (nodesInLoop.has(pathNode)) return false;
+      }
+    }
+
     if (!visited.has(node)) {
       visited.add(node);
-
-      if (node.isFinal) {
-        for (const pathNode of path) {
-          if (nodesInLoop.has(pathNode)) return false;
-        }
-      }
 
       for (const adjacency of node.adjacencies) {
         visitList.push(adjacency.node);
