@@ -48,7 +48,7 @@ let viz = new Viz({ workerURL });
 let testStringRemovePattern = /\W+/g;
 
 function saveState() {
-  localStorage.setItem('rawGraph', inputElem.value);
+  if (inputElem.value.length < 5000) localStorage.setItem('rawGraph', inputElem.value);
   localStorage.setItem('dfa', dfaElem.checked);
   localStorage.setItem('simplify', simplifyElem.checked);
   localStorage.setItem('word', inputTestElem.value);
