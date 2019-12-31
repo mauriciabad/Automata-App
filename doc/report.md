@@ -2,7 +2,7 @@
 
 State machine web app by [Maurici Abad Gutierrez](https://mauriciabad.com)
 
-> Use it here: https://ale2.netlify.com/
+> Use it here: **https://ale2.netlify.com/**
 
 Main features:
 
@@ -44,6 +44,7 @@ It parses the information using regex and I made them really carfeully, so that 
 - In regex, missing commas are added.
 - In regex, consecutive and trailing commas are removed.
 - In regex, `.` and `|` operators accept any number of arguments, like: `|(a,b,c,d,e,...)`.
+- If input is longer than 5000 characters it's ignored. Avoids frezeing the browser.
 
 All this transitions would be accepted:
 
@@ -326,7 +327,7 @@ export default class Node {
 
 
 
-### Simplify
+### Simplify functionality
 
 
 
