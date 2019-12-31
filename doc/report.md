@@ -211,6 +211,8 @@ For example: `.(a,b,c,d,e,...)` and `|(a,b,c,d,e,...)`.
   - Invalid Regex: Missing operands
   - Invalid Regex: Missing operator
 
+Because graphs generated from regexs contain a lot of rebundant silent transitions and are more complex than needed, I made a simplify functionality. It's explained in another section.
+
 ### Code
 
 ```js
