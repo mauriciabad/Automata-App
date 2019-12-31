@@ -12,7 +12,8 @@ Main features:
 - Convert a NDA to DFA.
 - Evaluate if DFA or NDA is finite.
 - List all accepted strings exept is they are inifnite.
-- Accept wrong inputs and fix them.
+- Accept wrong inputs and fix them automatically.
+- Evaluate if an arbitrary string is accepted strings in a PDA.
 - Simplify DFA and NDA to a version with less nodes and ε.
 - Real time processing and really high performance.
 - Intuitive, clean and fast UI.
@@ -90,7 +91,7 @@ const regxParser = {
 1. This  value is only evaluated the first time you get the value.
 1. Use efficent data structures. In this case a Set.
 
-This is the code:
+### Code
 
 ```js
 get isDfa() {
@@ -144,6 +145,8 @@ For every letter and last accesible node, it saves all the possible accesible no
 
 `epsilonAccessibleNodes()` returns all nodes accecible by 0 or any number of silent transitions. It includes the starting node.
 
+### Code
+
 ```js
 isAcceptedString(word) {
   if (this.isPda) return this.isAcceptedStringPda(word);
@@ -187,13 +190,161 @@ There's an input field in the UI where you can test any arbitraty word in real t
 
 ## Assignment 3: regular expression
 
-### Parsing
+Add `regex: <your regex>` line in the input to use it. Also accepted: `regex`, `re`, `regexr`, `regular expression` and respective plurals.
 
-- Add `regex: <your regex>` line in the input to use it.
-  - Also accepted: `regex`, `re`, `regexr`, `regular expression` and respective plurals.
-- When `regex:` is present the following fields are ignored:
+When `regex:` is present the following fields are ignored:
 `alphabet`, `stack`, `states`, `final` and `transitions`.
-- When a regex graph is generated, the node names are hidden. (Exept the `Sink` node)
+
+When a regex graph is generated, the node names are hidden. Exept the `Sink` node.
+
+The following input errors are fixed automatically:
+
+- Closes parenthesis if not closed.
+- Adds commas in between characters.
+- Removes consecutive commas.
+- Removes trailing commas.
+- Accepts any number of operands in **`.`** and **`|`** operations.
+For example: `.(a,b,c,d,e,...)` and `|(a,b,c,d,e,...)`.
+- When input is unpredictable a nice message is displayed:
+  - Invalid Regex: Missing operator
+  - Invalid Regex: Parenthesis are wrong
+  - Invalid Regex: Missing operands
+  - Invalid Regex: Missing operator
+
+### Code
+
+```js
+const regxParser = {
+  regex: /(regex|re|regexr|regular expression)s? *: *(.*)/i,
+  // ...
+};
+
+class RawGraph {
+  constructor(str) {
+    // ...
+    const regexMatch = str.match(regxParser.regex);
+
+    this.regex = (regexMatch ? regexMatch[2] : '')
+      .replace(/[^\w,().*|]+/g, '')         // Remove not accepted characters
+      .replace(/(\w)(?=\w)/g, '$1,')        // Add commas to consecutive letters
+      .replace(/(\))(?=[\w,(.*|])/g, '$1,') // Add commas to consecutive regex
+      .replace(/,+/g, ',')                  // Remove consecutive commas
+      .replace(/,\)/g, ')');                // Remove trailing commas
+
+    this.regex += ')'.repeat(Math.max(0, missingParentheses(this.regex.match(/(\(|\))/g) || [])));
+    // ...
+  }
+}
+```
+
+```js
+class Graph {
+  constructor(data, type = 'original') {
+    try {
+      this.rawData = data;
+      this.title = data.comments ? data.comments[0] : 'Graph';
+      this.invalid = false;
+      this.fromRegex = !!data.regex;
+      this.type = type;
+      this.isPda = data.stack.length > 0;
+      this.stack = data.stack;
+
+      if (this.fromRegex) {
+        this.nodes = new Map();
+        this.alphabet = new Set();
+
+        try {
+          const nodeIn = this.addVertex(undefined);
+          const nodeOut = this.addVertex(undefined, true);
+          this.start = nodeIn;
+          this.addRegex(nodeIn, nodeOut, data.regex);
+        } catch (e) {
+          this.invalidate(e.message);
+        }
+      } else {
+        // ...
+      }
+      // ...
+    }
+  }
+
+  // -------------------------------------- //
+
+  addRegex(nodeIn, nodeOut, regex = ['']) {
+    const operator = regex[0];
+    if (operator === '(' || operator === ')') throw Error('Invalid regex: \nMissing operator');
+    const operands = [];
+    let level = 0;
+    let operandBegining = 2;
+    for (let i = 2; i < regex.length - 1; i += 1) {
+      switch (regex[i]) {
+        case '(': level += 1; break;
+        case ')': level -= 1; break;
+        case ',':
+          if (level === 0) {
+            operands.push(regex.slice(operandBegining, i));
+            operandBegining = i + 1;
+          }
+          break;
+        default: break;
+      }
+    }
+
+    operands.push(regex.slice(operandBegining, regex.length - 1));
+
+    if (level !== 0) throw Error('Invalid regex: \nParenthesis are wrong');
+
+    switch (operator) {
+      case '*': this.addRegexRepeat(nodeIn, nodeOut, operands); break;
+      case '.': this.addRegexAdd(nodeIn, nodeOut, operands); break;
+      case '|': this.addRegexOr(nodeIn, nodeOut, operands); break;
+      case '': case undefined: throw Error('Invalid regex: \nMissing operands');
+      case '(': case ')': throw Error('Invalid regex: \nMissing operator');
+      default: this.addRegexBasic(nodeIn, nodeOut, regex); break;
+    }
+  }
+
+  // -------------------------------------- //
+
+  addRegexBasic(nodeIn, nodeOut, label) {
+    nodeIn.addAdjacency(nodeOut, label);
+    this.alphabet.add(label);
+  }
+
+  addRegexOr(nodeIn, nodeOut, operands) {
+    for (const operand of operands) {
+      const nodeIn2 = this.addVertex(undefined);
+      const nodeOut2 = this.addVertex(undefined);
+      nodeIn.addAdjacency(nodeIn2, '');
+      nodeOut2.addAdjacency(nodeOut, '');
+      this.addRegex(nodeIn2, nodeOut2, operand);
+    }
+  }
+
+  addRegexAdd(nodeIn, nodeOut, operands) {
+    let lastNode = nodeIn;
+    for (const operand of operands) {
+      const node = this.addVertex(undefined);
+      this.addRegex(lastNode, node, operand);
+      lastNode = node;
+    }
+    lastNode.addAdjacency(nodeOut, '');
+  }
+
+  addRegexRepeat(nodeIn, nodeOut, operands) {
+    const nodeCenter = this.addVertex(undefined);
+    const nodeRight = this.addVertex(undefined);
+
+    nodeIn.addAdjacency(nodeRight, '');
+    nodeCenter.addAdjacency(nodeRight, '');
+    nodeRight.addAdjacency(nodeIn, '');
+    nodeRight.addAdjacency(nodeOut, '');
+
+    this.addRegex(nodeIn, nodeCenter, operands[0]);
+  }
+  // ...
+}
+```
 
 ## Assignment 4: finite
 
@@ -210,6 +361,8 @@ To evaluate if a graph is finite it checks if the value has altredy been evaluat
 So my algorithm traverses recursively the graph in a dfa style. It finds when the graph is not finite (and stopping) or if it has checked all paths it assumes that the graph is finite.
 
 Notice that if there is no accessible final node from the node, the result must be true.
+
+### Code
 
 ```js
 export default class Graph {

@@ -45,11 +45,11 @@ export default class RawGraph {
 
       this.comments = Array.from(commentMatches, (match) => match[1]);
       this.regex = (regexMatch ? regexMatch[2] : '')
-        .replace(/[^\w,().*|]+/g, '')
-        .replace(/(\w)(?=\w)/g, '$1,')
-        .replace(/(\))(?=[\w,(.*|])/g, '$1,')
-        .replace(/,+/g, ',')
-        .replace(/,\)/g, ')');
+        .replace(/[^\w,().*|]+/g, '') // Remove not accepted characters
+        .replace(/(\w)(?=\w)/g, '$1,') // Add commas to consecutive letters
+        .replace(/(\))(?=[\w,(.*|])/g, '$1,') // Add commas to consecutive regex
+        .replace(/,+/g, ',') // Remove consecutive commas
+        .replace(/,\)/g, ')'); // Remove trailing commas
       this.regex += ')'.repeat(Math.max(0, missingParentheses(this.regex.match(/(\(|\))/g) || [])));
       this.alphabet = (alphabetMatch ? alphabetMatch[1] : '').split('').sort();
       this.stack = (stackMatch ? stackMatch[1] : '').split('').sort();
