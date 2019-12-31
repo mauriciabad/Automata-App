@@ -365,7 +365,7 @@ Notice that if there is no accessible final node from the node, the result must 
 ### Code
 
 ```js
-export default class Graph {
+class Graph {
   // ...
   get isFinite() {
     if (this._isFinite !== undefined) return this._isFinite;
@@ -377,7 +377,7 @@ export default class Graph {
 ```
 
 ```js
-export default class Node {
+class Node {
   // ...
   checkIsFinite() {
     try {
@@ -414,7 +414,7 @@ export default class Node {
     return true;
   }
 
-  // ...
+  // -------------------------------------- //
 
   nodesInLoop() {
     const loopNodes = new Set();
