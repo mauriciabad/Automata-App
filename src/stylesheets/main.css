@@ -7,7 +7,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   background: #e8e6e3;
   min-width: 640px;
-  min-height: 480px
+  min-height: 480px;
 }
 
 abbr { text-decoration: none !important; }
