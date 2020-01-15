@@ -273,11 +273,15 @@ h3 {
   z-index: 1;
 }
 
+.test {
+  position: relative;
+}
+
 .test::before {
   font-size: 1.25em;
   position: absolute;
   line-height: 2;
-  right: 2.5rem;
+  right: 0.5rem;
   z-index: 2;
   pointer-events: none;
 }
