@@ -325,8 +325,8 @@ h3 {
   z-index: 1;
 }
 
-.word-list[data-infinite="true"]:empty::after {
-  position: fixed;
+.word-list[data-infinite="true"]:empty {
+  top: 0;
 }
 
 .word-list {
