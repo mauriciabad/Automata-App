@@ -8,6 +8,7 @@ body {
   background: #e8e6e3;
   min-width: 640px;
   min-height: 480px;
+  height: 100vh;
 }
 
 abbr { text-decoration: none !important; }
@@ -46,7 +47,7 @@ h3 {
     'graph tests';
   padding: 1rem;
   gap: 1rem;
-  height: 100vh;
+  height: 100%;
   box-sizing: border-box;
 }
 
