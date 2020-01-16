@@ -517,6 +517,8 @@ export default class Graph {
       stack: [...this.stack],
       transitions,
       final: [...this.nodes.values()].filter((node) => node.isFinal).map((node) => node.label),
+      isDfa: this.isDfa,
+      isFinite: this.isFinite,
     };
   }
 

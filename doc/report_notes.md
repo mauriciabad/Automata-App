@@ -12,6 +12,7 @@
 - isDfa and isFinite can be undefined
 - uploading an image crashes but the app can be closed and opened again
 - all accessibility inputs are focusable
+- save functionality
 
 ### Wrong inputs accepted
 
