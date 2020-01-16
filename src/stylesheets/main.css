@@ -131,7 +131,20 @@ h3 {
   background: #f1f0f6;
   color: #000;
   border: solid 1px #dbdadd;
+  transition:
+    box-shadow 200ms var(--ease-bounce),
+    background 150ms ease-out,
+    border-color 150ms ease-out;
+  outline: none;
 }
+
+.upload:hover {
+  background: #d7d7dc;
+  border-color: #b6b2bc;
+}
+
+.upload:focus,
+.upload:focus-within { box-shadow: 0 0 0 3px var(--color-primary); }
 
 .upload__input {
   position: absolute;
@@ -198,7 +211,7 @@ h3 {
   color: #666;
   font-size: 1rem;
   margin: 6px 0.5em;
-  float: right;
+  display: inline-block;
   user-select: none;
   font-weight: bold;
 }
@@ -215,10 +228,10 @@ h3 {
 
 .grid-graph {
   display: grid;
-  grid-template: 1fr 1fr / 1fr 4rem;
+  grid-template: 1fr min-content / 1fr 1fr;
   grid-template-areas:
-    'graph infoDfa'
-    'graph infoFinite';
+    'graph graph'
+    'infoDfa infoFinite';
 }
 .graph-info__dfa { grid-area: infoDfa; }
 
