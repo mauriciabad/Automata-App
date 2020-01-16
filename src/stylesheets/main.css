@@ -5,9 +5,9 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  background: #e8e6e3;
-  min-width: 640px;
-  min-height: 480px;
+  background: #f6f5fa;
+  min-width: 860px;
+  min-height: 375px;
   height: 100vh;
 }
 
@@ -18,9 +18,16 @@ img {
   user-select: none;
 }
 
+h1,
+h2,
+h3 {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
 h3 {
   margin: 1em 0 0;
   user-select: none;
+  font-size: 1rem;
 }
 
 .save {
@@ -41,10 +48,8 @@ h3 {
 
 .grid {
   display: grid;
-  grid-template: 1fr 2fr / 2fr 1fr;
-  grid-template-areas:
-    'input output'
-    'graph tests';
+  grid-template: 1fr/16rem 1fr 16rem;
+  grid-template-areas: 'input graph tests';
   padding: 1rem;
   gap: 1rem;
   height: 100%;
@@ -52,10 +57,7 @@ h3 {
 }
 
 .box {
-  border-radius: 1rem;
-  box-shadow: 0 0.25rem 0.5rem #0004;
   padding: 1rem;
-  background: #fff;
   transition: border-color 400ms ease-out;
   display: flex;
   flex-direction: column;
@@ -68,9 +70,16 @@ h3 {
   scroll-behavior: smooth;
 }
 
-.box--output { grid-area: output; }
 .box--input { grid-area: input; }
-.box--graph { grid-area: graph; }
+
+.box--graph {
+  grid-area: graph;
+  background: #fff;
+  border-radius: 2rem;
+  box-shadow:
+    0 1.5rem 5.5rem -4rem rgb(146, 90, 255, 0.5),
+    0 1.5rem 5.5rem -4rem rgba(0, 0, 0, 0.66);
+}
 
 .box__content--tests {
   grid-area: tests;
@@ -83,19 +92,9 @@ h3 {
   gap: 1rem;
 }
 
-.box__content--output {
-  font-family: 'Roboto Mono', monospace;
-  margin: 0;
-  overflow: auto;
-  scroll-behavior: smooth;
-  height: 0;
-  word-break: break-all;
-  white-space: pre-wrap;
-}
-
 .box__content--input {
   display: grid;
-  grid-template: 1fr / 1fr 1fr 1fr;
+  grid-template: min-content 1fr min-content min-content/ 1fr;
   gap: 1rem;
   overflow: visible;
 }
@@ -110,6 +109,7 @@ h3 {
   border-radius: 0.5rem;
   padding: 4px;
   margin: -4px;
+  background: none;
   transition: box-shadow 200ms var(--ease-bounce);
 }
 
@@ -122,15 +122,15 @@ h3 {
 }
 
 .upload {
-  border: dashed 1rem #0002;
+  display: block;
+  padding: 1rem;
   border-radius: 1rem;
   position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  opacity: 0.5;
   user-select: none;
-  overflow: hidden;
+  text-decoration: none;
+  background: #f1f0f6;
+  color: #000;
+  border: solid 1px #dbdadd;
 }
 
 .upload__input {
@@ -153,11 +153,14 @@ h3 {
 
 .upload__text {
   text-align: center;
-  margin: 0.5rem 0 0;
 }
 
 .upload__icon {
-  height: 4rem;
+  font-size: 1.5em;
+  vertical-align: -0.05em;
+  line-height: 1rem;
+  display: inline-block;
+  height: 1rem;
 }
 
 .select {
@@ -170,7 +173,7 @@ h3 {
   border: none;
   outline: none;
   padding: 0.5em 0.5em;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3), 0 0 0 0 var(--color-primary);
+  box-shadow: 0 0 0 0 var(--color-primary), 0 4px 12px -2px rgba(0, 0, 0, 0.2);
   transition: box-shadow 200ms var(--ease-bounce);
   min-width: 0;
   background: white;
@@ -178,7 +181,7 @@ h3 {
 
 .select:focus,
 .test__input:focus {
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3), 0 0 0 3px var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary), 0 4px 12px -2px rgba(0, 0, 0, 0.2);
 }
 
 #graph > svg {
@@ -193,10 +196,16 @@ h3 {
 
 .box__title--sub {
   color: #666;
-  font-size: 0.6667em;
+  font-size: 1rem;
   margin: 6px 0.5em;
   float: right;
   user-select: none;
+  font-weight: bold;
+}
+
+.box__title > h2 {
+  display: inline-block;
+  margin: 0;
 }
 
 #graph-title {
@@ -339,11 +348,12 @@ h3 {
 }
 
 .word-list__word {
-  background: #eee;
+  background: #fff;
   padding: 0 0.3333em;
   line-height: 1.6667;
   border-radius: 0.3333em;
   margin-left: 1.75em;
+  box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.2);
 }
 
 .word-list__item {

@@ -4,30 +4,30 @@
     <meta charset="utf-8">
     <title>ALE2 Project</title>
     <meta name="description" content="State machine automata">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="grid" id="grid">
     <div class="box box--input">
       <h2 class="box__title">Input</h2>
       <div class="box__content box__content--input">
-        <textarea class="input_box" id="input" autocomplete="off" spellcheck="false" data-gramm="false"></textarea>
         <select name="template" id="selectTemplate" class="select">
-          <option value="" selected disabled style="display: none;" id="selectTemplatePlaceholder">Template</option>
+          <option value="" selected disabled style="display: none;" id="selectTemplatePlaceholder">Custom input</option>
         </select>
+        <textarea class="input_box" id="input" autocomplete="off" spellcheck="false" data-gramm="false"></textarea>
         <div class="upload">
-          <img class="upload__icon" src="images/document.svg" alt="📄" height="80">
-          <label class="upload__text" for="file">Choose a file or drag it here</label>
-          <input class="upload__input" type="file" id="upload">
+          <label class="upload__text" for="file"><span class="upload__icon">+</span> Open file</label>
+          <input class="upload__input" type="file" id="upload" title="">
         </div>
+        <a class="upload" id="save" download="graph.txt" href="data:text/plain;charset=utf-8,">
+          <img class="upload__icon" src="images/save_alt-24px.svg" alt="💾">
+          Save file
+        </a>
       </div>
     </div>
-    <div class="box box--output">
-      <h2 class="box__title">Parsed input</h2>
-      <div class="box__content box__content--output" id="output"></div>
-    </div>
     <div class="box box--graph">
-      <h2 class="box__title">Graph
-        <a class="save" id="save" download="graph.txt" href="data:text/plain;charset=utf-8,"><img class="save__icon" src="./images/save_alt-24px.svg" alt="💾"></a>
+      <div class="box__title">
+        <h2>Graph</h2>
         <span class="box__title--sub" id="graph-title"></span>
         <div class="toggle-group" id="toggleGroup">
           <div class="toggle toggle--simplify">
@@ -39,7 +39,7 @@
           </div>
           <label for="dfaToggle" class="box__title--sub">DFA</label>
         </div>
-      </h2>
+      </div>
       <div class="box__content box__content--graph grid-graph">
         <div class="grid-graph__graph" id="graph"></div>
         <div class="graph-info graph-info__dfa info__icon-container--false" id="infoDfa">

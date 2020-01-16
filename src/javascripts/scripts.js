@@ -11,7 +11,6 @@ import templates from '../data/templates';
 const graphElem = document.getElementById('graph');
 const graphTitleElem = document.getElementById('graph-title');
 const inputElem = document.getElementById('input');
-const outputElem = document.getElementById('output');
 const uploadElem = document.getElementById('upload');
 const saveElem = document.getElementById('save');
 const simplifyElem = document.getElementById('simplify');
@@ -32,7 +31,7 @@ dfaElem.checked = localStorage.getItem('dfa') === 'true';
 const storedRawGraph = localStorage.getItem('rawGraph');
 if (storedRawGraph) inputElem.value = storedRawGraph;
 if (!inputElem.value) inputElem.value = templates.Wooow;
-selectTemplateElem.innerHTML = Object.keys(templates).reduce((total, templateName) => `${total}<option value="${templateName}">${templateName}</option>`, '<option value="" selected disabled style="display: none;" id="selectTemplatePlaceholder">Template</option>');
+selectTemplateElem.innerHTML = Object.keys(templates).reduce((total, templateName) => `${total}<option value="${templateName}">${templateName}</option>`, '<option value="" selected disabled style="display: none;" id="selectTemplatePlaceholder">Custom input</option>');
 const selectTemplatePlaceholderElem = document.getElementById('selectTemplatePlaceholder');
 
 let data;
@@ -208,8 +207,6 @@ async function readData() {
 
     inputTestElem.pattern = `^[${[...graph[type].alphabet].join('')}]*$`;
     testStringRemovePattern = new RegExp(`[^${[...graph[type].alphabet].join('')}]+`, 'g');
-
-    outputElem.textContent = JSON.stringify(data, null, 2);
 
     displayGraph();
   }
