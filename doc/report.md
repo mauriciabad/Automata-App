@@ -452,7 +452,104 @@ class Node {
 
 ## Assignment 5: ndfa
 
+> **`toDfa()`** Replaces the current graph with its dfa equivalent.
 
+I sorrounded the function by try in case the new graph becomes too big, it doesn't happen unless you use a really large graph to start with.
+
+listNodes is a Map where the keys are all the node names and the value another Map where the keys are all the letters in the alphabet and the value an empty set.
+
+> **`alphabetAsMap()`** returns a Map where the key is a lleter and the value is an empty Set. It fills the map with all the letters of the alphabet of the graph.
+
+> **`addSink()`** just adds a node with the name "Sink" and connects each node with it with all the remaining letters from the alphabet. (look at the code, it's easier to understant)
+
+## Code
+
+```js
+class Graph {
+  // ...
+  toDfa() {
+    try {
+      const listNodes = new Map([...this.nodes.keys()]
+        .map((nodeName) => [nodeName, this.alphabetAsMap()]));
+
+      for (const [nodeName, listLetters] of listNodes) {
+        const node = this.nodes.get(nodeName);
+
+        for (const adjacency of node.adjacencies) {
+          if (adjacency.label !== '') {
+            listLetters.get(adjacency.label).add(adjacency.node.label);
+          }
+        }
+
+        for (const epsilonAccessibleNode of node.epsilonAccessibleNodes()) {
+          if (epsilonAccessibleNode.isFinal) node.isFinal = true;
+          for (const adjacency of epsilonAccessibleNode.adjacencies) {
+            if (adjacency.label !== '') {
+              listLetters.get(adjacency.label).add(adjacency.node.label);
+            }
+          }
+        }
+      }
+
+      // Store all information to build a new graph
+      const finalNodes = new Set([...this.finalNodes].map((node) => node.label));
+      const startNodeName = this.start.label;
+      const newNodes = new Set([startNodeName]);
+
+      this.nodes.clear();
+
+      // Build the new dfs graph
+      this.start = this.addVertex(startNodeName);
+
+      for (const composedNodeName of newNodes) {
+        const composedNodeNameContainsFinalNode = composedNodeName.split(',').reduce((total, node2) => total || finalNodes.has(node2), false);
+        if (composedNodeNameContainsFinalNode) {
+          this.addVertex(composedNodeName).isFinal = true;
+        }
+
+        const listNodes2 = this.alphabetAsMap();
+
+        for (const nodeName of composedNodeName.split(',')) {
+          for (const [letter, accesibleNodes] of listNodes.get(nodeName)) {
+            for (const node2 of accesibleNodes) {
+              listNodes2.get(letter).add(node2);
+            }
+          }
+        }
+
+        for (const [letter, accesibleNodes] of listNodes2) {
+          if (accesibleNodes.size !== 0) {
+            const newNodeName = [...accesibleNodes].join(',');
+
+            newNodes.add(newNodeName);
+
+            this.addEdge(composedNodeName, newNodeName, letter);
+          }
+        }
+      }
+
+      this.addSink();
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+      this.invalidate('Error converting to DFA');
+    }
+  }
+
+  addSink() {
+    for (const node of this.nodes.values()) {
+      for (const letter of this.alphabet) {
+        if (!node.isAdjecent({ label: letter })) this.addEdge(node.label, 'Sink', letter);
+      }
+    }
+  }
+
+  alphabetAsMap() {
+    return new Map([...this.alphabet].map((letter) => [letter, new Set()]));
+  }
+  // ...
+}
+```
 
 ## Assignment 6: pda
 

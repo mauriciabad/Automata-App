@@ -357,16 +357,19 @@ export default class Graph {
         }
       }
 
+      // Store all information to build a new graph
       const finalNodes = new Set([...this.finalNodes].map((node) => node.label));
       const startNodeName = this.start.label;
       const newNodes = new Set([startNodeName]);
 
       this.nodes.clear();
 
+      // Build the new dfs graph
       this.start = this.addVertex(startNodeName);
 
       for (const composedNodeName of newNodes) {
-        if (composedNodeName.split(',').reduce((total, node2) => total || finalNodes.has(node2), false)) {
+        const composedNodeNameContainsFinalNode = composedNodeName.split(',').reduce((total, node2) => total || finalNodes.has(node2), false);
+        if (composedNodeNameContainsFinalNode) {
           this.addVertex(composedNodeName).isFinal = true;
         }
 

@@ -9,6 +9,8 @@
 - svg spinner and web worker
 - Webpack
 - eslint
+- isDfa and isFinite can be undefined
+- uploading an image crashes but the app can be closed and opened again
 
 ### Wrong inputs accepted
 
