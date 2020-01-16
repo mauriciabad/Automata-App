@@ -11,6 +11,7 @@
 - eslint
 - isDfa and isFinite can be undefined
 - uploading an image crashes but the app can be closed and opened again
+- all accessibility inputs are focusable
 
 ### Wrong inputs accepted
 
