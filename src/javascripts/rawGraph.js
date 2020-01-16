@@ -76,8 +76,8 @@ export default class RawGraph {
           },
         };
       });
-      this.dfa = (dfaMatch ? afirmative.includes(dfaMatch[1].toLowerCase()) : false);
-      this.finite = (finiteMatch ? afirmative.includes(finiteMatch[1].toLowerCase()) : false);
+      this.dfa = (dfaMatch ? afirmative.includes(dfaMatch[1].toLowerCase()) : undefined);
+      this.finite = (finiteMatch ? afirmative.includes(finiteMatch[1].toLowerCase()) : undefined);
       this.words = Array.from(wordsMatches, (match) => ({
         word: match[1] || '',
         accepted: afirmative.includes(match[2].toLowerCase()),

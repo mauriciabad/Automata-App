@@ -92,7 +92,7 @@ async function testDfa() {
   if (graph[type].isPda) result = 'unknown';
 
   infoDfaElem.classList.add(`info__icon-container--${result}`);
-  if (data.dfa !== graph[type].isDfa && !graph[type].isPda) infoDfaElem.classList.add('info__icon-container--warning');
+  if (data.dfa !== undefined && data.dfa !== graph[type].isDfa && !graph[type].isPda) infoDfaElem.classList.add('info__icon-container--warning');
 }
 
 async function testFinite() {
@@ -112,7 +112,7 @@ async function testFinite() {
   if (graph[type].isPda) result = 'unknown';
 
   infoFiniteElem.classList.add(`info__icon-container--${result}`);
-  if (data.finite !== graph[type].isFinite && !graph[type].isPda) infoFiniteElem.classList.add('info__icon-container--warning');
+  if (data.finite !== undefined && data.finite !== graph[type].isFinite && !graph[type].isPda) infoFiniteElem.classList.add('info__icon-container--warning');
 }
 
 async function testWords() {
