@@ -135,12 +135,12 @@ h3 {
 
 .upload__input {
   position: absolute;
-  top: -1rem;
-  right: -1rem;
-  bottom: -1rem;
-  left: -1rem;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   border-radius: 1rem;
-  width: calc(100% + 2rem);
+  width: 100%;
   opacity: 0;
   font-size: 0;
   z-index: 1;
