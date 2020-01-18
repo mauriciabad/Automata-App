@@ -337,17 +337,6 @@ h3 {
   color: #888;
 }
 
-.word-list[data-infinite="true"]::before {
-  content: '';
-  position: absolute;
-  bottom: 3rem;
-  right: 0;
-  left: 0;
-  height: calc(1rem + 33%);
-  background-image: linear-gradient(to top, white, transparent);
-  z-index: 1;
-}
-
 .word-list[data-infinite="true"]:empty {
   top: 0;
 }
