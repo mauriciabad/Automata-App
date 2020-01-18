@@ -48,7 +48,7 @@ h3 {
 
 .grid {
   display: grid;
-  grid-template: 1fr/16rem 1fr 16rem;
+  grid-template: auto / 16rem auto 16rem;
   grid-template-areas: 'input graph tests';
   padding: 1rem;
   gap: 1rem;
@@ -84,7 +84,7 @@ h3 {
 .box__content--tests {
   grid-area: tests;
   display: grid;
-  grid-template: min-content 1fr / 1fr 1fr;
+  grid-template: min-content auto / 1fr 1fr;
   grid-template-areas:
     'title1 title2'
     'list list';
@@ -94,7 +94,7 @@ h3 {
 
 .box__content--input {
   display: grid;
-  grid-template: min-content 1fr min-content min-content/ 1fr;
+  grid-template: min-content auto min-content min-content/ auto;
   gap: 1rem;
   overflow: visible;
 }
@@ -228,7 +228,7 @@ h3 {
 
 .grid-graph {
   display: grid;
-  grid-template: 1fr min-content / 1fr 1fr;
+  grid-template: auto min-content / 1fr 1fr;
   grid-template-areas:
     'graph graph'
     'infoDfa infoFinite';
@@ -243,6 +243,7 @@ h3 {
   grid-area: graph;
   display: grid;
   place-items: center;
+  min-height: 0;
 }
 
 .info__icon-container {
@@ -315,12 +316,12 @@ h3 {
 }
 
 .noAllWords > .word-list-column {
-  grid-template: 1fr / 1fr;
+  grid-template: auto / auto;
 }
 
 .word-list-column {
   display: grid;
-  grid-template: 1fr / 1fr 1fr;
+  grid-template: auto / 1fr 1fr;
   overflow: auto;
   grid-area: list;
 }
