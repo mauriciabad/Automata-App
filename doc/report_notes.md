@@ -13,6 +13,8 @@
 - uploading an image crashes but the app can be closed and opened again
 - all accessibility inputs are focusable
 - save functionality
+- loading dots
+- save file fixes errors
 
 ### Wrong inputs accepted
 

@@ -553,7 +553,112 @@ class Graph {
 
 ## Assignment 6: pda
 
+With PDA there are some functionalities that can't be used:
 
+- Check if it's finite
+- Check if it's DFA
+- List all accepted words
+- Convert to DFA
+- Simplify
+
+In the UI you can see that they are disabled.
+
+The software detects when a graph is a pda, the user don't have to specify.
+When the number of letters in the stack is greater than 0, it is a pda. The stack line can be omited.
+The following transition are totaly equivalent:
+```
+1,a [_,_] --> 2
+1,a --> 2
+```
+
+> **`isAcceptedStringPda()`** Returns true if the _word_ is accepted in a pda graph. False otherwise. The code is almost the same as `epsilonAccessibleNodesPda()` but with some aditions.
+
+> **`epsilonAccessibleNodesPda()`** Returns a Map where the keys are all the nodes accessible by epsilon transitions and the values are a Set containing all the possible stacks that you can have from that node. _Because sometimes there are infinite stacks, the stacks with more than 1000 letters are discarted._
+
+The algorithm is similar to the one used in `isAcceptedString()`.
+The main diference is that this algotithm also keeps track of the possible stacks that you can have in every step. And once all letters are used it checks if there's any final node with an empty stack.
+
+If at some point there are no more nodes rechable, the function returns false inmidietly.
+
+```js
+class Graph{
+  // ...
+  isAcceptedStringPda(word) {
+    let originNodeStacks = this.start.epsilonAccessibleNodesPda();
+
+    for (const letter of word) {
+      const nextOriginNodeStacks = new Map();
+
+      for (const [node, stacks] of originNodeStacks) {
+        for (const stack of stacks) {
+          const pop = stack.slice(-1);
+
+          for (const adjacency of node.adjacencies) {
+            if (adjacency.label === letter && (adjacency.stackPop === '' || adjacency.stackPop === pop)) {
+              if (stack.length <= 1000) {
+                const nextStack = ((adjacency.stackPop === '') ? stack : stack.slice(0, -1)) + adjacency.stackPush;
+                const epsilonAccessibleNodes = adjacency.node.epsilonAccessibleNodesPda(nextStack);
+
+                for (const [node2, stacks2] of epsilonAccessibleNodes) {
+                  if (!nextOriginNodeStacks.has(node2)) nextOriginNodeStacks.set(node2, new Set());
+                  nextOriginNodeStacks.get(node2).add(...stacks2);
+                }
+              }
+            }
+          }
+        }
+      }
+
+      if (nextOriginNodeStacks.size === 0) return false;
+
+      originNodeStacks = nextOriginNodeStacks;
+    }
+
+    for (const [node, stacks] of originNodeStacks) {
+      for (const stack of stacks) {
+        if (node.isFinal && stack === '') return true;
+      }
+    }
+
+    return false;
+  }
+  // ...
+}
+```
+
+```js
+class Node {
+  // ...
+  epsilonAccessibleNodesPda(originalStack = '', nodeStacks = new Map([[this, new Set([originalStack])]])) {
+    for (const [node, stacks] of nodeStacks) {
+      for (const stack of stacks) {
+        const pop = stack.slice(-1);
+
+        for (const adjacency of node.adjacencies) {
+          if (adjacency.label === '' && (adjacency.stackPop === '' || adjacency.stackPop === pop)) {
+            if (stack.length <= 1000) {
+              if (!nodeStacks.has(adjacency.node)) nodeStacks.set(adjacency.node, new Set());
+              if (!nodeStacks.get(adjacency.node).has(stack)) {
+                nodeStacks.get(adjacency.node).add(stack);
+                const nextNodeStacks = adjacency.node.epsilonAccessibleNodesPda(stack, nodeStacks);
+
+                // Add nextNodeStacks to nodeStacks
+                for (const [node2, stacks2] of nextNodeStacks) {
+                  if (!nodeStacks.has(node2)) nodeStacks.set(node2, new Set());
+                  nodeStacks.get(node2).add(...stacks2);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return nodeStacks;
+  }
+  // ...
+}
+```
 
 ## Software design
 
