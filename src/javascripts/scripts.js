@@ -6,7 +6,7 @@ import Viz from 'viz.js';
 import workerURL from 'file-loader!viz.js/full.render';
 import Graph from './graph';
 import RawGraph from './rawGraph';
-import templates from '../data/templates';
+import templates from '../data/templates.json';
 
 const graphElem = document.getElementById('graph');
 const graphTitleElem = document.getElementById('graph-title');
