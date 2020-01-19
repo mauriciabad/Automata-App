@@ -660,14 +660,6 @@ class Node {
 }
 ```
 
-## Software design
-
-
-
-## Design Documentation
-
-
-
 ## UI
 
 - explain graphs and svg are saved
@@ -678,16 +670,237 @@ class Node {
 
 ## Testing
 
+The app has over 50 different input tests. They try edge cases and happy paths.
 
+To ensure high quality code this project has [ESLint](https://eslint.org/) configured with the recomended setings. ESLint is a great code analysis tool for JavaScript.
+
+### Continous Integration
+
+The project also has Continous Integration configured in [GitHub](https://github.com/) with [Travis](https://travis-ci.org/) and [Netlify](https://www.netlify.com/).
+
+Every commit trigers a build in Travis and Netlify.
+
+> Travis runs ESLint and doesn't let you merge failing branches.
+
+> Netlify builds the site and deploys it to https://automata-app.netlify.com/ 100% automatically and free. This makes me forget about deploying de app, it's always up-to-date.
 
 ## Other contributions
 
+### Tools
 
+I used several tools/technollogies/libraries to make a better project:
+
+- [GitHub](https://github.com/) to manage the project
+- [Webpack](https://webpack.js.org/) to optimize the files
+- [Static Site Boilerplate](http://staticsiteboilerplate.com/) as a boilerplate
+- [ESLint](https://eslint.org/) to test the code
+- [Travis](https://travis-ci.org/) to run tests
+- [Netlify](https://www.netlify.com/) to deploy
+- [Web Workers](https://web.dev/off-main-thread/) for asyncronous code
+- [Viz.js](http://viz-js.com/) to use [Graphviz](http://www.graphviz.org/) in the browser
+- [PostCSS](https://postcss.org/) to compile css files
+- [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/) to run builds
+- JavaScript
+
+I spent time learning most of this things.
+
+### Autofix input errors
+
+As explained in previous sections the input is automaticaly fixed most of the cases.
+
+### Beautiful, Simple and Accessible UI
+
+I spent a lot of time twiking al kind of details in the UI to make it the most beautiful, simple and accessible possible.
 
 ### Simplify functionality
 
+I made a function that removes all epsilon transitions in a graph to make the regex graphs more readable. It produces an equivalent automaton.
 
+```js
+class Graph {
+  // ...
+  simplify() {
+    if (!this.isPda) {
+      this.simplifyConsecutiveEpsilons();
+      this.simplifyEpsilonLoops();
+      this.simplifyStart();
+      this.simplifySkipableNodes();
+      this.simplifySelfEpsilonLoops();
+      this.simplifyEpsilonToFinal();
+      this.simplifyPowersetAlgorithm();
+    }
+  }
 
-### Webpack
+  simplifyEpsilonLoops() {
+    const nodesOrigins = this.nodesOrigins();
 
+    for (const loop of this.start.epsilonLoops()) {
+      const firstNode = Array.from(loop).reduce(
+        (oldNode, node) => (node === this.start ? node : oldNode),
+        Array.from(loop)[0],
+      );
 
+      for (const node of loop) {
+        if (node !== firstNode) {
+          for (const adjecency of node.adjacencies) {
+            if (adjecency.node.isFinal && adjecency.label === '') firstNode.isFinal = true;
+
+            firstNode.addAdjacency(adjecency.node, adjecency.label);
+          }
+          for (const originNode of nodesOrigins.get(node).values()) {
+            for (const originNodeAdjecency of originNode.adjacencies) {
+              if (node === originNodeAdjecency.node) {
+                if (originNodeAdjecency.label !== '') {
+                  originNode.addAdjacency(firstNode, originNodeAdjecency.label);
+                }
+              }
+            }
+          }
+          this.removeVertex(node.label);
+        }
+      }
+      if (firstNode.hasAdjacency(firstNode, '')) firstNode.removeAdjacency(firstNode, '');
+    }
+  }
+
+  simplifyConsecutiveEpsilons() {
+    const undeletableEpsilonNodes = new Set([this.start]);
+    const nodesOrigins = this.nodesOrigins();
+
+    for (const node of this.nodes.values()) {
+      for (const adjecency of node.adjacencies) {
+        if (adjecency.label !== '') {
+          undeletableEpsilonNodes.add(node);
+          undeletableEpsilonNodes.add(adjecency.node);
+        }
+      }
+    }
+
+    for (const node of this.nodes.values()) {
+      if (!undeletableEpsilonNodes.has(node)) {
+        for (const adjecency of node.adjacencies) {
+          const destinationNode = adjecency.node;
+          if (node.isFinal) destinationNode.isFinal = true;
+
+          for (const originNode of nodesOrigins.get(node).values()) {
+            if (originNode !== destinationNode) {
+              originNode.addAdjacency(destinationNode, '');
+              nodesOrigins.get(destinationNode).add(originNode);
+            }
+          }
+        }
+        if (node.adjacencies.length === 0 && nodesOrigins.has(node)) {
+          for (const originNode of nodesOrigins.get(node).values()) {
+            originNode.isFinal = node.isFinal;
+          }
+        }
+
+        this.removeVertex(node.label);
+        node.isFinal = true;
+      }
+    }
+  }
+
+  simplifySkipableNodes() {
+    const nodesOrigins = this.nodesOrigins();
+
+    for (const node of this.nodes.values()) {
+      if (node !== this.start && !node.isFinal && node.adjacencies.length !== 0) {
+        let skipable = true;
+        for (const adjecency of node.adjacencies) {
+          if (adjecency.label !== '') {
+            skipable = false;
+            break;
+          }
+        }
+        if (skipable) {
+          for (const originNode of nodesOrigins.get(node).values()) {
+            for (const originNodeAdjecency of originNode.adjacencies) {
+              if (originNodeAdjecency.node === node) {
+                for (const destinationNode of node.adjecentNodes) {
+                  originNode.addAdjacency(destinationNode, originNodeAdjecency.label);
+                }
+              }
+            }
+          }
+          this.removeVertex(node.label);
+        }
+      }
+    }
+  }
+
+  simplifyStart() {
+    const nodesOrigins = this.nodesOrigins();
+
+    for (const startAdjecency of this.start.adjacencies) {
+      const { node } = startAdjecency;
+      if (node !== this.start) {
+        let skipable = nodesOrigins.get(node).size === 1;
+        if (skipable) {
+          for (const adj of [...nodesOrigins.get(node)][0].adjacencies) {
+            if (adj.node === node && adj.label !== '') {
+              skipable = false;
+              break;
+            }
+          }
+        }
+
+        if (skipable && startAdjecency.label === '') {
+          for (const adjecency of node.adjacencies) {
+            this.start.addAdjacency(adjecency.node, adjecency.label);
+          }
+          if (node.isFinal) this.start.isFinal = true;
+          this.removeVertex(node.label);
+        }
+      }
+    }
+  }
+
+  simplifySelfEpsilonLoops() {
+    for (const node of this.nodes.values()) {
+      node.removeAdjacency(node, '');
+    }
+  }
+
+  simplifyPowersetAlgorithm() {
+    for (const node of this.nodes.values()) {
+      for (const accesibleNode of node.epsilonAccessibleNodes()) {
+        if (accesibleNode.isFinal) node.isFinal = true;
+        for (const accesibleNodeAdjacency of accesibleNode.adjacencies) {
+          if (accesibleNodeAdjacency.label !== '') node.addAdjacency(accesibleNodeAdjacency.node, accesibleNodeAdjacency.label);
+        }
+      }
+      for (const adjacency of node.adjacencies) {
+        if (adjacency.label === '') node.removeAdjacency(adjacency.node, adjacency.label);
+      }
+    }
+  }
+
+  simplifyEpsilonToFinal() {
+    for (const node of this.nodes.values()) {
+      for (const accesibleNode of node.epsilonAccessibleNodes()) {
+        if (node !== accesibleNode && accesibleNode.isFinal) {
+          node.isFinal = true;
+          if (accesibleNode.adjacencies.length === 0) node.removeAdjacency(accesibleNode, '');
+        }
+      }
+    }
+  }
+
+  nodesOrigins() {
+    const nodesOrigins = new Map();
+
+    for (const node of this.nodes.values()) {
+      nodesOrigins.set(node, new Set());
+    }
+
+    for (const node of this.nodes.values()) {
+      for (const adjecency of node.adjacencies) {
+        nodesOrigins.get(adjecency.node).add(node);
+      }
+    }
+    return nodesOrigins;
+  }
+  // ...
+}
+```
