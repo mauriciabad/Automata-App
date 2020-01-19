@@ -9,13 +9,13 @@ if (!ROOT) {
 
 const config = {
   // Your website's name, used for favicon meta tags
-  site_name: 'ALE2 Project',
+  site_name: 'Automata App',
 
   // Your website's description, used for favicon meta tags
-  site_description: 'ALE2 Q1 2019 Fontys Assignment',
+  site_description: 'State machine automaton app',
 
   // Your website's URL, used for sitemap
-  site_url: 'https://ale2.netlify.com',
+  site_url: 'https://automata-app.netlify.com',
 
   // Google Analytics tracking ID (leave blank to disable)
   googleAnalyticsUA: '',

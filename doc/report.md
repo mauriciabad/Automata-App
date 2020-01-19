@@ -1,8 +1,8 @@
-# State Machine | ALE 2 Fall 2019 | Maurici Abad
+# State Machine | ALE2 Fall 2019 | Maurici Abad
 
 State machine web app by [Maurici Abad Gutierrez](https://mauriciabad.com)
 
-> Use it here: **https://ale2.netlify.com/**
+> Use it here: **https://automata-app.netlify.com/**
 
 Main features:
 

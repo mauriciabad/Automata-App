@@ -19,7 +19,7 @@ async function runSetup() {
   clear();
   console.log(
     chalk.red(
-      figlet.textSync('ALE2 Project', { horizontalLayout: 'fitted' })
+      figlet.textSync('Automata App', { horizontalLayout: 'fitted' })
     )
   );
 
@@ -28,7 +28,7 @@ async function runSetup() {
       type: 'input',
       name: 'site_name',
       message: 'What is the name of your website?',
-      initial: 'ALE2 Project'
+      initial: 'Automata App'
     },
     {
       type: 'input',
