@@ -662,11 +662,35 @@ class Node {
 
 ## UI
 
-- explain graphs and svg are saved
-- Input is saved between sessions
-- Input changes are displayed immediately
-- explain graph title and download
-- only updated if parsed content changes, not just the raw input
+UI files:
+
+- Layout: [/src/index.html](/src/index.html)
+- Style: [/src/stylesheets/main.css](/src/stylesheets/main.css)
+- Script: [/src/javascripts/scripts.js](/src/javascripts/scripts.js)
+- Tests: [/src/data/templates.json](/src/data/templates.json)
+- Images: [/src/images/](/src/images/)
+
+This are some features implemented in the UI:
+
+- Input changes are displayed immediately and there are no unnecessary butons.
+- If the user changes the input, but the information is the same, the app doesn't evaluate everything again. For example, entering a new empty line won't make the app check if the graph is dfs, finite, check the words, etc.
+- Uses a minimalistic design in whitch the main content is the graph visualization.
+  - Uses diferent typografies (title, content and code)
+  - Has good contrast in text color.
+- Works in Chrome, Firefox, Safari and Edge.
+  - Works the best with Chrome.
+- The app is usable 100% only with the keyboard.
+- The graph visualization has a loading animation because sometimes it takes some time to generate.
+- Once a graph visualization is generated, it's stored in a local variable. This way if the user switches fast the toggles the app will show iinstantly the new visualization.
+- The input is stored in `localStorage` bewteen sessions. So users neves lose their work.
+- The first comment of a graph input is considered it's title.
+- When you download the input as a file:
+  - The app formats it (aplyes fixes and adds omited lines).
+  - It has a relevant file name.
+- Displays error messages instead of crashing.
+- When the input states that the graph is dfa, final or a word is accepted. The UI checks if it's right, if it's not right is shows visual hints to indicate that. If information is not specified in the input, the ui is the same as if it was right.
+- Files can be oppened:
+  - Can also be dragged and droped into the button.
 
 ## Testing
 
