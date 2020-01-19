@@ -16,3 +16,5 @@ Author: [Maurici Abad](https://mauriciabad.com/)
 npm install
 npm start
 ```
+
+Once the page is built, your default browser will open on https://localhost:8080/
