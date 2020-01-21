@@ -55,10 +55,6 @@ export default class RawGraph {
       this.stack = (stackMatch ? stackMatch[1] : '').split('').sort();
       this.states = (statesMatch ? statesMatch[1] : '').split(',').map((item) => item.trim()).filter((item) => item !== '');
       this.final = (finalMatch ? finalMatch[1] : '').split(',').map((item) => item.trim()).filter((item) => item !== '');
-      // eslint-disable-next-line no-restricted-syntax
-      for (const node of this.final) {
-        if (!this.states.includes(node)) this.states.push(node);
-      }
       this.transitions = Array.from(transitionsMatches, (match) => {
         const origin = (match[1] || '').trim();
         const destination = (match[6] || '').trim();
@@ -80,6 +76,10 @@ export default class RawGraph {
           },
         };
       });
+      // eslint-disable-next-line no-restricted-syntax
+      for (const node of this.final) {
+        if (!this.states.includes(node)) this.states.push(node);
+      }
       this.dfa = (dfaMatch ? afirmative.includes(dfaMatch[1].toLowerCase()) : undefined);
       this.finite = (finiteMatch ? afirmative.includes(finiteMatch[1].toLowerCase()) : undefined);
       this.words = Array.from(wordsMatches, (match) => ({
