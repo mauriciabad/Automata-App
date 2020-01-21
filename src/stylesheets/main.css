@@ -381,6 +381,7 @@ h3 {
   position: sticky;
   align-self: start;
   padding-bottom: 1rem;
+  min-width: 0;
 }
 
 .word-list__word {
