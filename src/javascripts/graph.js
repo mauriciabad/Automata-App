@@ -519,6 +519,7 @@ export default class Graph {
       final: [...this.nodes.values()].filter((node) => node.isFinal).map((node) => node.label),
       isDfa: this.isDfa,
       isFinite: this.isFinite,
+      isPda: this.isPda,
     };
   }
 
@@ -526,13 +527,10 @@ export default class Graph {
     const data = this.newRawData();
 
     return `${this.rawData.comments.reduce((total, comment) => `${total}# ${comment}\n`, '')}alphabet: ${data.alphabet.join('')}
-${data.stack ? `stack: ${data.stack.join('')}\n` : ''}states: ${data.states.join(',')}
+${data.isPda ? `stack: ${data.stack.join('')}\n` : ''}states: ${data.states.join(',')}
 final: ${data.final.join(',')}
 transitions: ${data.transitions.reduce((total, transition) => `${total}${transition.origin},${transition.label}${transition.stack.add || transition.stack.remove ? ` [${transition.stack.remove || '_'},${transition.stack.add || '_'}]` : ''} --> ${transition.destination}\n`, '\n')}end.
-
-dfa: ${data.isDfa ? 'y' : 'n'}
-finite: ${data.isFinite ? 'y' : 'n'}
-
+${data.isPda ? '' : `\ndfa: ${data.isDfa ? 'y' : 'n'}\nfinite: ${data.isFinite ? 'y' : 'n'}\n`}
 words: ${this.rawData.words.reduce((total, word) => `${total}${word.word},${word.accepted ? 'y' : 'n'}\n`, '\n')}end.
 ${this.rawData.regex ? `\nregex: ${this.rawData.regex}` : ''}`;
   }
