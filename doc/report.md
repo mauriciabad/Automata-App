@@ -783,7 +783,7 @@ class Graph {
           this.removeVertex(node.label);
         }
       }
-      if (firstNode.hasAdjacency(firstNode, '')) firstNode.removeAdjacency(firstNode, '');
+      if (firstNode && firstNode.hasAdjacency(firstNode, '')) firstNode.removeAdjacency(firstNode, '');
     }
   }
 
