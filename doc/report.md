@@ -629,18 +629,20 @@ class Graph{
 ```js
 class Node {
   // ...
-  epsilonAccessibleNodesPda(originalStack = '', nodeStacks = new Map([[this, new Set([originalStack])]])) {
+  epsilonAccessibleNodesPdaRec(nodeStacks = new Map([[this, new Set([''])]])) {
     for (const [node, stacks] of nodeStacks) {
       for (const stack of stacks) {
-        const pop = stack.slice(-1);
+        const pop = stack.length >= 1 ? stack.slice(-1) : undefined;
 
         for (const adjacency of node.adjacencies) {
-          if (adjacency.label === '' && (adjacency.stackPop === '' || adjacency.stackPop === pop)) {
+          if (adjacency.label === '' && (adjacency.stackPop === '' || (pop && adjacency.stackPop === pop))) {
             if (stack.length <= 1000) {
+              let newStack = adjacency.stackPop === pop ? stack.slice(0, -1) : stack;
+              newStack += adjacency.stackPush;
               if (!nodeStacks.has(adjacency.node)) nodeStacks.set(adjacency.node, new Set());
-              if (!nodeStacks.get(adjacency.node).has(stack)) {
-                nodeStacks.get(adjacency.node).add(stack);
-                const nextNodeStacks = adjacency.node.epsilonAccessibleNodesPda(stack, nodeStacks);
+              if (!nodeStacks.get(adjacency.node).has(newStack)) {
+                nodeStacks.get(adjacency.node).add(newStack);
+                const nextNodeStacks = adjacency.node.epsilonAccessibleNodesPdaRec(nodeStacks);
 
                 // Add nextNodeStacks to nodeStacks
                 for (const [node2, stacks2] of nextNodeStacks) {
@@ -655,6 +657,10 @@ class Node {
     }
 
     return nodeStacks;
+  }
+
+  epsilonAccessibleNodesPda(stack = '') {
+    return this.epsilonAccessibleNodesPdaRec(new Map([[this, new Set([stack || ''])]]));
   }
   // ...
 }

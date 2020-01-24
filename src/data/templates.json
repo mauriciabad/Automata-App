@@ -47,5 +47,5 @@
   "PDA 2": "# PDA 2\nalphabet: ah\nstack: x \nstates: 1,2\nfinal:  2 \ntransitions: \n1,a [_,x] --> 1\n1,h --> 2\n2,a [x,_] --> 2\nend.\n\nwords: \nh,y\naha,y\naahaa,y\naaahaaa,y\naaaahaaaa,y\n,n\na,n\naa,n\nha,n\nah,n\nahaa,n\naaha,n\nhaaaaa,n\naaaaah,n\nahaaaa,n\naaaaha,n\nend.\n",
   "PDA 3": "# PDA 3\nalphabet: ab\nstack: x\nstates: 1,2,3,4\nfinal: 4\ntransitions:\n1,a [_,x] --> 1\n1,b [x,_] --> 2\n2,b [x,_] --> 3\n3,b [x,_] --> 4\nend.\n\nwords:\naaabbb,y\n\nab,n\naab,n\naaab,n\nabb,n\naabb,n\naaabb,n\nabbb,n\naabbb,n\naaaaaabbbbbb,n\n\n,n\na,n\naa,n\naaa,n\naaaaaa,n\n\nb,n\nbb,n\nbbb,n\nbbbbbb,n\nend.\n",
   "PDA 4": "# PDA 4\nalphabet: ab\nstack: xy\nstates: 1,2,3,4,5,6\nfinal: 6\ntransitions: \n1,a [_,x] --> 2\n2,b [_,y] --> 3\n3, [y,y] --> 4\n4, [y,_] --> 5\n5, [x,_] --> 6\nend.\n\nwords: \nab,y\n,n\na,n\nb,n\naa,n\nbb,n\nba,n\nend.\n",
-  "PDA 5": "# PDA 5\nalphabet: \nstack: x\nstates: 1,2,3\nfinal: 3\ntransitions: \n1, [_,x] --> 2\n2, [x,_] --> 3\nend.\n\nwords: \n,n\nend.\n"
+  "PDA 5": "# PDA 5\nalphabet: \nstack: x\nstates: 1,2,3\nfinal: 3\ntransitions: \n1, [_,x] --> 2\n2, [x,_] --> 3\nend.\n\nwords: \n,y\nend.\n"
 }
