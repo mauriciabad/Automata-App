@@ -2,7 +2,7 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/16cd754b-9506-428e-8e81-cf51c2c1371c/deploy-status)](https://app.netlify.com/sites/automata-app/deploys) [![Build Status](https://travis-ci.com/mauriciabad/Automata-App.svg?branch=master)](https://travis-ci.com/mauriciabad/Automata-App)
 
-Use it here: https://automata-app.netlify.com/
+Use it here: https://automata-app.netlify.app/
 
 Final Report: [/doc/report.md](/doc/report.md)
 
