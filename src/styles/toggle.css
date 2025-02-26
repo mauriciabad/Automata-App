@@ -1,4 +1,3 @@
-
 .b {
   display: block;
 }
@@ -16,11 +15,17 @@
   border-radius: 100px;
   background-color: #ddd;
   overflow: hidden;
-  box-shadow: inset 0 0 2px 1px rgba(26, 15, 15, 0.05), 0 0 0 0 var(--color-primary);
+  box-shadow:
+    inset 0 0 2px 1px rgba(26, 15, 15, 0.05),
+    0 0 0 0 var(--color-primary);
   transition: box-shadow 200ms var(--ease-bounce);
 }
 
-.toggle:focus-within { box-shadow: inset 0 0 2px 1px rgba(26, 15, 15, 0.05), 0 0 0 3px var(--color-primary); }
+.toggle:focus-within {
+  box-shadow:
+    inset 0 0 2px 1px rgba(26, 15, 15, 0.05),
+    0 0 0 3px var(--color-primary);
+}
 
 .check {
   position: absolute;

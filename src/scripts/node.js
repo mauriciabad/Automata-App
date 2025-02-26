@@ -8,10 +8,13 @@ export default class Node {
     this._adjacencies = new Set();
   }
 
-  addAdjacency(node, label, stackPop = '', stackPush = '') {
+  addAdjacency(node, label, stackPop = "", stackPush = "") {
     if (!this.hasAdjacency(node, label, stackPop, stackPush)) {
       this._adjacencies.add({
-        node, label, stackPop, stackPush,
+        node,
+        label,
+        stackPop,
+        stackPush,
       });
     }
   }
@@ -23,8 +26,10 @@ export default class Node {
     return this.hasAdjacency(node, label);
   }
 
-  removeAdjacency(node, label, stackPop = '', stackPush = '') {
-    this._adjacencies.delete(this.getAdjacency(node, label, stackPop, stackPush));
+  removeAdjacency(node, label, stackPop = "", stackPush = "") {
+    this._adjacencies.delete(
+      this.getAdjacency(node, label, stackPop, stackPush)
+    );
   }
 
   removeAllAdjacencies(node) {
@@ -38,13 +43,13 @@ export default class Node {
     }
   }
 
-  getAdjacency(node, label, stackPop = '', stackPush = '') {
+  getAdjacency(node, label, stackPop = "", stackPush = "") {
     for (const adjacency of this._adjacencies) {
       if (
-        adjacency.node === node
-        && adjacency.label === label
-        && adjacency.stackPop === stackPop
-        && adjacency.stackPush === stackPush
+        adjacency.node === node &&
+        adjacency.label === label &&
+        adjacency.stackPop === stackPop &&
+        adjacency.stackPush === stackPush
       ) {
         return adjacency;
       }
@@ -52,7 +57,7 @@ export default class Node {
     return undefined;
   }
 
-  hasAdjacency(node, label, stackPop = '', stackPush = '') {
+  hasAdjacency(node, label, stackPop = "", stackPush = "") {
     return this.getAdjacency(node, label, stackPop, stackPush) !== undefined;
   }
 
@@ -79,9 +84,11 @@ export default class Node {
   epsilonAccessibleNodes(accessibleNodes = new Set([this])) {
     for (const node of accessibleNodes) {
       for (const adjacency of node.adjacencies) {
-        if (adjacency.label === '' && !accessibleNodes.has(adjacency.node)) {
+        if (adjacency.label === "" && !accessibleNodes.has(adjacency.node)) {
           accessibleNodes.add(adjacency.node);
-          accessibleNodes.add(...adjacency.node.epsilonAccessibleNodes(accessibleNodes));
+          accessibleNodes.add(
+            ...adjacency.node.epsilonAccessibleNodes(accessibleNodes)
+          );
         }
       }
     }
@@ -89,20 +96,26 @@ export default class Node {
     return accessibleNodes;
   }
 
-  epsilonAccessibleNodesPdaRec(nodeStacks = new Map([[this, new Set([''])]])) {
+  epsilonAccessibleNodesPdaRec(nodeStacks = new Map([[this, new Set([""])]])) {
     for (const [node, stacks] of nodeStacks) {
       for (const stack of stacks) {
         const pop = stack.length >= 1 ? stack.slice(-1) : undefined;
 
         for (const adjacency of node.adjacencies) {
-          if (adjacency.label === '' && (adjacency.stackPop === '' || (pop && adjacency.stackPop === pop))) {
+          if (
+            adjacency.label === "" &&
+            (adjacency.stackPop === "" || (pop && adjacency.stackPop === pop))
+          ) {
             if (stack.length <= 1000) {
-              let newStack = adjacency.stackPop === pop ? stack.slice(0, -1) : stack;
+              let newStack =
+                adjacency.stackPop === pop ? stack.slice(0, -1) : stack;
               newStack += adjacency.stackPush;
-              if (!nodeStacks.has(adjacency.node)) nodeStacks.set(adjacency.node, new Set());
+              if (!nodeStacks.has(adjacency.node))
+                nodeStacks.set(adjacency.node, new Set());
               if (!nodeStacks.get(adjacency.node).has(newStack)) {
                 nodeStacks.get(adjacency.node).add(newStack);
-                const nextNodeStacks = adjacency.node.epsilonAccessibleNodesPdaRec(nodeStacks);
+                const nextNodeStacks =
+                  adjacency.node.epsilonAccessibleNodesPdaRec(nodeStacks);
 
                 // Add nextNodeStacks to nodeStacks
                 for (const [node2, stacks2] of nextNodeStacks) {
@@ -119,8 +132,10 @@ export default class Node {
     return nodeStacks;
   }
 
-  epsilonAccessibleNodesPda(stack = '') {
-    return this.epsilonAccessibleNodesPdaRec(new Map([[this, new Set([stack || ''])]]));
+  epsilonAccessibleNodesPda(stack = "") {
+    return this.epsilonAccessibleNodesPdaRec(
+      new Map([[this, new Set([stack || ""])]])
+    );
   }
 
   epsilonLoops() {
@@ -145,7 +160,7 @@ export default class Node {
       visited.add(node);
 
       const adjecentEpsilonNodes = node.adjacencies
-        .filter((adjacency) => adjacency.label === '')
+        .filter((adjacency) => adjacency.label === "")
         .map((adjacency) => adjacency.node);
 
       for (const eNode of adjecentEpsilonNodes) {
@@ -215,7 +230,8 @@ export default class Node {
 
       for (const adjacency of node.adjacencies) {
         visitNextList.push(adjacency.node);
-        if (!this.checkIsFiniteRec(nodesInLoop, path, visited, visitNextList)) return false;
+        if (!this.checkIsFiniteRec(nodesInLoop, path, visited, visitNextList))
+          return false;
       }
     }
     path.pop();
@@ -224,7 +240,9 @@ export default class Node {
 
   acceptedStrings() {
     const accepted = new Set();
-    this.acceptedStringsRec(accepted, [], new Set(), [{ node: this, label: '' }]);
+    this.acceptedStringsRec(accepted, [], new Set(), [
+      { node: this, label: "" },
+    ]);
     return [...accepted].sort();
   }
 
@@ -238,7 +256,7 @@ export default class Node {
     if (!visited.has(adjacency)) {
       visited.add(adjacency);
 
-      if (adjacency.node.isFinal) accepted.add(path.join(''));
+      if (adjacency.node.isFinal) accepted.add(path.join(""));
 
       for (const nextAdjacency of adjacency.node.adjacencies) {
         visitNextList.push(nextAdjacency);
