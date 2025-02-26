@@ -1,8 +1,8 @@
 # State Machine | ALE2 Fall 2019 | Maurici Abad
 
-State machine web app by [Maurici Abad Gutierrez](https://mauriciabad.com)
+State machine web app by [Maurici Abad Gutierrez](https://mauri.app)
 
-> Use it here: **https://automata-app.netlify.com/**
+> Use it here: **<https://automata-app.mauri.app/>**
 
 Main features:
 
@@ -566,14 +566,15 @@ In the UI you can see that they are disabled.
 The software detects when a graph is a pda, the user don't have to specify.
 When the number of letters in the stack is greater than 0, it is a pda. The stack line can be omitted.
 The following transition are totally equivalent:
+
 ```
 1,a [_,_] --> 2
 1,a --> 2
 ```
 
-> **`isAcceptedStringPda()`** Returns true if the _word_ is accepted in a pda graph. False otherwise. The code is almost the same as `epsilonAccessibleNodesPda()` but with some additions.
+> **`isAcceptedStringPda()`** Returns true if the *word* is accepted in a pda graph. False otherwise. The code is almost the same as `epsilonAccessibleNodesPda()` but with some additions.
 
-> **`epsilonAccessibleNodesPda()`** Returns a Map where the keys are all the nodes accessible by epsilon transitions and the values are a Set containing all the possible stacks that you can have from that node. _Because sometimes there are infinite stacks, the stacks with more than 1000 letters are discarded._
+> **`epsilonAccessibleNodesPda()`** Returns a Map where the keys are all the nodes accessible by epsilon transitions and the values are a Set containing all the possible stacks that you can have from that node. *Because sometimes there are infinite stacks, the stacks with more than 1000 letters are discarded.*
 
 The algorithm is similar to the one used in `isAcceptedString()`.
 The main difference is that this algorithm also keeps track of the possible stacks that you can have in every step. And once all letters are used it checks if there's any final node with an empty stack.
@@ -706,13 +707,7 @@ To ensure high quality code this project has [ESLint](https://eslint.org/) confi
 
 ### Continuous Integration
 
-The project also has Continuous Integration configured in [GitHub](https://github.com/) with [Travis](https://travis-ci.org/) and [Netlify](https://www.netlify.com/).
-
-Every commit triggers a build in Travis and Netlify.
-
-> Travis runs ESLint and doesn't let you merge failing branches.
-
-> Netlify builds the site and deploys it to https://automata-app.netlify.com/ 100% automatically and free. This makes me forget about deploying the app, it's always up-to-date.
+The project also has Continuous Integration configured in with GitHub Actions.
 
 ## Other contributions
 
@@ -724,8 +719,6 @@ I used several tools/technologies/libraries to make a better project:
 - [Webpack](https://webpack.js.org/) to optimize the files
 - [Static Site Boilerplate](http://staticsiteboilerplate.com/) as a boilerplate
 - [ESLint](https://eslint.org/) to test the code
-- [Travis](https://travis-ci.org/) to run tests
-- [Netlify](https://www.netlify.com/) to deploy
 - [Web Workers](https://web.dev/off-main-thread/) for asynchronous code
 - [Viz.js](http://viz-js.com/) to use [Graphviz](http://www.graphviz.org/) in the browser
 - [PostCSS](https://postcss.org/) to compile css files

@@ -15,7 +15,7 @@ const config = {
   site_description: 'State machine automaton app',
 
   // Your website's URL, used for sitemap
-  site_url: 'https://automata-app.netlify.com',
+  site_url: 'https://automata-app.mauri.app',
 
   // Google Analytics tracking ID (leave blank to disable)
   googleAnalyticsUA: 'UA-100348659-3',
